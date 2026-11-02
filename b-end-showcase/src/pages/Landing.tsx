@@ -48,6 +48,7 @@ const dashboardEntries = [
 ];
 
 const listEntries = [
+  { path: '/examples/store-operations', title: 'Skill 实测 · 门店经营管理', desc: '有依据的 Spec → 指标 + 筛选 + 图文表格，支持批量关注、CSV 导出和详情抽屉', modules: ['G-1', 'G-2', 'D-1', 'G-3', 'G-4'], featured: true },
   { path: '/list/crud', title: 'CRUD 管理列表', desc: '筛选栏 + 操作工具条 + 数据表格（带切换tab）+ 分页', modules: ['G-1', 'G-2', 'G-3', 'G-4'], featured: true },
   { path: '/list/tree', title: '树形层级', desc: '左侧树导航 + 右侧纯文字表格，层级分类管理', modules: ['G-1', 'G-2', 'G-3', 'G-4'] },
   { path: '/list/metric-detail', title: '指标 + 明细', desc: '顶部指标概览 + 趋势图 + 底部带图片列表格', modules: ['G-1', 'G-2', 'G-3', 'D-1', 'D-3', 'G-4'] },

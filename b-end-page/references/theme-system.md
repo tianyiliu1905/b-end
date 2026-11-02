@@ -252,7 +252,7 @@ $color-primary-2: #D59500;  /* 深色衍生 */
 
 **同步业务 Token 层**：自定义主题色确定后，先在 `tokens.css` 原子层补充对应色阶，再新增一份 `tokens.<custom>.overrides.css`（见上方 §6 步骤），并在 `themes` 配置对象里新增对应记录（`swatch` 取自定义主色），`loadMtdCssUrl` 改为加载自定义 SCSS 编译产物而非预置 CSS 包，架构上与预置主题完全一致，不需要额外分支逻辑。
 
-> ⚠️ **主题色变更必须在 Design Spec 中明确标注**（见 `SKILL.md` §7 步骤 6），让用户确认后再生成代码。SCSS 自定义主题需要项目支持 SCSS 编译（Vite 开箱即用，Webpack 需配置 `sass-loader`）。
+> ⚠️ **主题色变更必须在 Design Spec 中明确标注**（见 `SKILL.md` §7 步骤 6），说明主题色来源与适配依据后直接生成代码，无需等待确认。SCSS 自定义主题需要项目支持 SCSS 编译（Vite 开箱即用，Webpack 需配置 `sass-loader`）。
 
 ---
 

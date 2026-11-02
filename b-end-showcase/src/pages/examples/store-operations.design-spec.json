@@ -1,0 +1,122 @@
+{
+  "input_type": "text",
+  "granularity": "page",
+  "scenario": "existing",
+  "page_type": "list",
+  "l1_assembly": "page-列表页装配逻辑.md :: 指标+明细",
+  "framework": "react",
+  "component_library": "@ss/mtd-react3",
+  "rationale": [
+    {
+      "decision": "指标+明细",
+      "evidence": "门店管理以记录查询与批量操作为主，顶部只保留汇总；L1 列表装配 §二的指标+明细模式"
+    },
+    {
+      "decision": "G-3 简单档",
+      "evidence": "关键词、城市、状态共 3 个条件，满足 General3-filter-bar.md 的不超过 5 维条件"
+    },
+    {
+      "decision": "G-4 图文信息表",
+      "evidence": "门店对象标识、编号、状态和操作是主信息；General4-data-table.md 的图文变种，灰色图像占位"
+    },
+    {
+      "decision": "D-1 纯数字卡",
+      "evidence": "4 个并列核心数字，没有时间序列；不引入趋势图或虚构环比"
+    },
+    {
+      "decision": "只读抽屉",
+      "evidence": "查看单门店详情且保留列表上下文；FD1 标准 640px 抽屉 + Detail2 两列描述列表"
+    },
+    {
+      "decision": "沿用主题与状态习惯",
+      "evidence": "package.json 为 React 18/MTD React 3；现有 tokens.css、ThemeProvider 和 useState"
+    }
+  ],
+  "assumptions": [
+    "使用虚构咖啡连锁品牌和 18 条模拟门店数据",
+    "统计周期为 2026 年 10 月完整自然月",
+    "关注状态仅在当前页面会话中保留",
+    "当前示范不接真实后端"
+  ],
+  "modules": [
+    {
+      "id": "G-1",
+      "name": "顶部导航"
+    },
+    {
+      "id": "G-2",
+      "name": "侧边栏"
+    },
+    {
+      "id": "D-1",
+      "name": "指标卡片组",
+      "variant": "纯数字"
+    },
+    {
+      "id": "G-3",
+      "name": "筛选器栏",
+      "variant": "简单档"
+    },
+    {
+      "id": "G-4",
+      "name": "数据表格",
+      "variant": "图文信息表",
+      "inline": [
+        "操作栏",
+        "选择",
+        "分页器"
+      ]
+    },
+    {
+      "id": "FD1",
+      "name": "详情承载容器",
+      "variant": "抽屉"
+    },
+    {
+      "id": "Detail2",
+      "name": "描述列表",
+      "variant": "两列只读"
+    }
+  ],
+  "style": {
+    "mtd_theme": "primary",
+    "color_budget": [
+      "blue",
+      "green",
+      "orange"
+    ],
+    "tokens": "src/styles/tokens.css"
+  },
+  "charts": [],
+  "interactions": [
+    "查询及重置联动指标和表格",
+    "分页清空选中项",
+    "跨筛选清空选中项",
+    "单条/批量关注",
+    "导出选中或全部筛选结果 CSV",
+    "详情抽屉",
+    "主题切换",
+    "侧栏折叠"
+  ],
+  "mtd_components": [
+    "Button",
+    "Input",
+    "Select",
+    "Table",
+    "Pagination",
+    "Card",
+    "Tag",
+    "Drawer",
+    "Menu",
+    "Tabs",
+    "Icon",
+    "Empty"
+  ],
+  "l3_evidence": {
+    "query_script": "b-end-page/mtd3/scripts/mtd-rag.js",
+    "target": "mtd-react",
+    "version": "0.12.14",
+    "local_api_crosscheck": "node_modules/@ss/mtd-react3/lib/**/*.d.ts"
+  },
+  "route": "/examples/store-operations"
+}

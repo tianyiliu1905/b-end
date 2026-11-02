@@ -35,6 +35,7 @@ import DrawerDetailPage from './pages/detail/DrawerDetailPage';
 import ModalDetailPage from './pages/detail/ModalDetailPage';
 
 import TokenSheet from './pages/TokenSheet';
+import StoreOperations from './pages/examples/StoreOperations';
 
 import './styles/tokens.css';
 
@@ -61,7 +62,7 @@ function Home() {
 /** 全局主题切换悬浮栏：首页/模板/模块相关页面已在 TopNav 内置主题下拉，此处隐藏避免重复 */
 function GlobalThemeSwitcher() {
   const location = useLocation();
-  const hideOn = location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens';
+  const hideOn = location.pathname.startsWith('/examples/') || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens';
   if (hideOn) return null;
   return <ThemeSwitcher />;
 }
@@ -70,7 +71,7 @@ function GlobalThemeSwitcher() {
 function HomeFloatingButton() {
   const location = useLocation();
   const navigate = useNavigate();
-  if (location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens') return null;
+  if (location.pathname.startsWith('/examples/') || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens') return null;
   return (
     <div style={{
       position: 'fixed',
@@ -121,6 +122,7 @@ function App() {
           <Route path="/modules" element={<ModulesIndex />} />
           <Route path="/modules/:id" element={<ModuleDetail />} />
           <Route path="/tokens" element={<TokenSheet />} />
+          <Route path="/examples/store-operations" element={<StoreOperations />} />
 
           {/* Dashboard 页面 */}
           <Route path="/dashboard/overview" element={

@@ -11,7 +11,7 @@
 | Skill / 知识库 | [`b-end-page/SKILL.md`](b-end-page/SKILL.md) | 告诉 Agent 如何判断需求、按需读取规范、选择模块和实现页面 |
 | Showcase / 示范案例 | [`b-end-showcase/`](b-end-showcase/) | 运行页面与模块变体，查看设计效果，复制模块 Design Spec |
 
-> 本文根据早期工作规划、当前 Skill 导出和 Showcase 源码整理。当前 Skill 元数据为 **V27 / ID 97696**；源码导入基线为 `e819686`。本文描述现有资产与规则，未将规划目标视为效果验证结论。
+> 本文根据早期工作规划、当前 Skill 导出和 Showcase 源码整理。Skill 导出基线元数据为 **V27 / ID 97696**（仓库内已继续修改，见变更记录）；源码导入基线为 `e819686`。本文描述现有资产与规则，未将规划目标视为效果验证结论。
 
 ## 为什么做这个项目
 
@@ -81,7 +81,7 @@ Token 横跨页面与模块实现，统一颜色、字号、间距、圆角等�
 
 共同前置步骤：识别输入和粒度 → 判断从零生成或存量修改 → 探测 React/Vue 与依赖 → 扫描项目约束 → 选择 L1/L2 → 查询 L3。
 
-- **列表 / 看板**：代码生成前输出 Markdown + JSON Design Spec，明确模块、变体、布局、主题和交互；用户确认后生成并自检。
+- **列表 / 看板**：代码生成前输出 Markdown + JSON Design Spec，明确模块、变体、布局、主题和交互；说明依据与合理假设后直接生成并自检，无需等待用户确认。
 - **表单 / 详情**：按专用索引与容器规则直接生成，不经过通用 Design Spec 确认关卡；仍需完成环境识别、组件查询和验证。
 - **组件用法 / 排错**：直接查询对应框架的组件知识，不执行完整页面装配流程。
 
@@ -107,7 +107,7 @@ Showcase 将页面案例、模块变体和规格放在同一个浏览环境中�
 - **复制 Design Spec**：从模块目录、详情或悬浮面板复制已配置的规格；无规格的条目禁用复制。规格包含布局、Token、具体色值和代码骨架，便于交给其他 Agent 复用。
 - **Token 展示与双主题切换**：查看基础视觉语言及两套主题的表现。
 
-当前路由中包含 **16 个业务案例入口**：4 个看板、3 个列表、5 个表单和4个详情。案例数量不代表每种 Skill 模式均已有独立示例，也不代表全部案例已通过本次运行验证。
+当前路由中包含 **17 个业务案例入口**：4 个看板、4 个列表（含本次 Skill 实测）、5 个表单和4个详情。案例数量不代表每种 Skill 模式均已有独立示例，也不代表全部案例已通过本次运行验证。
 
 | 浏览内容 | 路由 |
 | --- | --- |
@@ -154,6 +154,15 @@ Showcase 将页面案例、模块变体和规格放在同一个浏览环境中�
 
 Skill 通过宿主平台或 Agent 环境加载；本仓库保留完整导出目录，没有提供统一的跨平台安装命令。Skill 的框架规则包含 React/Vue 分支，Showcase 当前仅提供 React 工程。
 
+## Skill 实测：门店经营管理
+
+首页列表分区新增 **Skill 实测 · 门店经营管理**，路由 `/examples/store-operations`。示例采用指标+明细模式，支持名称/城市/状态组合查询、指标联动、分页、单条/批量关注、CSV 导出、只读详情抽屉及双主题切换。
+
+- [实现源码](b-end-showcase/src/pages/examples/StoreOperations.tsx)
+- [Design Spec 与选型依据](b-end-showcase/src/pages/examples/store-operations.design-spec.json)
+- 数据为虚构样本，关注状态在当前页面会话内保留。
+- 验证：生产构建、新增页面独立类型检查和浏览器交互实测通过；全工程类型检查存在原有错误，尚未整体通过。
+
 ## 本地运行
 
 需要 Node.js **20.19.0 或更新版本**（依照 `package.json` 的 engines）及可获取内部依赖 `@ss/mtd-react3` 的 npm 环境。内部包与组件查询服务需要相应网络及访问权限；仓库不包含凭据或内部 registry 配置。
@@ -172,7 +181,7 @@ npm run build
 npm run preview
 ```
 
-当前技术栈声明为 React 18、TypeScript、Vite 4、React Router 6、Tailwind CSS 3、MTD React 3 和 AntV G2 5，具体版本由 `package-lock.json` 锁定。`build` 脚本为 `vite build`，不包含独立 TypeScript 检查；当前没有 `test` 脚本。本次整理只验证文档、文件路径和源码对应关系，未安装依赖或执行应用构建。
+当前技术栈声明为 React 18、TypeScript、Vite 4、React Router 6、Tailwind CSS 3、MTD React 3 和 AntV G2 5，具体版本由 `package-lock.json` 锁定。`build` 脚本为 `vite build`，不包含独立 TypeScript 检查；当前没有 `test` 脚本。初次文档整理未运行应用；后续 Skill 实测已安装依赖、通过生产构建并完成新页面浏览器验证。
 
 ## 维护闭环与当前边界
 

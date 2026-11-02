@@ -265,7 +265,7 @@ G-5（切换 tab）、List-2（操作栏）、List-3（分页器）只保留逻�
 
 #### 步骤 4：存量风格快照（仅存量场景）
 
-当判定为存量场景时，先扫描用户现有代码库，输出风格摘要供用户确认：
+当判定为存量场景时，先扫描用户现有代码库，输出风格摘要并说明适配依据，随后继续实施：
 
 **扫描范围**（三项）：
 
@@ -411,7 +411,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 3. **新增主题只改配置，不改业务代码**：新增一套主题时，只需新增一份 `references/theme-examples/tokens.<主题key>.overrides.css`（`html[data-theme='<key>']` 覆盖块），并在 `theme.react.tsx`/`theme.vue3.ts` 的 `themes` 配置对象中新增一条对应记录（`swatch` 取该主题主色），业务组件代码不需要任何改动，具体步骤见 `references/theme-system.md` §6。
 4. **自定义非预置主题色**（如用户口述"主题色改成 #FFC300"）：走 SCSS 覆盖方式，做法与新增主题一致，同样在主题配置层处理，具体步骤见 `references/theme-system.md` §自定义主题色。
 
-> ⚠️ **主题色变更必须在 Design Spec 中明确标注**（见 §7 步骤 6），让用户确认后再生成。SCSS 自定义主题需要项目支持 SCSS 编译（Vite 开箱即用，Webpack 需配置 sass-loader）。
+> ⚠️ **主题色变更必须在 Design Spec 中明确标注**（见 §7 步骤 6），说明主题色来源与适配依据后直接生成，无需等待确认。SCSS 自定义主题需要项目支持 SCSS 编译（Vite 开箱即用，Webpack 需配置 sass-loader）。
 
 **图表色板**：分类色 `--chart-1..7`（主题色/绿/橙/蓝绿/紫/粉/棕，共 7 色不含黄，`--chart-1` = `--color-brand-primary` 随主题联动）| 同色深浅 `--chart-primary-strong`(= `--color-primary-2`，active 色阶) vs `--chart-primary-weak`(= `--color-primary-5`，`#8FBCFF`) | 取色统一走 `src/lib/chartTokens.ts`（React）/ `src/composables/chartTokens.ts`（Vue）的 `chartPalette`/`chartMono`/`chartTrend` getter 对象，详见 `style-profile.md` §6。
 
@@ -474,7 +474,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 5. **加载 L1**：表单页读取 `references/L1-templates/page-表单页装配逻辑.md`，详情页读取 `references/L1-templates/page-详情页装配逻辑.md`。表单按顺序/步骤/主从落地页、抽屉或弹窗选容器；弹窗仅用于约 1–5 个字段且无分组、无分步的聚焦操作。详情仍按落地页（默认）或抽屉选容器，不开放弹窗。
 6. **装配 L2**：按 L1 的触发词与容器约束生成「容器 + 模块清单」，只读取清单命中的 `references/L2-modules/*.md`。优先复用 G/F；详情专属语义才用 D3/D5/D9。
 7. **查询 L3**：先读 `references/L3-notes/component-MTD组件清单.md`，校验组件名，再使用 `mtd3/scripts/mtd-rag.js` 查询当前框架的 API；读取 precautions 与 base 规范。不得凭记忆写 MTD API。
-8. **直接生成代码**：遵循 L1 容器与全局样式、L2 排版和 L3 API 生成可运行代码。除步骤 3 的存量组件库确认外，此分支**不输出、不等待通用 Design Spec 确认**。
+8. **直接生成代码**：遵循 L1 容器与全局样式、L2 排版和 L3 API 生成可运行代码。此分支**不强制输出通用 Design Spec，也不等待确认**。
 9. **验证**：执行项目可用的构建/类型检查/测试，并逐项核对表单/详情 L1/L2/L3 规则；有组件报错时重新查询知识库，最多重试 3 次。
 
 完成该分支后直接结束，不再进入下方通用步骤 2–8。下方通用 Design Spec 流程只适用于列表页和数据看板。
@@ -496,7 +496,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 
 ### 步骤 3：存量风格快照（仅存量）
 
-详见 §3.3 步骤 4。扫描 CSS 变量/Token 体系 + 状态管理方式，输出风格快照供用户确认。
+详见 §3.3 步骤 4。扫描 CSS 变量/Token 体系 + 状态管理方式，输出风格快照并说明适配依据，无需等待确认。
 
 > 增量场景跳过此步。
 
@@ -514,9 +514,9 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 2. 用 `mtd-rag.js --target=mtd-react|mtd-vue` 查询本页用到的所有 MTD 组件
 3. 图表查 `antv-g2-chart` skill 的 G2 v5 Spec 写法
 
-### 步骤 6：⭐ 输出 Design Spec（确认关卡 — 生成前必须暂停）
+### 步骤 6：输出有依据的 Design Spec（输出后直接继续）
 
-列表页和数据看板写代码前，必须先输出 Design Spec（Markdown 给人看 + JSON 给程序解析），**然后暂停等用户确认或调整**。只有用户确认后才进入代码生成。表单页和详情页是明确例外：按 §7.0 直接生码，不进入本步骤。
+列表页和数据看板写代码前，先输出 Design Spec（Markdown 给人看 + JSON 给程序解析），说明页面模式、模块、变体、主题及关键交互的选型依据，**输出后直接进入实施前自检与代码生成，不暂停等待用户确认**。依据应来自用户需求、现有项目代码、命中的 L1/L2 规范及 L3 查询结果；合理补全的需求须标为假设，不得伪装成用户要求。只有缺少影响正确性的关键信息且无法从上下文推断，或用户明确要求先审方案时，才提出必要问题。表单页和详情页按 §7.0 直接生码，不强制套用本通用 Spec 模板。
 
 **Markdown 格式**（直接输出到对话中）：
 
@@ -530,6 +530,12 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 - 框架：[React / Vue 2 / Vue 3] — MTD 包名：[@ss/mtd-react3 / ...]
 
 - MTD 主题色：[默认蓝 #166FF7 / 美团黄 #FFDD00 / 自定义 #XXXXXX] — [如需自定义：生成 custom-theme.scss]
+
+### 选型依据与假设
+- 页面模式：[需求中的数据形态/任务目标 → L1 对应规则]
+- 模块与变体：[触发词/数据结构 → 命中的 L2 规范]
+- 技术与主题：[package.json / 主题文件 / L3 查询结果]
+- 合理假设：[需求未指定的范围与默认值；无则写无]
 
 ### 模块清单
 | 序号 | 模块编号 | 模块名 | 变体 | 备注 |
@@ -571,7 +577,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 - [ ] 图标全用 MTD Icon，-o 线性统一
 
 - [ ] G-1 顶导 + G-2 侧导已包含（除非用户明确排除或目标已有）
-- [ ] 存量场景：Token 映射已确认
+- [ ] 存量场景：Token 映射已核对
 - [ ] 存量场景：默认使用 MTD 组件库（用户明确指定遵循存量组件时除外）
 - [ ] **L3 特殊描述复查**：代码中用到的每个 MTD 组件，检查 `references/L3-notes/` 下是否有对应说明文件（当前已有：mtd-tabs、mtd-row）；如果有，逐条对照说明文件中的「准则」和「易错点」确认代码无违反（如 mtd-tabs 的上 padding 归零、mtd-row 的 gutter 规范等）
 - [ ] 同行卡片等高：tokens.css 同时覆盖 `.mtd-prime-row` 和 `.mtd-prime-row-flex`
@@ -586,6 +592,8 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
   "scenario": "increment | existing",
   "page_type": "dashboard | list",
   "l1_assembly": "page-看板页装配逻辑.md :: 筛选+表格",
+  "rationale": ["需求以复杂查询和明细操作为主，对应 L1 筛选+表格模式"],
+  "assumptions": ["未指定主题，采用工具蓝"],
   "framework": "react | vue2 | vue3",
   "component_library": "@ss/mtd-react3",
   "style": {
@@ -616,16 +624,11 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 }
 ```
 
-> **渐进式精化**：用户确认 spec 后可能要求调整（如"去掉 D-3""G-4 改成带图片列"）。每次调整都更新 Markdown + JSON spec，增量生成代码。不需要每次重新走全流程，只需更新 spec 变更部分。
+> **渐进式精化**：用户在 spec 输出或页面生成后可能要求调整（如"去掉 D-3""G-4 改成带图片列"）。每次调整都更新 Markdown + JSON spec，增量生成代码。不需要每次重新走全流程，只需更新 spec 变更部分。
 
-### 步骤 7：用户确认
+### 步骤 7：实施前自检（不等待用户确认）
 
-**暂停，等待用户确认 Design Spec。** 用户可能：
-- 直接确认 → 进入步骤 8
-- 要求调整模块/变体 → 更新 spec 后重新确认
-- 补充新需求 → 更新 spec，增量生成
-
-> ⚠️ **不要跳过确认直接生成代码。** spec 确认是减少返工的关键关卡。
+核对 Spec 与用户需求、项目约束、L1/L2 规范及已查询的 L3 API 一致，假设明确、模块不过度叠加，然后直接进入步骤 8。若用户补充需求或调整模块/变体，更新 Markdown + JSON Spec 并增量生成，不重新设置确认关卡。用户明确要求先审方案时，按用户要求等待。
 
 ### 步骤 8：代码生成
 
