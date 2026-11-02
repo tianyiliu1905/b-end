@@ -1,0 +1,482 @@
+/* ============================================================
+ * 弹窗详情页 — 优惠券管理列表 + Modal 详情
+ * 技术栈：React (@ss/mtd-react3)
+ * z-index 策略（与抽屉页相反）：
+ *   顶导保持 z-index: 1100（标准值），
+ *   Modal 通过 .detail-modal 推到 z-index: 1200 覆盖顶导。
+ *   （抽屉页是降低顶导至 100，让 Drawer 蒙层 900 覆盖；
+ *    弹窗页是保持顶导 1100，提升 Modal 至 1200 覆盖。）
+ * ============================================================ */
+
+/* ============================================================
+ * 主题色变量（蓝色主题，默认）
+ * ============================================================ */
+:root {
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+  --primary-on-light: var(--color-brand-primary, #166FF7);
+  --primary-text-on: #FFFFFF;
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+}
+
+/* ============================================================
+ * 全局基础
+ * ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background: #f5f6f7;
+  color: rgba(17, 25, 37, 0.85);
+}
+
+/* ============================================================
+ * AppShell 整体骨架
+ * ============================================================ */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding-top: var(--top-nav-h, 52px); /* 避开顶导 */
+}
+
+/* ============================================================
+ * G-topnavbar · 顶部导航栏
+ * position: fixed 贴顶满宽，z-index 1100
+ * ============================================================ */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h, 52px);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导统一为 100：低于抽屉蒙层(900)与弹窗蒙层(1050)，避免全局类名冲突 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+/* Logo 区 */
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+width: 24px;
+height: 24px;
+background: var(--primary, #166FF7);
+border-radius: 4px;
+flex-shrink: 0;
+}
+
+.logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+/* Tab 区 */
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  position: relative;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;  /* 去 a 标签默认下划线 */
+  cursor: pointer;
+}
+
+/* hover：仅颜色加深，显式去下划线 */
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+/* 选中态：文字加深加粗 + 2px 主色底线 */
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+/* 操作区 */
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.top-nav-icon {
+  font-size: 20px !important;
+  color: #646a73 !important;
+  cursor: pointer;
+}
+
+.top-nav-icon:hover {
+color: var(--primary, #166FF7) !important;
+}
+
+.top-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ============================================================
+ * G-sidenavbar · 侧边导航栏
+ * position: fixed，贴顶导下方，展开 200px / 折叠 60px
+ * ============================================================ */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--side-nav-w);
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav--collapsed {
+  width: var(--side-nav-w-collapsed, 60px);
+}
+
+/* 菜单滚动区 */
+.side-nav-menus {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-nav-menus::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav-menu {
+  width: 100%;
+}
+
+/* 二三级无 icon 项补偿对齐 */
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 折叠按钮 */
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.side-nav--collapsed .side-nav-collapse {
+  justify-content: center;
+  border-top: none;
+}
+
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+
+/* ============================================================
+ * 主内容区 · 避开顶导和侧导
+ * ============================================================ */
+.app-content {
+  margin-left: var(--side-nav-w, 200px);
+  flex: 1;
+  min-width: 0;
+  background: #f5f6f7;
+  transition: margin-left 0.2s ease;
+  height: calc(100vh - var(--top-nav-h));
+  overflow: hidden;
+}
+
+.side-nav--collapsed ~ .app-content,
+.app-body:has(.side-nav--collapsed) .app-content {
+  margin-left: var(--side-nav-w-collapsed, 60px);
+}
+
+/* ============================================================
+ * G1 · 承载容器 — 顺序落地页（灰底 + 白卡）
+ * ============================================================ */
+.page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px 24px 0;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+ * G2 · 表头信息区
+ * ============================================================ */
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.page-header__desc {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.65);
+  line-height: 22px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+ * 可滚动内容区（表格）
+ * ============================================================ */
+.scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ============================================================
+ * G8 · 只读数据表格（与抽屉版对齐）
+ * ============================================================ */
+.readonly-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.readonly-table .mtd-prime-table-wrapper {
+  background: #fff;
+}
+
+/* 注意：MTD Table 渲染的 td 元素无 class 名，
+   .mtd-prime-table-cell 选择器不生效，需直接匹配 td。
+   行高 48px = padding-top 13px + line-height 22px + padding-bottom 13px */
+.readonly-table .mtd-prime-table-cell,
+.readonly-table table td {
+  padding: 13px 8px;
+}
+
+.readonly-table .mtd-prime-table-header-cell,
+.readonly-table table th {
+  white-space: nowrap;
+}
+
+.readonly-table__pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.readonly-table a {
+  color: var(--primary, #166ff6);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.readonly-table a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * 弹窗内部 — 分组区域（F4 分组分段）
+ * ============================================================ */
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.modal-section__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2329;
+  margin: 0 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(17, 25, 37, 0.10);
+}
+
+/* ============================================================
+ * D5 描述列表 —— 基础样式（CSS Grid 2 列）
+ * 不使用 MTD Row/Col（float-based 会导致长内容错位），
+ * 改用 CSS Grid 确保两列对齐。
+ * ============================================================ */
+.description-list {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.description-list__item {
+  display: flex;
+  padding: 8px 16px 8px 0;
+  font-size: 14px;
+  line-height: 22px;
+  box-sizing: border-box;
+}
+
+.description-list__label {
+  color: rgba(17, 25, 37, 0.45);
+  flex-shrink: 0;
+  width: 80px;
+}
+
+.description-list__value {
+  color: rgba(17, 25, 37, 0.85);
+  flex: 1;
+  word-break: break-all;
+}
+
+.description-list__value--link {
+  color: var(--color-heading-accent, var(--primary));
+  cursor: pointer;
+}
+
+.description-list__value--link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * 4 列模式：label 与 value 纵向排列
+ * ============================================================ */
+.description-list--col4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.description-list--col4 .description-list__item {
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px 10px 0;
+}
+
+.description-list--col4 .description-list__label {
+  width: auto;
+  font-size: 13px;
+}
+
+.description-list--col4 .description-list__value {
+  font-size: 14px;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* ============================================================
+ * Modal z-index 修正
+ * 顶导 z-index: 1100，MTD Modal 默认遮罩 z-index 为 1050+
+ * 需确保 Modal 弹窗在顶导之上
+ * ============================================================ */
+.detail-modal {
+  z-index: 1200 !important;
+}
+
+/* ============================================================
+ * 窄屏适配
+ * ============================================================ */
+@media (max-width: 767.98px) {
+  .page-container {
+    padding: 12px;
+  }
+}

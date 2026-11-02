@@ -1,0 +1,313 @@
+/* ===== 页面级变量 ===== */
+:root {
+  --primary: var(--color-brand-primary, #166FF7);
+}
+
+/* ===== 页面容器 ===== */
+.page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 20px 24px 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ===== F2 表头信息区 ===== */
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.page-header__breadcrumb {
+  margin-bottom: 8px;
+}
+
+.page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+}
+
+.page-header__title--with-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-header__back-icon {
+  font-size: 20px;
+  color: #646a73;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.page-header__back-icon:hover {
+  color: var(--primary);
+}
+
+.page-header__status {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* 摘要信息行 */
+.page-header__summary {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-header__summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.page-header__summary-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.page-header__summary-label {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.45);
+  line-height: 22px;
+  flex-shrink: 0;
+}
+
+.page-header__summary-value {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.85);
+  line-height: 22px;
+}
+
+.page-header__summary-value--link {
+  color: var(--primary);
+  cursor: pointer;
+}
+
+/* 两行模式：用 Grid 把每行均分成等宽列，列内 label 固定宽度、value 撑满剩余空间。
+ * grid-template-columns 的列数 N 两行必须统一取两行字段数中较大的那个值。
+ * 窄容器兜底：当容器 < 500px 时回退为 2 列，< 300px 时回退为 1 列。 */
+.page-header__summary--aligned .page-header__summary-row {
+  display: grid;
+  gap: 8px 16px;
+}
+
+.page-header__summary--aligned .page-header__summary-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.page-header__summary--aligned .page-header__summary-label {
+  display: inline-block;
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.page-header__summary--aligned .page-header__summary-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 窄屏兜底：预览窗口/小屏下 grid 4列会让 value 塌陷，回退成 2 列 */
+@media (max-width: 1100px) {
+  .page-header__summary--aligned .page-header__summary-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .page-header__summary--aligned .page-header__summary-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ===== F4 分组标题 ===== */
+/* 需要显式 display:block 覆盖 StoreSettingsPage.css 中全局 .form-section{display:flex} 的污染 */
+.form-section {
+  display: block;
+  padding: 8px 0;
+}
+
+.form-section__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 24px;
+  margin: 24px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.form-section:first-of-type .form-section__title {
+  margin-top: 0;
+}
+
+/* ===== D5 描述列表 ===== */
+.desc-list {
+  width: 100%;
+}
+
+.desc-list--2col .desc-list__item,
+.desc-list--3col .desc-list__item,
+.desc-list--1col .desc-list__item {
+  padding: 8px 16px 8px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.desc-list__label {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.45);
+  line-height: 22px;
+  flex-shrink: 0;
+  width: 70px;
+}
+
+.desc-list__value {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.85);
+  line-height: 22px;
+  word-break: break-all;
+  flex: 1;
+  min-width: 0;
+}
+
+.desc-list__value--link {
+  color: var(--primary);
+  cursor: pointer;
+}
+
+/* ===== D3 Tab ===== */
+.detail-tabs {
+  margin-top: 4px;
+}
+
+/* 隐藏无内容 TabPane 的占位 */
+.detail-tabs .mtd-prime-tabs-content {
+  padding-top: 16px;
+}
+
+/* ===== F8 只读表格 ===== */
+.readonly-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.readonly-table .mtd-prime-table-wrapper {
+  background: #fff;
+}
+
+.readonly-table .mtd-prime-table-cell {
+  padding: 8px 8px;
+}
+
+.readonly-table .mtd-prime-table-header-cell {
+  white-space: nowrap;
+}
+
+.readonly-table__pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.table-link {
+  color: var(--primary, #166FF7);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.table-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Timeline ===== */
+.timeline-wrapper {
+  padding: 16px 0 16px 6px; /* 左侧留 6px，防止图标（16px）超出 line 容器（10px）被 scroll-content overflow 裁剪 */
+}
+
+/* ===== Detail-2 横向流程节点 ===== */
+.steps-flow-wrapper {
+  padding: 24px 0 16px;
+}
+
+/* ===== D9 附件预览 ===== */
+.attachment-section {
+  padding: 16px 0;
+}
+
+.attachment-section__title {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(17, 25, 37, 0.85);
+  margin-bottom: 12px;
+}
+
+.attachment-preview__files {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+
+.attachment-preview__file-link {
+  color: var(--primary, #166ff6);
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.attachment-preview__file-link:hover {
+  text-decoration: underline;
+}
+
+.attachment-preview__images {
+  display: flex;
+  gap: 12px;
+}
+
+.attachment-preview__image {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}

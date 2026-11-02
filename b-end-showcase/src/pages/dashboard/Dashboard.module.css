@@ -1,0 +1,397 @@
+/* 看板页通用样式 */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-module);
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-elem);
+}
+
+.filterLabel {
+  font-size: var(--fs-14);
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: var(--text-1);
+  background: var(--bg-card);
+  outline: none;
+}
+
+.filterSelect:focus {
+  border-color: var(--color-brand-primary);
+}
+
+/* D-1 指标卡片组 */
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-module);
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-elem);
+}
+
+.metricLabel {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+
+.metricValue {
+  font-size: var(--fs-24);
+  line-height: var(--lh-24);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+/* 图表区域 */
+.chartRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--gap-module);
+}
+
+.chartMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
+
+.chartSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.granularity {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  overflow: hidden;
+}
+
+.granBtn {
+  padding: 4px 12px;
+  font-size: var(--fs-12);
+  border: none;
+  background: var(--bg-card);
+  color: var(--text-2);
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+}
+
+.granBtn:last-child {
+  border-right: none;
+}
+
+.granActive {
+  background: var(--color-brand-primary);
+  color: #fff;
+}
+
+/* 全宽图表 */
+.chartFull {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
+
+/* 状态指标卡 */
+.statusMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-module);
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-module);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statusLabel {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+
+.statusValue {
+  font-size: var(--fs-24);
+  line-height: var(--lh-24);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+/* 表格 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  /* 单元格内边距属于组件内部排版，不跟随模块间距 token */
+  padding: var(--gap-elem) var(--card-padding);
+  text-align: left;
+  font-size: var(--fs-14);
+  border-bottom: 1px solid var(--divider);
+}
+
+.table th {
+  font-weight: var(--fw-medium);
+  color: var(--text-3);
+  background: var(--bg-card-inner);
+}
+
+.table td {
+  color: var(--text-2);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-4);
+  font-size: var(--fs-12);
+}
+
+.tagGreen {
+  background: #e6f7ef;
+  color: var(--color-green);
+}
+
+.tagRed {
+  background: #fff1f0;
+  color: var(--color-red);
+}
+
+.tagOrange {
+  background: #fff7e6;
+  color: var(--color-orange);
+}
+
+.tagBlue {
+background: var(--color-primary-4);
+color: var(--color-heading-accent);
+}
+
+.tagGray {
+  background: var(--bg-card-inner);
+  color: var(--text-4);
+}
+
+/* 进度条 */
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-card-inner);
+  border-radius: var(--radius-4);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-brand-primary);
+  border-radius: var(--radius-4);
+  transition: width 0.3s;
+}
+
+/* 操作卡 D-6 */
+.actionCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-module);
+}
+
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-elem);
+}
+
+.actionCardTitle {
+  font-size: var(--fs-14);
+  font-weight: var(--fw-medium);
+  color: var(--text-1);
+}
+
+.actionCardDesc {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+  flex: 1;
+}
+
+.actionCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionCardMetric {
+  font-size: var(--fs-16);
+  font-weight: var(--fw-semibold);
+  color: var(--color-heading-accent);
+}
+
+.actionBtn {
+  padding: 4px 12px;
+  background: var(--color-brand-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-4);
+  font-size: var(--fs-12);
+  cursor: pointer;
+}
+
+.actionBtn:hover {
+background: var(--color-primary-2);
+}
+
+/* 目标管理 */
+.goalRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--gap-module);
+}
+
+.goalRing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-module);
+}
+
+.goalList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
+
+.goalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goalItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goalItemName {
+  font-size: var(--fs-14);
+  color: var(--text-2);
+}
+
+.goalItemPercent {
+  font-size: var(--fs-14);
+  font-weight: var(--fw-medium);
+  color: var(--color-heading-accent);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--divider);
+  margin-bottom: var(--gap-module);
+}
+
+.tab {
+  padding: var(--gap-elem) var(--card-padding);
+  font-size: var(--fs-14);
+  color: var(--text-3);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tabActive {
+  color: var(--color-heading-accent);
+  border-bottom-color: var(--color-brand-primary);
+  font-weight: var(--fw-medium);
+}
+
+/* 漏斗 */
+.funnelRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-module);
+}
+
+/* 驾驶舱多维图表 */
+.cockpitCharts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-module);
+}
+
+.cockpitChart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--gap-elem);
+  padding: var(--gap-elem) 0;
+}
+
+.pageBtn {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  background: var(--bg-card);
+  font-size: var(--fs-12);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.pageBtn:hover {
+  border-color: var(--color-brand-primary);
+  color: var(--color-heading-accent);
+}
+
+.pageInfo {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}

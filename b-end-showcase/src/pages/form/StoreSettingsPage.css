@@ -1,0 +1,319 @@
+/* ===== 全局变量 ===== */
+:root {
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+  --primary-on-light: var(--color-brand-primary, #166FF7);
+  --primary-text-on: #FFFFFF;
+}
+
+/* 全局重置已移除，避免影响其他页面 */
+
+.app-shell {
+  min-height: 100vh;
+}
+
+/* ===== 顶导航栏 ===== */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h, 52px);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导必须低于抽屉蒙层(900)与弹窗蒙层(1050)，统一为 100 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.store-settings .top-nav-logo .logo-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--color-brand-primary, var(--primary));
+  border-radius: 4px;
+}
+
+.store-settings .top-nav-logo .logo-name {
+  width: 64px;
+  height: 24px;
+  background: #e8e8e8;
+  border-radius: 4px;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  position: relative;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.top-nav-actions .avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8e8;
+}
+
+/* ===== 侧导航栏 ===== */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--side-nav-w);
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav--collapsed {
+  width: var(--side-nav-w-collapsed);
+}
+
+.side-nav-menu {
+  flex: 1;
+  overflow-y: auto;
+  border-right: none !important;
+}
+
+/* 一级菜单 icon 尺寸覆盖（MTD 默认 14px，规范要求 20px） */
+.side-nav-menu .mtd-prime-menu-item-custom-icon {
+  font-size: 20px !important;
+}
+
+/* 二三级无 icon 项对齐补偿 */
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+/* 折叠按钮 */
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.side-nav--collapsed .side-nav-collapse {
+  justify-content: center;
+  border-top: none;
+}
+
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 20px;
+  color: #5a5f66;
+}
+
+.side-nav-collapse-btn:hover {
+  background: #F3F3F4;
+}
+
+/* ===== 内容区 ===== */
+.store-settings .app-content {
+  margin-left: var(--side-nav-w);
+  padding-top: var(--top-nav-h);
+  min-height: 100vh;
+  background: #f5f6f7;
+  transition: margin-left 0.2s ease;
+}
+
+.store-settings .app-content--collapsed {
+  margin-left: var(--side-nav-w-collapsed);
+}
+
+.page-container {
+  padding: 16px;
+  min-height: calc(100vh - var(--top-nav-h));
+}
+
+/* ===== 主从白卡容器 ===== */
+.content-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  display: flex;
+  min-height: calc(100vh - var(--top-nav-h) - 32px);
+}
+
+/* ===== 左侧列表面板（二级侧导） ===== */
+.master-panel {
+  width: 200px;
+  flex-shrink: 0;
+  padding: 8px;
+  border-right: 1px solid #e5e6e8;
+  overflow-y: auto;
+  border-radius: 8px 0 0 8px;
+}
+
+.master-panel__menu {
+  border-right: none !important;
+}
+
+/* ===== 右侧面板 ===== */
+.detail-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-panel__content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+/* ===== 页面标题 ===== */
+.store-settings .page-header {
+  margin-bottom: 24px;
+}
+
+.store-settings .page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+}
+
+/* ===== 操作栏（内嵌模式） ===== */
+.action-bar {
+  border-top: 1px solid #e5e6e8;
+  padding: 12px 24px;
+  flex-shrink: 0;
+}
+
+.action-bar__inner {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ===== 表单布局 ===== */
+.section-form {
+  max-width: 640px;
+}
+
+/* React Form 内部是 flex wrap，分组 div 必须撑满整行 */
+.section-form > div {
+  width: 100%;
+}
+
+/* 分组容器需要 flex-wrap 让 span-N 的 Form.Item 并排 */
+.form-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* 控件撑满所在列 — MTD 的 Select / InputNumber / Cascader 等默认宽度不是 100% */
+.section-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+
+.section-form .mtd-prime-select,
+.section-form .mtd-prime-picker,
+.section-form .mtd-prime-date-picker,
+.section-form .mtd-prime-input-number,
+.section-form .mtd-prime-range-picker,
+.section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* ===== 窄屏响应式 ===== */
+@media (max-width: 480px) {
+  .page-container {
+    padding: 12px;
+  }
+
+  .content-card {
+    flex-direction: column;
+  }
+
+  .master-panel {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e6e8;
+    border-radius: 8px 8px 0 0;
+    max-height: 200px;
+  }
+}

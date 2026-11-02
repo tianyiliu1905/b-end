@@ -1,0 +1,128 @@
+/* ============================================================
+ * Detail3 附件预览 —— 类名统一加 ap- 前缀（AttachmentPreview 缩写）
+ * 避免与项目中其他页面同名类冲突（普通 .css 是全局作用域）
+ * ============================================================ */
+
+/* 外层容器 */
+.ap-wrap {
+  padding: 16px 0 8px;
+}
+
+/* 区域标题（"附件资料"/"现场照片"等） */
+.ap-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+ * 图片缩略图区域（图片类附件）
+ * 规范：96×96px，间距 12px，圆角 4px，边框 1px solid #f0f0f0，图片区在上
+ * ============================================================ */
+.ap-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ap-image-thumb {
+  width: 96px;
+  height: 96px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--divider, rgba(17, 25, 37, 0.1));
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* MTD Image 组件本身默认 display:inline，需要设为 block 撑满缩略图容器 */
+.ap-image-thumb .mtd-prime-image,
+.ap-image-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+ * 文件链接列表（文件类附件）
+ * 规范：纯文字蓝色链接，无图标，无文件大小，横向并排，超出换行
+ * ============================================================ */
+.ap-files {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px; /* 行间距 8px，同行文件间距 24px */
+}
+
+.ap-file-link {
+  color: var(--color-brand-blue, #166ff7);
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ap-file-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * 变体 D：嵌入 GroupSection 的场景演示
+ * ============================================================ */
+.ap-group-demo {
+  border: 1px solid var(--divider, rgba(17, 25, 37, 0.07));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ap-group-header {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  border-bottom: 1px solid var(--divider, rgba(17, 25, 37, 0.07));
+  background: var(--bg-card, #fff);
+}
+
+.ap-group-body {
+  padding: 8px 20px 16px;
+  background: var(--bg-card, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* 描述列表行（模拟 D2 字段）*/
+.ap-desc-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.ap-desc-label {
+  color: var(--text-3, rgba(17, 25, 37, 0.45));
+  flex-shrink: 0;
+  width: 80px;
+}
+
+.ap-desc-value {
+  color: var(--text-1, rgba(17, 25, 37, 0.85));
+}
+
+/* 附件行：label 顶部对齐（文件链接可能换行）*/
+.ap-desc-row--attachment {
+  align-items: flex-start;
+  padding-top: 8px;
+}
+
+/* 嵌入描述列表行内的文件链接区，与 label 对齐后占满剩余宽度 */
+.ap-files--inline {
+  flex: 1;
+  min-width: 0;
+}

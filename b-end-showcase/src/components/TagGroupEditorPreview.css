@@ -1,0 +1,21 @@
+/* ─────────────────────────────────────────────
+   Form9 · 增删标签组（TagGroupEditor）
+   ───────────────────────────────────────────── */
+
+/* 控件区垂直居中
+ * Tag 高度 ~24px < Form.Item 行高 32px，默认贴顶导致与左侧 label 未对齐。
+ * 注意：主表单 .section-form 的作用域选择器不会覆盖到此处，
+ * 必须单独为 .tag-groups-block 补一条居中修正。 */
+.tag-groups-block .mtd-prime-form-item-body {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+/* 标签组行容器：横向排列 + 自动换行 */
+.tag-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}

@@ -1,0 +1,91 @@
+/* ============================================================
+ * SpecQualificationDrawer.css
+ * 三层规范来源：
+ *   F1 PresentationContainer → 抽屉容器（width 640px, maskClosable false）
+ *   F2 PageHeader  → 抽屉辅助描述 .sq-drawer-desc
+ *   F3 GroupSection → 分组标题 .sq-form-section__title（蓝色方块 + 分组间距 24px）
+ *   F4 SingleLayout → 紧凑模式（flex-wrap 撑满、控件 100%、行间距 12px）
+ *   F14 ActionBar   → 抽屉 footer 操作栏 .sq-drawer-action-bar
+ * ============================================================ */
+
+/* ---- F2 · 抽屉内辅助描述 ---- */
+.sq-drawer-desc {
+  font-size: 14px;
+  color: #646a73;
+  line-height: 22px;
+  margin: 0 0 16px;
+}
+
+/* ---- F3 · 分组分段 ---- */
+
+/* 分组容器：分组间距 24px */
+.sq-form-section {
+  margin-top: 24px;
+}
+
+/* 首个分组无上间距 */
+.sq-form-section:first-child,
+.sq-form-section:first-of-type {
+  margin-top: 0;
+}
+
+/* 分组标题
+ * 16px/600, color #1f2329
+ * ::before 蓝色方块 2px × 16px
+ * 标题与首字段间距 margin-bottom 16px */
+.sq-form-section__title {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 24px;
+  margin: 0 0 16px;
+  gap: 8px;
+}
+
+.sq-form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--color-brand-primary, #166FF7);
+  flex-shrink: 0;
+}
+
+/* ---- F4 · 单栏布局（紧凑模式 — 抽屉场景） ---- */
+
+/* 表单宽度与 Drawer 拉通 */
+.sq-spec-form {
+  width: 100%;
+}
+
+/* React Form 内部是 flex-wrap，分组 div 必须撑满整行 */
+.sq-spec-form > div {
+  width: 100%;
+}
+
+/* 控件撑满所在列 */
+.sq-spec-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+.sq-spec-form .mtd-prime-select,
+.sq-spec-form .mtd-prime-picker,
+.sq-spec-form .mtd-prime-date-picker,
+.sq-spec-form .mtd-prime-input-number,
+.sq-spec-form .mtd-prime-range-picker,
+.sq-spec-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* 紧凑模式行间距 12px */
+.sq-spec-form .mtd-prime-form-item {
+  margin-bottom: 12px;
+}
+
+/* ---- F14 · 操作工具栏（抽屉 footer） ---- */
+.sq-drawer-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}

@@ -1,0 +1,171 @@
+/* ============================================================
+ * Form8 · 公式编辑器（FormulaEditor）
+ * ============================================================ */
+
+/* ───────── 变体 A · 条件规则型（条件组树 A-1）基线复用件 ───────── */
+
+/* ① 且/或 badge —— 灰底白字胶囊，可切换的带下拉箭头 */
+.logic-connector {
+  display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+  height: 24px; padding: 0 8px; border-radius: 12px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  user-select: none; flex-shrink: 0; line-height: 1;
+  transition: all .15s; border: none;
+  background: var(--text-6); color: #fff;
+}
+.logic-connector:hover { opacity: .85; }
+.logic-connector__menu {
+  position: absolute; top: 100%; left: 0; z-index: 10;
+  background: var(--bg-card); border-radius: 4px; box-shadow: var(--shadow-mid);
+  padding: 4px 0; min-width: 100px;
+}
+.logic-connector__menu-item {
+  padding: 6px 12px; font-size: 12px; cursor: pointer;
+}
+.logic-connector__menu-item:hover { background: var(--bg-card-inner); }
+
+/* ② 规则行 + 行内操作按钮（基线 padding-top:22px 对齐带顶部 label 的行） */
+.rule-row { display: flex; align-items: flex-start; gap: 8px; }
+.rule-row + .rule-row { margin-top: 8px; }
+.rule-row__fields { display: flex; align-items: flex-start; gap: 8px; flex: 1; }
+.rule-row__actions {
+  display: flex; align-items: flex-start; gap: 4px; flex-shrink: 0; padding-top: 22px;
+}
+.rule-row__action-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 4px;
+  border: none; background: var(--bg-card-inner); cursor: pointer;
+  font-size: 14px; color: var(--text-3); transition: all .15s;
+}
+.rule-row__action-btn:hover { background: var(--divider); color: var(--color-brand-primary); }
+.rule-row__action-btn--danger:hover { background: #fff1f0; color: var(--color-red); }
+
+/* ③ 文字+icon 操作链接 —— 统一主色蓝，不用橙色 */
+.add-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 13px; color: var(--color-brand-primary); cursor: pointer;
+  background: none; border: none; padding: 4px 0; margin-top: 8px;
+}
+.add-link:hover { text-decoration: underline; }
+
+/* ───────── A-1 · 条件组树 ───────── */
+.condition-groups { display: flex; flex-direction: column; gap: 12px; }
+
+/* 容器节点：灰底，水平排列 = 逻辑列 + 子节点列 */
+.tree-container {
+  display: flex; align-items: stretch;
+  background: var(--bg-card-inner); border-radius: 8px; padding: 16px;
+  gap: 12px;
+}
+/* 嵌套容器：透明背景，不额外加灰底 */
+.tree-container .tree-container {
+  background: transparent; border-radius: 0; padding: 0;
+}
+
+/* 逻辑列：纵向贯穿，上线 + badge + 下线 */
+.tree-logic-col {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; min-width: 28px;
+}
+.tree-logic-col__line {
+  flex: 1; width: 1px; background: var(--text-6); min-height: 12px;
+}
+.tree-logic-col__badge {
+  position: relative; z-index: 2; flex-shrink: 0; padding: 4px 0;
+}
+
+/* 子节点列 */
+.tree-container__children {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* 条件组卡片（叶子节点）：透明背景，融入外层灰底 */
+.condition-group {
+  background: transparent; border-radius: 0; overflow: hidden;
+}
+
+/* 条件组头部 */
+.condition-group__header {
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; padding: 4px 0;
+}
+.condition-group__header-title { font-size: 14px; font-weight: 500; flex: 1; }
+.condition-group__header-delete {
+  border: none; background: transparent; cursor: pointer; padding: 4px;
+  color: var(--text-4);
+}
+
+/* 条件组内部布局 */
+.condition-group__body { padding: 4px 0; }
+.condition-group__rows {
+  display: flex; gap: 12px; align-items: stretch;
+}
+.condition-group__rules-col {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+/* 公式编辑器内部嵌套的 Form.Item：均分可用空间，不写固定宽度 */
+.rule-row__fields .mtd-prime-form-item {
+  flex: 1; min-width: 0; width: auto;
+}
+/* label 上下布局时：左对齐、宽度自适应（覆盖 useContext 继承的 120px 右对齐） */
+.rule-row__fields .mtd-prime-form-item .mtd-prime-form-item-label {
+  width: auto;
+}
+.rule-row__fields .mtd-prime-form-item .mtd-prime-form-item-label-ctx {
+  width: auto !important;
+  text-align: left;
+}
+/* 内部控件撑满 Form.Item */
+.rule-row__fields .mtd-prime-form-item .mtd-prime-form-item-body {
+  flex: 1; min-width: 0;
+}
+.rule-row__fields .mtd-prime-form-item .mtd-prime-select,
+.rule-row__fields .mtd-prime-form-item .mtd-prime-input {
+  width: 100%;
+}
+
+/* ───────── 变体 B · 计算公式配置型 ───────── */
+.formula-config-container {
+  background: var(--bg-card-inner); border-radius: 8px; padding: 16px;
+}
+/* 自定义键值行：label 在左，公式内容在右（不用 Form.Item，避免双层 label） */
+.formula-config-row {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.formula-config-row__label {
+  flex-shrink: 0; width: 98px;
+  font-size: 14px; color: var(--text-3); line-height: 32px;
+  white-space: nowrap;
+}
+.formula-config-row__body {
+  flex: 1; min-width: 0; overflow-x: auto;
+}
+.formula-config-divider {
+  border-top: 1px solid var(--divider); margin: 16px 0;
+}
+/* 公式行：固定文本 + 运算符 + checkbox + select 横向排列，默认不换行 */
+.formula-template {
+  display: flex; flex-wrap: nowrap; align-items: center; gap: 6px; min-height: 32px;
+}
+.formula-fixed-text {
+  font-size: 14px; color: var(--text-1); white-space: nowrap;
+}
+.formula-template__op {
+  font-size: 14px; color: var(--text-3); padding: 0 2px; white-space: nowrap;
+}
+.formula-sub-formula { margin-top: 4px; }
+
+/* 行右侧删除：轻量 icon 按钮，静息灰色、hover 才转红，避免强调色文字按钮抢视觉 */
+.formula-config-row__delete {
+  flex-shrink: 0; width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: transparent; border-radius: 4px; cursor: pointer;
+  color: var(--text-4); font-size: 16px;
+  transition: color .15s, background .15s;
+}
+.formula-config-row__delete:hover {
+  color: var(--color-red); background: rgba(245, 72, 59, .08);
+}

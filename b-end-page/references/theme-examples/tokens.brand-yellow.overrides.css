@@ -1,0 +1,52 @@
+/**
+ * B 端设计规范 · 黄色主题覆盖块（brand-yellow = 美团黄）
+ *
+ * 用途：本文件是一段**可直接追加到 tokens.css 末尾**（或作为独立 CSS 文件引入）的
+ * 主题覆盖规则。它只重新指定「语义层 → 原子层」的引用关系，不引入任何新色值——
+ * 所有黄色系色值都已在 tokens.css 的原子层（--yellow-1~7）中维护，
+ * 这里只负责把 --color-primary-* 这批语义变量从 Blue 系改指到 Yellow 系。
+ *
+ * 落地方式（唯一推荐，与 theme.react.tsx / theme.vue3.ts 配套）：
+ *   直接把本文件内容合并进项目的 tokens.css 末尾即可。运行时由主题切换逻辑给
+ *   <html> 设置 data-theme="brand-yellow" 属性来激活这组覆盖，JS 不参与任何色值计算。
+ *
+ * 为什么用 CSS 属性选择器而不是 JS 注入变量值：
+ *   - 所有色彩决策完整留在 CSS 中，JS 只负责切换一个标识符字符串；
+ *   - 「语义层 → 原子层」的引用关系不会被割裂到 JS 里，避免出现
+ *     root.style.setProperty('--x', 'var(--y)') 这种「注入的值本身又是个 var() 引用」的混乱写法；
+ *   - 新增主题只需追加一个 [data-theme='xxx'] 块，不需要改动任何 JS 配置对象。
+ *
+ * ⚠️ 注意 --color-primary-N 的编号语义（与 Blue 主题一致，来自官方源文件）：
+ *      -1 = hover、-2 = active、-3 = disabled、-4 = 浅色背景、-5 = 备用。
+ *    取阶规律与 Blue 主题完全对称：基准 Y5，hover 取浅一级 Y4，active 取深一级 Y6，
+ *    disabled 取 Y2，浅色背景取 Y1，备用取 Y3。
+ *
+ * 未在本文件中出现的变量，代表该 token 在黄色主题下与 tokens.css 默认值完全一致，
+ * 不需要覆盖（如中性色、间距、圆角、阴影、chart-2..7、chart-up/down 等）。
+ */
+
+html[data-theme='brand-yellow'] {
+  /* 主色语义层整体改指 Yellow 系原子层，取阶规律与 Blue 主题完全对称 */
+  --color-primary: var(--yellow-5);    /* #FFDD00 标准色 */
+  --color-primary-1: var(--yellow-4);  /* #FFE852 hover（比标准色浅一级） */
+  --color-primary-2: var(--yellow-6);  /* #F5C800 active（比标准色深一级） */
+  --color-primary-3: var(--yellow-2);  /* #FFF6B8 disabled */
+  --color-primary-4: var(--yellow-1);  /* #FFFADB 浅色背景 */
+  --color-primary-5: var(--yellow-3);  /* #FFEF8A 备用 */
+
+  /* 页面标题/重要标题强调色：黄色主题下显式覆盖为橙色（Orange-5），
+     不跟随 --color-primary 变成 #FFDD00，避免大号标题文字/渐变字可读性下降。
+     完整规则见 theme-system.md §2.3、style-profile.md §1.2 第 4 条。 */
+  --color-heading-accent: var(--orange-5);
+}
+
+/* 说明：
+   - --chart-primary-weak 引用 --color-primary-5，已随上方覆盖自动联动，不需单独声明；
+   - --chart-primary-strong 引用 --color-primary-2，同理自动联动；
+   - --chart-1 引用 --color-brand-primary → --color-primary，同理自动联动；
+   - --nav-active-bg 引用 --color-primary-4，同理自动联动；
+   - --color-accent(--yellow-5=#FFDD00) / --color-accent-text(--yellow-7=#7A3100) 本身就是
+     固定不随主题变化的点缀色（黄底强调文字用官方深棕色 Yellow-7，而非橙色），
+     黄色主题下与默认主题取值相同，因此不在此列出，不需要重复覆盖。
+   这正是两层结构的价值：只改 6 行「语义层 → 原子层」的指向，
+   所有下游引用（图表色阶、导航底色、链接色等）全部自动跟随，无需逐个枚举。 */

@@ -1,0 +1,251 @@
+/* ============================================
+   规格合规判断 Demo — 页面样式
+   技术栈：@ss/mtd-react3（CSS 类名前缀 mtd-prime-）
+   遵循 L2 模块规范：G-topnavbar / G-sidenavbar / F1 承载容器
+   ============================================ */
+
+/* ===== CSS 变量 ===== */
+:root {
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+  --primary: var(--color-brand-primary, #166FF7);
+}
+
+/* ===== 整体骨架 ===== */
+.app-shell {
+  min-height: 100vh;
+  background: #f5f6f7;
+}
+
+.app-body {
+  padding-top: var(--top-nav-h);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== G · 顶导航栏 ===== */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导必须低于抽屉蒙层(900)与弹窗蒙层(1050)，统一为 100 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 120px;
+  flex-shrink: 0;
+}
+.spec-qualification .top-nav-logo .logo-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--color-brand-primary, var(--primary));
+  border-radius: 4px;
+}
+.spec-qualification .top-nav-logo .logo-name {
+  width: auto;
+  height: auto;
+  background: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  line-height: 52px;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+.top-nav-actions .avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ===== G · 侧导航栏 ===== */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav-menu {
+  flex: 1;
+  overflow-y: auto;
+  border-right: none !important;
+}
+
+/* 二三级无 icon 项对齐补偿 */
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+.side-nav-collapse--collapsed {
+  justify-content: center;
+  border-top: none;
+}
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+
+/* ===== 内容区 ===== */
+.spec-qualification .app-content {
+  min-width: 0;
+  flex: 1;
+  transition: margin-left 0.2s ease;
+  overflow: hidden;
+  height: calc(100vh - 52px);
+}
+
+/* ===== F1 · 承载容器 — 灰底 + 白卡 ===== */
+.spec-qualification .page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-qualification .page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 20px 24px 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== F2 · 表头信息区 ===== */
+.spec-qualification .page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.spec-qualification .page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.spec-qualification .page-header__desc {
+  font-size: 14px;
+  color: #8f959e;
+  line-height: 22px;
+  margin: 4px 0 0;
+}
+
+/* ===== 可滚动内容区 ===== */
+.spec-qualification .scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ===== 窄屏响应式 ===== */
+@media (max-width: 480px) {
+  .spec-qualification .page-container {
+    padding: 12px;
+  }
+}

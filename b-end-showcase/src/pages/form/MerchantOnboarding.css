@@ -1,0 +1,459 @@
+/* ============================================================
+ *  商家入驻申请 — 全局样式
+ *  技术栈：@ss/mtd-react3（CSS 类名前缀 mtd-prime-）
+ *  遵循 L1/L2/L3 三层规范
+ * ============================================================ */
+
+:root {
+  /* 主题色：蓝色主题（默认）— 来自 base.md §0 */
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+  --primary-on-light: var(--color-brand-primary, #166FF7);
+  --primary-text-on: #FFFFFF;
+
+  /* 中性色 — 来自 base.md §Grey */
+  --text-primary: #1f2329;
+  --text-secondary: rgba(17, 25, 37, 0.65);
+  --text-placeholder: rgba(17, 25, 37, 0.30);
+  --border-color: #f0f0f0;
+  --divider: rgba(17, 25, 37, 0.10);
+  --bg-page: #F3F3F4;
+  --bg-card: #ffffff;
+  --radius-card: 8px;
+
+  /* 布局尺寸 — 来自 G-sidenavbar §3.1b & G-topnavbar */
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+}
+
+/* ===== 全局重置（已限定作用域） ===== */
+.app-shell.merchant-onboarding,
+.app-shell.merchant-onboarding *,
+.app-shell.merchant-onboarding *::before,
+.app-shell.merchant-onboarding *::after {
+  box-sizing: border-box;
+}
+
+.app-shell.merchant-onboarding {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  line-height: 1.5;
+}
+
+.app-shell.merchant-onboarding {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ================================================================
+   G-topnavbar 顶导航栏
+   来自 G-topnavbar.md：高度 52px，三段式布局
+   ================================================================ */
+
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h);
+  background: var(--bg-card);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导必须低于抽屉蒙层(900)与弹窗蒙层(1050)，统一为 100 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.top-nav-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--color-brand-primary, #166FF7) 0%, #6C5CE7 100%);
+  flex-shrink: 0;
+}
+
+.top-nav-logo-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: var(--top-nav-h);
+  line-height: var(--top-nav-h);
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+
+/* §3.3 hover 仅变色，显式去下划线 */
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+/* §3.4 选中态：文字加深加粗 + 2px 主色底线 */
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+/* §3.6 操作区：固定宽，右对齐 */
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.top-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ================================================================
+   G-sidenavbar 侧导航栏
+   来自 G-sidenavbar.md §3.1b
+   ================================================================ */
+
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--side-nav-w);
+  background: var(--bg-card);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0 4px;
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+
+.side-nav.is-collapsed {
+  width: var(--side-nav-w-collapsed);
+}
+
+.side-nav-menu {
+  flex: 1;
+  overflow-y: auto;
+  border-right: none !important;
+}
+
+/* §3.3 二三级无 icon 项对齐补偿 */
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+/* §3.8 菜单项文字溢出 */
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* §3.4 折叠按钮：MTD 不提供，自实现 */
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+}
+
+.side-nav-collapse.is-collapsed {
+  justify-content: center;
+  border-top: none;
+}
+
+.side-nav-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 20px;
+  transition: background 0.15s;
+}
+
+.side-nav-collapse-btn:hover {
+  background: var(--bg-page);
+}
+
+/* ================================================================
+   F1 承载容器 — 内容区（灰底）
+   ================================================================ */
+
+.merchant-onboarding .app-content {
+  margin-left: var(--side-nav-w);
+  margin-top: var(--top-nav-h);
+  height: calc(100vh - var(--top-nav-h));
+  overflow: hidden;
+  background: var(--bg-page);
+  transition: margin-left 0.2s ease;
+}
+
+.merchant-onboarding .app-content.is-collapsed {
+  margin-left: var(--side-nav-w-collapsed);
+}
+
+.merchant-onboarding .page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================================================================
+   F1 页面白卡
+   ================================================================ */
+
+.merchant-onboarding .page-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 20px 24px 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ================================================================
+   F2 PageHeader 页面标题
+   ================================================================ */
+
+.merchant-onboarding .page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.merchant-onboarding .page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.merchant-onboarding .page-header__desc {
+  font-size: 14px;
+  color: #646a73;
+  line-height: 22px;
+  margin: 4px 0 0;
+}
+
+/* ================================================================
+   F7 步骤条（MTD Steps）
+   ================================================================ */
+
+.merchant-onboarding .merchant-steps {
+  padding: 20px 0 24px;
+  margin: 0 auto 24px;
+  max-width: 720px;
+}
+
+/* ================================================================
+   步骤内容区
+   ================================================================ */
+
+.merchant-onboarding .step-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ================================================================
+   F14 · 操作工具栏 ActionBar
+   sticky 吸底在白卡内，按钮右对齐（参考团购会员卡写法）
+   ================================================================ */
+
+.merchant-onboarding .action-bar {
+  background: #fff;
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 0 -24px;
+  border-radius: 0 0 8px 8px;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   F4 单栏布局 — 表单限宽
+   F4 §约束1：统一限宽 640px
+   ================================================================ */
+
+.merchant-onboarding .section-form {
+  max-width: 640px;
+}
+
+/* F4 §约束6/§7：MTD React Form 是 flex wrap 容器，
+ * 内部 div 作为 flex 子项必须显式撑满整行 */
+.merchant-onboarding .section-form > div {
+  width: 100%;
+}
+
+/* ================================================================
+   F3 分组分段（GroupSection）
+   ================================================================ */
+
+.merchant-onboarding .form-section {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.merchant-onboarding .form-section:first-child,
+.merchant-onboarding .form-section:first-of-type {
+  margin-top: 0;
+}
+
+/* 分组标题
+ * F3 §3.3：16px/600, color #1f2329
+ * ::before 蓝色方块 2px × 16px, var(--primary), 无圆角 */
+.merchant-onboarding .form-section__title {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+  line-height: 1.5;
+  gap: 8px;
+}
+
+.merchant-onboarding .form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--color-brand-primary, var(--primary));
+  flex-shrink: 0;
+}
+
+
+/* ================================================================
+   F4 控件撑满（⚠️ 硬约束）
+   MTD 的 Select / DatePicker / InputNumber / RangePicker / Cascader
+   默认宽度不是 100%，必须强制撑满
+   ================================================================ */
+
+.merchant-onboarding .section-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+
+.merchant-onboarding .section-form .mtd-prime-select,
+.merchant-onboarding .section-form .mtd-prime-picker,
+.merchant-onboarding .section-form .mtd-prime-date-picker,
+.merchant-onboarding .section-form .mtd-prime-input-number,
+.merchant-onboarding .section-form .mtd-prime-range-picker,
+.merchant-onboarding .section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* ================================================================
+   Switch 行（开关 + 说明文字同行）
+   ================================================================ */
+
+.form-switch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+}
+
+.form-switch-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ================================================================
+   协议区域
+   ================================================================ */
+
+.agreement-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.agreement-link {
+  color: var(--primary-on-light);
+  text-decoration: none;
+}
+
+.agreement-link:hover {
+  text-decoration: underline;
+}
+
+/* ================================================================
+   响应式：窄屏多列退化为单列 + 步骤条滚动
+   ================================================================ */
+
+@media (max-width: 767.98px) {
+  .page-card {
+    padding: 16px 20px 24px;
+  }
+}

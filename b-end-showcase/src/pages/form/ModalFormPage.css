@@ -1,0 +1,458 @@
+/* ============================================================
+ * 弹窗表单页 — 优惠券管理列表 + Modal 新建表单
+ * 技术栈：React (@ss/mtd-react3)
+ * z-index 策略（与弹窗详情页一致）：
+ *   顶导保持 z-index: 1100（标准值），
+ *   Modal 通过 .form-modal 推到 z-index: 1200 覆盖顶导。
+ * ============================================================ */
+
+/* ============================================================
+ * 主题色变量（蓝色主题，默认）
+ * ============================================================ */
+:root {
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+  --primary-on-light: var(--color-brand-primary, #166FF7);
+  --primary-text-on: #FFFFFF;
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+}
+
+/* ============================================================
+ * 全局基础
+ * ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background: #f5f6f7;
+  color: rgba(17, 25, 37, 0.85);
+}
+
+/* ============================================================
+ * AppShell 整体骨架
+ * ============================================================ */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding-top: var(--top-nav-h, 52px);
+}
+
+/* ============================================================
+ * G-topnavbar · 顶部导航栏
+ * ============================================================ */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h, 52px);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导统一为 100：低于抽屉蒙层(900)与弹窗蒙层(1050)，避免全局类名冲突 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+width: 24px;
+height: 24px;
+background: var(--primary, #166FF7);
+border-radius: 4px;
+flex-shrink: 0;
+}
+
+.logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  position: relative;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.top-nav-icon {
+  font-size: 20px !important;
+  color: #646a73 !important;
+  cursor: pointer;
+}
+
+.top-nav-icon:hover {
+color: var(--primary, #166FF7) !important;
+}
+
+.top-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ============================================================
+ * G-sidenavbar · 侧边导航栏
+ * ============================================================ */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--side-nav-w);
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav--collapsed {
+  width: var(--side-nav-w-collapsed, 60px);
+}
+
+.side-nav-menus {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-nav-menus::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav-menu {
+  width: 100%;
+}
+
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.side-nav--collapsed .side-nav-collapse {
+  justify-content: center;
+  border-top: none;
+}
+
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+
+/* ============================================================
+ * 主内容区 · 避开顶导和侧导
+ * ============================================================ */
+.app-content {
+  margin-left: var(--side-nav-w, 200px);
+  flex: 1;
+  min-width: 0;
+  background: #f5f6f7;
+  transition: margin-left 0.2s ease;
+  height: calc(100vh - var(--top-nav-h));
+  overflow: hidden;
+}
+
+.side-nav--collapsed ~ .app-content,
+.app-body:has(.side-nav--collapsed) .app-content {
+  margin-left: var(--side-nav-w-collapsed, 60px);
+}
+
+/* ============================================================
+ * G1 · 承载容器 — 顺序落地页（灰底 + 白卡）
+ * ============================================================ */
+.page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px 24px 0;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+ * G2 · 表头信息区（带右侧操作按钮）
+ * ============================================================ */
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.page-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.page-header__desc {
+  font-size: 14px;
+  color: rgba(17, 25, 37, 0.65);
+  line-height: 22px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+ * 可滚动内容区（表格）
+ * ============================================================ */
+.scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ============================================================
+ * G8 · 只读数据表格
+ * ============================================================ */
+.readonly-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.readonly-table .mtd-prime-table-wrapper {
+  background: #fff;
+}
+
+.readonly-table .mtd-prime-table-cell,
+.readonly-table table td {
+  padding: 13px 8px;
+}
+
+.readonly-table .mtd-prime-table-header-cell,
+.readonly-table table th {
+  white-space: nowrap;
+}
+
+.readonly-table__pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.readonly-table a {
+  color: var(--primary, #166ff6);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.readonly-table a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * 弹窗内部 — 分组区域（F4 分组分段）
+ * 与弹窗详情页样式一致
+ * ============================================================ */
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.modal-section__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2329;
+  margin: 0 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(17, 25, 37, 0.10);
+}
+
+/* ============================================================
+ * 弹窗内部 — F5 表单布局
+ * ============================================================ */
+.modal-form > div {
+  width: 100%;
+}
+
+.modal-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+
+.modal-form .mtd-prime-select,
+.modal-form .mtd-prime-picker,
+.modal-form .mtd-prime-date-picker,
+.modal-form .mtd-prime-input-number,
+.modal-form .mtd-prime-range-picker,
+.modal-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* 控件区垂直居中（Radio.Group / Switch 等） */
+.modal-form .mtd-prime-form-item-body {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+/* Radio.Group 横向平铺，选项文字不逐字换行 */
+.modal-form .mtd-prime-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.modal-form .mtd-prime-radio {
+  white-space: nowrap;
+}
+
+/* ============================================================
+ * Modal Footer 按钮间距
+ * ============================================================ */
+.form-modal .mtd-prime-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ============================================================
+ * Modal z-index 修正
+ * ============================================================ */
+.form-modal {
+  z-index: 1200 !important;
+}
+
+/* ============================================================
+ * 窄屏适配
+ * ============================================================ */
+@media (max-width: 767.98px) {
+  .page-container {
+    padding: 12px;
+  }
+}

@@ -1,0 +1,38 @@
+/* ============================================================
+ * Form7 · 文件/图片上传（FileUpload）
+ * ============================================================ */
+
+/* 拖拽上传区域：固定 480×160，不随 Form.Item 的 span 拉伸 */
+.dragger-upload-area {
+  text-align: center;
+  width: 480px;
+  height: 160px;
+  background-color: var(--bg-card);
+  border: 1px dashed #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragger-upload-area__main {
+  font-size: 14px;
+  color: #1f2329;
+}
+
+.dragger-upload-area__sub {
+  font-size: 12px;
+  color: #adadad;
+  line-height: 20px;
+  margin-top: 4px;
+}
+
+/* 仅对上传 Form.Item 生效，不影响其他 Form.Item：
+ * 用 margin-bottom 而非 padding-bottom —— MTD 的 form-item-label 使用
+ * box-sizing: border-box，padding 会被包含在固定的 22px 高度内（压缩文字空间），
+ * 而 margin 在外部额外增加间距，保持 label 行高 22px 不变。 */
+.section-form .upload-item.mtd-prime-form-item .mtd-prime-form-item-label {
+  margin-bottom: 8px;
+}

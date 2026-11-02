@@ -1,0 +1,124 @@
+/* ============================================================
+ * D2 描述列表预览 —— 外层容器
+ * ============================================================ */
+.dl-preview-wrap {
+  padding: 16px 0;
+}
+
+.dl-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dl-section-badge {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-4, rgba(17, 25, 37, 0.25));
+  background: rgba(17, 25, 37, 0.04);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* ============================================================
+ * D2 描述列表 —— flex-wrap 实现多列（MTD 无 Descriptions 组件，不依赖 Row/Col 栅格）
+ * 类名统一加 dlp- 前缀：项目里其他详情页（MasterDetailPage/ModalDetailPage/
+ * DrawerDetailDrawer）各自维护了同名的 .description-list 系列类名，
+ * 普通 .css 是全局作用域，一旦被同时打包加载会互相覆盖，导致多列布局失效。
+ * ============================================================ */
+.dlp-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* ============================================================
+ * 字段项 —— 基础样式（2 列 / 3 列：label 与 value 横向同行）
+ * ============================================================ */
+.dlp-item {
+  display: flex;
+  box-sizing: border-box;
+  padding: 6px 16px 6px 0; /* 上下 6px：控制字段行间距；右侧 16px：列间留白 */
+  font-size: 14px;
+  line-height: 22px;
+  min-width: 0;
+}
+
+/* 2 列：每列占 50% */
+.dlp-list--col2 .dlp-item {
+  width: 50%;
+}
+
+/* 3 列：每列占 33.33% */
+.dlp-list--col3 .dlp-item {
+  width: 33.3333%;
+}
+
+/* label：次要信息色，固定宽度，不缩 */
+.dlp-label {
+  color: var(--text-3, rgba(17, 25, 37, 0.45));
+  flex-shrink: 0;
+  width: 96px; /* 2 列默认 label 宽度 */
+}
+
+/* value：正文色，占满剩余宽度，允许任意字符处换行 */
+.dlp-value {
+  color: var(--text-1, rgba(17, 25, 37, 0.85));
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+}
+
+/* 链接值：主题色 + pointer + hover 下划线 */
+.dlp-value--link {
+  color: var(--color-brand-blue, #166ff7);
+  cursor: pointer;
+}
+
+.dlp-value--link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * 3 列模式：label 收窄至 80px
+ * ============================================================ */
+.dlp-list--col3 .dlp-label {
+  width: 80px;
+}
+
+/* ============================================================
+ * 4 列模式：每列占 25%，label 在上 / value 在下（纵向排列）
+ * ============================================================ */
+.dlp-list--col4 .dlp-item {
+  width: 25%;
+  flex-direction: column;
+  align-items: flex-start; /* 纵向排列时子项默认 stretch，这里改为顶格左对齐更符合文字排版习惯 */
+  gap: 2px;                /* label（标题）与 value（数值）之间的纵向间距，规范固定值 */
+  padding: 6px 12px 6px 0; /* 字段项上下间距，控制相邻字段行之间的行间隔 */
+}
+
+.dlp-list--col4 .dlp-label {
+  width: 100%; /* 纵向排列下 label 独占一整行宽度展示完全 */
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.dlp-list--col4 .dlp-value {
+  width: 100%; /* 纵向排列下 value 也独占一整行宽度展示完全 */
+  flex: none;
+  font-size: 14px;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* 窄屏回退：容器不足以容纳 3/4 列时退化为单列，避免挤压变形 */
+@media (max-width: 540px) {
+  .dlp-list--col3 .dlp-item,
+  .dlp-list--col4 .dlp-item {
+    width: 100%;
+  }
+}

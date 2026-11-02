@@ -1,0 +1,93 @@
+/* ============================================================
+ * Form2 · 分组分段（GroupSection）
+ * ============================================================ */
+
+/* --- 分组标题（⚠️ 硬约束：与 G2 PageHeader / L1 装配逻辑完全一致） --- */
+.form-section__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 24px;
+  margin: 24px 0 16px;
+  /* ⚠️ 硬约束：禁止 border-bottom / padding-bottom，仅靠 margin 间距区隔 */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--color-brand-primary);
+  flex-shrink: 0;
+  /* 无圆角 */
+}
+
+/* ⚠️ 易错点：清零 margin-top 必须写在 .form-section（容器）这一层加 :first-child，
+ * 不能写成 .form-section__title:first-child ——
+ * 每个分组各自独立 div 包裹时，h3 在各自容器内天然都是第一个子元素，
+ * 写在标题自身会导致每组的 24px 间距都被清零。 */
+.form-section:first-child .form-section__title {
+  margin-top: 0;
+}
+
+/* React Form 是 flex-wrap：分组 div 必须撑满整行 */
+.section-form > div.form-section {
+  width: 100%;
+}
+
+/* 控件撑满所在列 */
+.section-form .mtd-prime-select,
+.section-form .mtd-prime-picker,
+.section-form .mtd-prime-date-picker,
+.section-form .mtd-prime-input-number,
+.section-form .mtd-prime-range-picker,
+.section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* ============================================================
+ * 变体 B · 折叠分组
+ * ============================================================ */
+.group-collapse {
+  width: 100%;
+}
+
+.collapse-section__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.collapse-section__body {
+  padding: 4px 0 12px;
+}
+
+/* ============================================================
+ * 变体 C · 分步分组
+ * ============================================================ */
+.stepped-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepped-group__steps {
+  padding: 8px 0 24px;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.stepped-group__content {
+  min-height: 160px;
+}
+
+.stepped-group__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+  margin-top: 8px;
+}

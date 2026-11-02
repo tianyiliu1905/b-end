@@ -1,0 +1,334 @@
+/* ============================================================
+ * 商品列表 — 顺序落地页样式
+ * 技术栈：React (@ss/mtd-react3)
+ * CSS 类名前缀：mtd-prime-
+ * 遵循规范：
+ *   - G-topnavbar.md / G-sidenavbar.md（顶部导航 + 侧边导航）
+ *   - G1-PresentationContainer.md §一 顺序落地页（灰底 + 白卡）
+ *   - G2-PageHeader.md（标题原子）
+ *   - G8-ReadonlyTable.md（只读数据表格）
+ * ============================================================ */
+
+:root {
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+}
+
+/* ===== AppShell 整体骨架 ===== */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding-top: var(--top-nav-h);
+}
+
+/* ===== G-topnavbar 顶部导航 ===== */
+/* z-index 硬约束（G1-PresentationContainer.md §3.6）：
+   抽屉蒙层 z-index 固定为 900，顶导必须 < 900（建议 100），
+   否则抽屉打开时蒙层无法覆盖顶导。 */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+width: 24px;
+height: 24px;
+background: var(--primary, #166FF7);
+border-radius: 4px;
+flex-shrink: 0;
+}
+
+.logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  position: relative;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.top-nav-icon {
+  font-size: 20px !important;
+  color: #646a73 !important;
+  cursor: pointer;
+}
+
+.top-nav-icon:hover {
+color: var(--primary, #166FF7) !important;
+}
+
+.top-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ===== G-sidenavbar 侧边导航 ===== */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  width: var(--side-nav-w);
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav--collapsed {
+  width: var(--side-nav-w-collapsed);
+}
+
+.side-nav-menus {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-nav-menus::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav-menu {
+  width: 100%;
+}
+
+/* 二三级无 icon 项补偿对齐 */
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon))
+  .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 折叠按钮 */
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.side-nav--collapsed .side-nav-collapse {
+  justify-content: center;
+  border-top: none;
+}
+
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+
+/* ===== 主内容区（G1 顺序落地页：灰底 + 白卡） ===== */
+.app-content {
+  margin-left: var(--side-nav-w);
+  flex: 1;
+  min-width: 0;
+  background: #f5f6f7;
+  transition: margin-left 0.2s ease;
+  height: calc(100vh - var(--top-nav-h));
+  overflow: hidden;
+}
+
+.side-nav--collapsed ~ .app-content,
+.app-body:has(.side-nav--collapsed) .app-content {
+  margin-left: var(--side-nav-w-collapsed);
+}
+
+.page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px 24px 0;
+  box-sizing: border-box;
+}
+
+/* ===== G2 表头信息区 ===== */
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+/* ===== 可滚动内容区 ===== */
+.scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* ===== G8 只读数据表格 ===== */
+.readonly-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.readonly-table .mtd-prime-table-wrapper {
+  background: #fff;
+}
+
+.readonly-table .mtd-prime-table-cell {
+  padding: 8px 8px;
+}
+
+.readonly-table .mtd-prime-table-header-cell {
+  white-space: nowrap;
+}
+
+.readonly-table__pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.readonly-table a {
+  color: var(--primary, #166ff6);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.readonly-table a:hover {
+  text-decoration: underline;
+}
+
+/* ===== 窄屏适配 ===== */
+@media (max-width: 767.98px) {
+  .page-container {
+    padding: 12px;
+  }
+}

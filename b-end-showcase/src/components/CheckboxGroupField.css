@@ -1,0 +1,153 @@
+/* ============================================================
+ * Form6 · 复选组（CheckboxGroup）
+ * ============================================================ */
+
+/* --- 变体B 分组卡片内部选项容器：纵向单列排列 ---
+ * ⚠️ 组内选项必须纵向堆叠（配合"分组横排四栏"，见 .checkbox-grid__groups）。
+ * 切勿改成 grid-template-columns: repeat(auto-fill, ...) 之类的横向多列，
+ * 否则就把"分组横排/组内纵排"整个对调了。 */
+.checkbox-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkbox-grid__item,
+.checkbox-row__item {
+  display: flex;
+  align-items: center;
+}
+
+/* --- 变体A：基础横排（无分组，仅勾选）
+ * 参考 G2 表头摘要信息行的排列规则：选项按自身内容自然宽度排列，
+ * 用 flex-wrap 横向铺开、一行最多 4 个，超出自动换行，不做等宽 Grid 拉伸。
+ * 不带底色容器，直接铺在表单区域内。 --- */
+.checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  /* Checkbox.Group 渲染的父节点自身 display 为 flex，
+     此时子元素默认按 flex-shrink 收缩到内容宽度，不会像普通块级元素
+     那样自动撑满父容器，必须显式撑满，flex-basis 的百分比换行计算才准确 */
+  width: 100%;
+}
+
+.checkbox-row__item {
+  /* 一行最多 4 个：4 项之间共 3 条 32px 横向 gap（3 × 32px = 96px），
+     从容器总宽里精确扣除后再均分成 4 份，避免等宽拉伸误差导致换行错位。
+     flex-shrink/grow 均为 0，宽度固定分配，超出部分交给文字自身处理。 */
+  flex: 0 0 calc((100% - 96px) / 4);
+}
+
+/* --- 变体B：分组网格 + 操作栏（操作栏上移至 label 行） --- */
+/* 页面装配处：多组分组多选矩阵纵向排列，组间用间距区隔 */
+.capability-form-section .form-item--capability + .form-item--capability {
+  margin-top: 24px;
+}
+
+/* mtd Form.Item 的 label 传入 ReactNode 时，会被塞进
+   .mtd-prime-form-item-label-ctx（默认 width:6em，且限制 2 行截断），
+   需要撑满宽度，自定义 label 行才能左右布局、操作栏靠右。
+   labelPosition="top" 让标题行与勾选区上下排列（而非 MTD 默认的左右布局），
+   label-ctx 类名不受 labelPosition 影响，覆盖规则同样生效。 */
+.form-item--capability .mtd-prime-form-item-label {
+  height: auto;
+  width: 100%;
+}
+
+.form-item--capability .mtd-prime-form-item-label-ctx {
+  width: 100% !important;
+  -webkit-line-clamp: unset;
+  text-align: left;
+}
+
+.checkbox-grid__label-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.checkbox-grid__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.checkbox-grid__actions .mtd-prime-button {
+  font-size: 14px;
+}
+
+.checkbox-grid__count {
+  font-size: 14px;
+  color: var(--text-4);
+  margin-left: auto;
+}
+
+/* 分组横排容器：四栏等宽 Grid，每个分组默认占一栏；
+   用 Grid 而非 flex 是因为分组数量不固定，Grid 能让空余栏位天然
+   留白对齐，不需要额外计算 flex-basis 或处理换行 */
+.checkbox-grid__groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr; /* 所有行统一为最高行的高度，跨行也对齐 */
+  gap: 16px;
+  /* 父节点 .mtd-prime-checkbox-group 自身 display 为 flex，
+     子元素默认收缩到内容宽度，不会自动撑满，必须显式撑满宽度
+     （与变体A .checkbox-row 是同一个坑） */
+  width: 100%;
+}
+
+.checkbox-grid__group {
+  padding: 16px;
+  background: var(--bg-card-inner);
+  border-radius: 6px;
+}
+
+.checkbox-grid__group-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+
+/* --- 变体C：大数据量场景 — Table + rowSelection --- */
+.grid-selector-table {
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.grid-selector-table__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card-inner);
+  border-bottom: 1px solid var(--divider);
+}
+
+.grid-selector-table__search {
+  width: 240px;
+}
+
+.grid-selector-table__count {
+  font-size: 12px;
+  color: var(--text-4);
+  margin-left: auto;
+}
+
+/* --- 响应式：小屏下分组网格退化为单栏 ---
+ * 组内选项本就是纵向单列（.checkbox-grid 为 flex column），无需处理；
+ * 需要退化的是分组容器：四栏 → 一栏 */
+@media (max-width: 767.98px) {
+  .checkbox-grid__groups {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-row__item {
+    flex: 1 1 100%;
+  }
+}

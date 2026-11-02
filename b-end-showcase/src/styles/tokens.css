@@ -1,0 +1,458 @@
+/* B端通用设计规范 - Design Token 中心
+   ─────────────────────────────────────────────
+   颜色部分采用「原子层 + 语义层」两层结构，变量命名与美团官方
+   _base_color.scss 源文件（km.sankuai.com/collabpage/1961097729）逐项对齐：
+
+   1) 原子层（本文件内私有，命名与源文件 $Blue-1/$Grey-7_2 等一致，
+      仅去掉 $ 前缀改为 --，如 --blue-1、--grey-7_2）：
+      纯色板字典，只表达「这是什么颜色的第几级」，不表达任何界面角色语义，
+      业务代码/组件样式禁止直接引用原子层变量，只能通过下方语义层间接使用。
+   2) 语义层（即 --color-primary-1 / --text-1 等变量，命名与源文件
+      $color-primary-1 / $color-text-1 完全一致）：
+      命名表达「这个颜色在界面里扮演什么角色」，值引用原子层。主题切换本质上
+      是「让同一批语义变量，在不同主题下引用不同色系的原子层」，因此原子层
+      本身不随主题变化，随主题变化的是语义层→原子层的引用关系（见
+      src/theme/useTheme.tsx 中 themes 配置表）。
+   3) 组件样式只允许使用语义层变量（--color-xx、--text-xx、--bg-xx、--border 等），
+      本次重构不改变任何语义层变量名，因此不需要改动任何组件代码。 */
+:root {
+  /* ═══════════════ 原子层：与 _base_color.scss 的基础色板逐项对齐（私有） ═══════════════ */
+  /* Blue-1~6 */
+  --blue-1: #F0F6FF;
+  --blue-2: #BFD8FE;
+  --blue-3: #8FBCFF;
+  --blue-4: #468DFB;
+  --blue-5: #166FF7;
+  --blue-6: #0E65E8;
+
+  /* Yellow-1~7（原子层，与蓝色 Blue-1~6 结构对称，Yellow-5 为主黄色，Yellow-7 为黄底强调文字专用深棕色） */
+  --yellow-1: #FFFADB;
+  --yellow-2: #FFF6B8;
+  --yellow-3: #FFEF8A;
+  --yellow-4: #FFE852;
+  --yellow-5: #FFDD00;
+  --yellow-6: #F5C800;
+  --yellow-7: #7A3100;
+
+  /* Green-1~6 */
+  --green-1: #E6FFF0;
+  --green-2: #B2F9D3;
+  --green-3: #7FEBB2;
+  --green-4: #08C969;
+  --green-5: #00A854;
+  --green-6: #00994D;
+
+  /* Red-1~6 */
+  --red-1: #FFF2F2;
+  --red-2: #FFC9C9;
+  --red-3: #FFA0A0;
+  --red-4: #FF4040;
+  --red-5: #FF1F1F;
+  --red-6: #F01D1D;
+
+  /* Orange-1~6 */
+  --orange-1: #FFF6F0;
+  --orange-2: #FFD9BF;
+  --orange-3: #FFBE8F;
+  --orange-4: #FF8827;
+  --orange-5: #FF7700;
+  --orange-6: #F56200;
+
+  /* Grey-1~10（透明灰与实体灰均来自源文件，_2 后缀对应源文件 Grey-7_2 实体灰记法） */
+  --grey-1: #111925;
+  --grey-2: rgba(17, 25, 37, .85);
+  --grey-3: rgba(17, 25, 37, .65);
+  --grey-4: rgba(17, 25, 37, .45);
+  --grey-5: rgba(17, 25, 37, .30);
+  --grey-6: rgba(17, 25, 37, .20);
+  --grey-7: rgba(17, 25, 37, .15);
+  --grey-8: rgba(17, 25, 37, .10);
+  --grey-9: rgba(17, 25, 37, .05);
+  --grey-10: rgba(17, 25, 37, .03);
+  --grey-7_2: #DCDDDF;
+  --grey-8_2: #E7E8E9;
+  --grey-9_2: #F3F3F4;
+  --grey-10_2: #F8F8F8;
+  --white: #FFFFFF;
+  --black: #000000;
+  --black-transparent: rgba(0, 0, 0, .5);
+  --blue-grey: #303640;
+
+  /* 展示应用已有的扩展功能色，不属于 _base_color.scss 的标准色板 */
+  --teal-5: #00A3A3;
+  --purple-5: #882EFF;
+  --pink-5: #EB2F93;
+  --brown-5: #9E7549;
+
+  /* ═══════════════ 规范语义层：变量名与 _base_color.scss 完全对齐 ═══════════════ */
+  /* primary（使用场景名称对齐源文件 @name 注释）：
+     -primary=标准色、-1=主色 hover、-2=主色激活、-3=主色禁用、-4=背景色、-5=备用 1 */
+  --color-primary: var(--blue-5);      /* @name 标准色 */
+  --color-primary-1: var(--blue-4);    /* @name 主色 hover */
+  --color-primary-2: var(--blue-6);    /* @name 主色激活 */
+  --color-primary-3: var(--blue-2);    /* @name 主色禁用 */
+  --color-primary-4: var(--blue-1);    /* @name 背景色 */
+  --color-primary-5: var(--blue-3);    /* @name 备用 1 */
+
+  /* text：1=禁用、2=次要、3=辅助、4=正文、5=一级标题、6=纯黑 */
+  --color-text-1: var(--grey-5);
+  --color-text-2: var(--grey-4);
+  --color-text-3: var(--grey-3);
+  --color-text-4: var(--grey-2);
+  --color-text-5: var(--grey-1);
+  --color-text-6: var(--black);
+
+  /* bgc / line / fill */
+  --color-bgc-1: rgba(0, 0, 0, .04);
+  --color-bgc-2: rgba(0, 0, 0, .06);
+  --color-bgc-3: var(--blue-1);
+  --color-disabled-bgc-1: rgba(0, 0, 0, .2);
+  --color-disabled-bgc-2: rgba(0, 0, 0, .25);
+  --color-line-1: var(--grey-7);
+  --color-line-2: var(--grey-8);
+  --color-line-1_2: var(--grey-7_2);
+  --color-line-2_2: var(--grey-8_2);
+  --color-fill-1: var(--grey-10);
+  --color-fill-2: var(--grey-9);
+  --color-fill-1_2: var(--grey-9_2);
+  --color-fill-2_2: var(--grey-10_2);
+  --color-fill-3: var(--grey-8);
+
+  /* success / danger / warning */
+  --color-success-1: var(--green-5);
+  --color-success-2: var(--green-1);
+  --color-success-3: var(--green-4);
+  --color-success-4: var(--green-6);
+  --color-success-5: var(--green-2);
+  --color-success-6: #007038;
+  --color-danger-1: var(--red-5);
+  --color-danger-2: var(--red-1);
+  --color-danger-3: var(--red-4);
+  --color-danger-4: var(--red-6);
+  --color-danger-5: var(--red-2);
+  --color-danger-6: #B3090E;
+  --color-warning-1: var(--orange-5);
+  --color-warning-2: var(--orange-1);
+  --color-warning-3: var(--orange-4);
+  --color-warning-4: var(--orange-6);
+  --color-warning-5: var(--orange-2);
+  --color-warning-6: #8A4100;
+
+  /* 以下为展示应用历史变量的兼容别名，全部反向引用上述规范语义层 */
+  --color-brand-primary: var(--color-primary);
+  --color-accent: var(--yellow-5);
+  --color-accent-text: var(--yellow-7);
+  --color-heading-accent: var(--color-primary);  /* 主色「文字」通用入口：标题/链接/tab激活/导航激活等一切用主色作文字颜色的场景都引用它，而非直接引用 --color-primary / --color-brand-primary，黄色主题下会被下方覆盖为 Orange-5，避免纯黄文字影响可读性 */
+  --chart-primary-weak: var(--color-primary-5);
+  --color-red: var(--color-danger-1);
+  --color-orange: var(--color-warning-1);
+  --color-green: var(--color-success-1);
+  --color-teal: var(--teal-5);
+  --color-purple: var(--purple-5);
+  --color-pink: var(--pink-5);
+  --color-brown: var(--brown-5);
+  --text-1: var(--color-text-5);
+  --text-2: var(--color-text-4);
+  --text-3: var(--color-text-3);
+  --text-4: var(--color-text-2);
+  --text-5: var(--color-text-1);
+  --text-6: var(--grey-6);
+  --bg-page: var(--color-fill-1_2);
+  --bg-card: var(--white);
+  --bg-card-inner: var(--color-fill-2_2);
+  --border: var(--color-line-1);
+  --divider: var(--color-line-2);
+  --bg-nav-dark: var(--blue-grey);
+  --mask: var(--black-transparent);
+
+  /* === 文字 Token === */
+  --fs-30: 30px; --lh-30: 38px;
+  --fs-24: 24px; --lh-24: 32px;
+  --fs-20: 20px; --lh-20: 28px;
+  --fs-18: 18px; --lh-18: 26px;
+  --fs-16: 16px; --lh-16: 24px;
+  --fs-14: 14px; --lh-14: 22px;
+  --fs-12: 12px; --lh-12: 20px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* === 间距 ===
+     gap-* 系列只负责「元素/模块之间的外部间距」；
+     card-padding 单独负责「卡片容器内部的内边距」，两者语义不同，不可混用：
+     模块间距收紧时（如 --gap-module 8px）卡片内部仍需保持舒适留白。 */
+  --gap-elem: 8px;
+  --gap-module: 8px;
+  --gap-section: 24px;
+  --gap-page: 16px;
+
+  /* 卡片内边距（dash-card / 表格容器等卡片内部留白） */
+  --card-padding: 16px;
+
+  /* === 导航专用（仅用于非 MTD 自定义导航元素，不覆盖 MTD Sidebar/Menu 组件内部） === */
+  --nav-header-height: 52px;
+  --nav-width: 168px;
+  --nav-collapsed-width: 60px;
+  --nav-tab-gap: 24px;
+  --nav-tab-offset: 32px;
+  --nav-icon-size: 20px;
+  --nav-tab-color: var(--text-2);
+  --nav-tab-color-active: var(--text-1);
+  --nav-active-color: var(--color-heading-accent);
+  --nav-active-bg: var(--color-primary-4);
+  --nav-item-color: var(--text-2);
+  --nav-hover-bg: var(--bg-card-inner);
+
+  /* === 圆角 === */
+  --radius-1: 16px;
+  --radius-2: 10px;
+  --radius-3: 6px;
+  --radius-4: 4px;
+  --radius: var(--radius-3);
+
+  /* === 阴影 === */
+  --shadow-high: 0 13px 39px rgba(0, 0, 0, .15);
+  --shadow-mid: 0 8px 24px rgba(0, 0, 0, .12);
+  --shadow-low: 0 4px 12px rgba(0, 0, 0, .10);
+  --shadow-min: 0 2px 6px rgba(0, 0, 0, .08);
+  --shadow-card: var(--shadow-min);
+
+  /* === 图表色板（对齐学城《【1】色彩》最新规范），语义层引用功能色/主色原子层 === */
+  /* 分类色板：主题色 → 绿 → 橙 → 蓝绿 → 紫 → 粉 → 棕，--chart-1 随主题联动 */
+  --chart-1: var(--color-brand-primary);
+  --chart-2: var(--green-5);   /* 绿色 */
+  --chart-3: var(--orange-5);   /* 橙色 */
+  --chart-4: var(--teal-5);   /* 蓝绿色 */
+  --chart-5: var(--purple-5);   /* 紫色 */
+  --chart-6: var(--pink-5);   /* 粉色 */
+  --chart-7: var(--brown-5);   /* 棕色 */
+  /* 主题色单色色阶（用于排名/渐变图表），随主题联动。
+     --chart-primary-weak 属于主题相关变量，已在上方语义层统一声明，此处不再重复。 */
+  --chart-primary-strong: var(--color-primary-2);
+  /* 涨跌色 */
+  --chart-up: var(--red-5);     /* Red-5 */
+  --chart-down: var(--green-5);   /* Green-5 */
+
+  /* === 字体族 === */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+}
+
+/* ═══════════════ 主题覆盖：美团黄 ═══════════════
+   切换主题时由 ThemeProvider 给 <html> 设置 data-theme="brand-yellow"，
+   激活下面这组覆盖，把同一批语义变量重新指向黄色系原子层。
+   这里只改「语义层 → 原子层」的引用关系，不出现任何十六进制字面量，
+   所有色值仍然只在上方原子层维护一份。 */
+html[data-theme='brand-yellow'] {
+  /* 与蓝色 primary 的取阶规律完全对称（基准 Y5，hover 浅一级 Y4，active 深一级 Y6，
+     disabled 用 Y2，浅色背景用 Y1，备用用 Y3），只是原子层换成 Yellow-1~7
+     （Y7 深棕色不参与 primary 取阶，专用于 --color-accent-text） */
+  --color-primary: var(--yellow-5);
+  --color-primary-1: var(--yellow-4);
+  --color-primary-2: var(--yellow-6);
+  --color-primary-3: var(--yellow-2);
+  --color-primary-4: var(--yellow-1);
+  --color-primary-5: var(--yellow-3);
+  /* 美团黄饱和度高，不适合直接用于浅底标题文字，展示应用的兼容标题变量使用源文件 Orange-5 */
+  --color-heading-accent: var(--orange-5);
+}
+
+/* 
+  注意：全局 reset (* { margin:0; padding:0 }) 已由 Tailwind v4 的 @layer base 处理。
+  不要在这里写无 layer 的 reset，否则会因为 CSS 层级优先级规则覆盖 Tailwind utilities。
+*/
+
+body {
+  background: var(--bg-page);
+  color: var(--text-1);
+  font-size: var(--fs-14);
+  line-height: var(--lh-14);
+}
+
+/* === 通用工具类 === */
+.dash-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-3);
+  padding: var(--card-padding);
+}
+
+.dash-title {
+  font-size: var(--fs-16);
+  line-height: var(--lh-16);
+  font-weight: var(--fw-medium);
+  color: var(--text-1);
+}
+
+.dash-subtitle {
+  font-size: var(--fs-12);
+  line-height: var(--lh-12);
+  color: var(--text-3);
+}
+
+.up { color: var(--chart-up); }
+.down { color: var(--chart-down); }
+
+/* === 同行卡片等高（MTD Row flex + stretch） === */
+.mtd-prime-row-flex {
+  align-items: stretch;
+}
+.mtd-prime-row-flex > [class*='mtd-prime-col'] {
+  display: flex;
+  flex-direction: column;
+}
+.mtd-prime-row-flex > [class*='mtd-prime-col'] .mtd-prime-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+/* === 数据卡片内部结构 === */
+/* Card header（标题区）：去掉 MTD 默认分割线，不参与 flex 拉伸，减少底部间距 */
+.mtd-prime-card > .mtd-prime-card-header {
+  flex-shrink: 0;
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+/* Card body 撑满卡片剩余高度，传递 flex 布局给图表区 */
+.mtd-prime-card > .mtd-prime-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+/* 有 header 的卡片，body 紧贴 header，减少间距 */
+.mtd-prime-card > .mtd-prime-card-header + .mtd-prime-card-body {
+  padding-top: 0;
+}
+/* 仅含 AntV 图表的卡片去掉 body 上内边距，让图表紧贴 header */
+.chart-card > .mtd-prime-card-body {
+  padding-top: 0;
+}
+/* card-title-bar：放在 Card header prop 中的标题容器 */
+.card-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+}
+/* 卡片标题左侧蓝色竖条装饰（统一通过 card-title-bar 内第一个 span 实现） */
+.card-title-bar > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title-bar > span:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--color-brand-primary);
+  flex-shrink: 0;
+}
+/* 文字按钮颜色遵循 MTD3 组件库默认规范：
+   - 未指定 type 的文字按钮（shape="text"）默认黑色（#111925），不跟随主题变化；
+   - 如需按钮跟随主题色，应显式使用 <Button type="primary" shape="text" />，
+     此时颜色由 MTD 主题 CSS（index.css / theme-yellow.css）中的
+     .mtd-prime-button-primary.mtd-prime-button-text 规则控制。
+   因此这里不再对 .mtd-prime-button-text 做全局强制覆盖。 */
+/* Tabs 内容区去掉左右和底部 padding，保留顶部间距 */
+.dash-card .mtd-prime-tabs-content,
+.mtd-prime-card .mtd-prime-tabs-content {
+  padding: 12px 0 0;
+}
+
+/* 图表/数据区：统一高度保证同行图表等高 */
+.card-body-area {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* === Table Sticky 固定列样式 === */
+/* 固定列需要不透明背景，否则滚动内容会透视重叠 */
+[class*="mtd-prime-table-cell-sticky"] {
+  background: var(--bg-card) !important;
+}
+
+/* 固定右侧列第一个 cell 左边缘阴影 */
+[class*="mtd-prime-table-cell-sticky-right-first"],
+[class*="mtd-prime-table-head-sticky-right-first"] {
+  box-shadow: -4px 0 8px rgba(0, 0, 0, .06);
+}
+
+/* 表头灰色背景（MTD 表头 cell 带 mtd-prime-table-head class） */
+[class*="mtd-prime-table-head-data"],
+[class*="mtd-prime-table-head-label"] {
+  background: var(--bg-card-inner) !important;
+}
+/* 表头行整体背景 */
+[class*="mtd-prime-table-head"] > tr,
+[class*="mtd-prime-table"] thead {
+  background: var(--bg-card-inner);
+}
+
+/* === Form5 可编辑表格（EditableTable）通用样式 === */
+/* 容器：与下方内容保持 16px 间距 */
+.editable-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+/* 添加行按钮：蓝色无框文字按钮，居左，紧贴表格下方（无额外间距） */
+.editable-table__add-row {
+  margin-top: 0;
+}
+
+/* 单元格内边距 8px */
+.editable-table .mtd-prime-table-cell {
+  padding: 8px 8px;
+}
+
+/* 表格内控件（Input / Select / InputNumber）撑满单元格 */
+.editable-table .mtd-prime-input,
+.editable-table .mtd-prime-select,
+.editable-table .mtd-prime-input-number {
+  width: 100%;
+}
+
+/* 表头文字不换行，防止窄屏折行 */
+.editable-table .mtd-prime-table-header-cell,
+.editable-table [class*="mtd-prime-table-head-label"] {
+  white-space: nowrap;
+}
+
+/* 汇总行：右对齐展示合计等统计信息 */
+.editable-table__summary {
+  text-align: right;
+  font-size: var(--fs-14);
+  color: var(--text-3);
+  padding: 8px 0;
+}
+.editable-table__summary strong {
+  color: var(--text-1);
+  font-size: var(--fs-16);
+}
+
+/* === 响应式 2×2 Grid（左宽右窄，极窄时单列堆叠） === */
+.grid-2x2-responsive {
+  display: grid;
+  grid-template-columns: 2fr minmax(280px, 1fr);
+  grid-template-rows: auto auto;
+  gap: 8px;
+}
+.grid-2x2-responsive > * {
+  min-width: 0;
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .grid-2x2-responsive {
+    grid-template-columns: 1fr;
+  }
+  .grid-2x2-responsive > *:first-child {
+    grid-row: auto;
+  }
+}

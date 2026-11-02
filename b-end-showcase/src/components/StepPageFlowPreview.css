@@ -1,0 +1,28 @@
+/* ============================================================
+ * Form4 · 步骤条（StepBar）
+ * 用 .step-bar-demo 前缀作用域，避免污染全局同名类名。
+ * ============================================================ */
+
+.step-bar-demo {
+  padding: 8px 0;
+}
+
+/* 步骤条本身：居中限宽 720px */
+.step-bar-demo__steps {
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+
+.step-bar-demo__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.step-bar-demo__hint {
+  min-height: 20px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--color-danger, #f5483b);
+}

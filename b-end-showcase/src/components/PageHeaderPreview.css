@@ -1,0 +1,186 @@
+/* ============================================================
+ * FD2 · 表头信息区（PageHeader）
+ * ============================================================ */
+
+.page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.page-header__breadcrumb {
+  margin-bottom: 8px;
+}
+
+.page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 28px;
+  margin: 0;
+}
+
+.page-header__desc {
+  font-size: 14px;
+  color: var(--text-3);
+  line-height: 22px;
+  /* ⚠️ 必须用 margin 简写清除 <p> 标签默认 margin-bottom，否则会多出 1em 下间距 */
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-header__title--with-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-header__back-icon {
+  font-size: 20px;
+  color: var(--text-3);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.page-header__back-icon:hover {
+  color: var(--color-brand-primary);
+}
+
+.page-header__announcement {
+  margin-top: 12px;
+}
+
+/* 状态标签（详情页专用）—— 紧跟标题文字同行 */
+.page-header__status {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* --- 摘要信息行 --- */
+.page-header__summary {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-header__summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+}
+
+.page-header__summary-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.page-header__summary-label {
+  font-size: 14px;
+  /* MTD 颜色 token：$color-text-2 次要信息文字色，等价 rgba(17, 25, 37, 0.45) */
+  color: var(--text-4);
+  line-height: 22px;
+  flex-shrink: 0;
+}
+
+.page-header__summary-value {
+  font-size: 14px;
+  /* MTD 颜色 token：$color-text-4 正文，等价 rgba(17, 25, 37, 0.85) */
+  color: var(--text-2);
+  line-height: 22px;
+}
+
+.page-header__summary-value--link {
+  color: var(--color-brand-primary);
+  cursor: pointer;
+}
+
+/* 两行模式：用 Grid 把每行均分成等宽列，列内 label 固定 96px、value 撑满剩余空间。
+ * 列数统一取所有行中字段数最大值，由 JS 动态计算后通过行内 style 绑定，
+ * 不在公共 CSS 类里写死具体列数。 */
+.page-header__summary--aligned .page-header__summary-row {
+  display: grid;
+  gap: 8px 16px;
+}
+
+.page-header__summary--aligned .page-header__summary-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.page-header__summary--aligned .page-header__summary-label {
+  display: inline-block;
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.page-header__summary--aligned .page-header__summary-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- 锚点导航（React）：Anchor 吸顶容器 — affix={false} + CSS sticky
+ * 必须放在 .page-header 外部（sticky 祖先不能有 overflow: hidden）
+ * 用负 margin 撑满白卡宽度（抵消 .page-card 的 padding-left/right: 24px），
+ * 预览容器 padding 为 20px，故此处对应改为 -20px/20px。 */
+/* 多个全局 CSS 文件都有裸 .page-header { border-bottom } 规则，CSS 加载顺序不确定，
+ * 用更高优先级的双类选择器确保 --no-border 始终覆盖所有竞争规则 */
+.page-header.page-header--no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0; /* Anchor 容器自带 margin-bottom 接管间距 */
+}
+
+.page-header__anchor {
+  margin-top: 0;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 10;
+  padding-top: 16px;
+  padding-bottom: 4px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.page-header__anchor .mtd-prime-anchor-wrapper {
+  margin-left: 0;
+  width: 100%;
+}
+
+.page-header__anchor .mtd-prime-anchor {
+  width: 100%;
+}
+
+/* --- 空间切换器：位于 .page-header 之上，用于多空间切换 --- */
+.space-switcher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--divider);
+  margin-bottom: 16px;
+}
+
+.space-switcher__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-3);
+  text-align: left; /* ⚠️ 硬约束：标签必须左对齐 */
+  flex-shrink: 0;
+  line-height: 22px;
+}
+
+.space-switcher__select {
+  width: 240px;
+}

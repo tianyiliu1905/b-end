@@ -1,0 +1,394 @@
+/* ============================================
+   CSS 变量（蓝色主题，默认）
+   base.md §0 主题色机制
+   ============================================ */
+:root {
+  --primary: var(--color-brand-primary, #166FF7);
+  --primary-hover: var(--color-primary-1, #468DFB);
+  --primary-active: var(--color-primary-2, #0E65E8);
+  --primary-bg: var(--color-primary-4, #F0F6FF);
+  --primary-on-light: var(--color-brand-primary, #166FF7);
+  --primary-text-on: #FFFFFF;
+  --top-nav-h: 52px;
+  --side-nav-w: 200px;
+  --side-nav-w-collapsed: 60px;
+}
+
+/* 全局重置已移除，避免影响其他页面 */
+
+/* ============================================
+   整体骨架
+   ============================================ */
+.app-shell {
+  min-height: 100vh;
+  background: #f5f6f7;
+}
+
+.app-body {
+  padding-top: var(--top-nav-h);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================
+   G · 顶导航栏 TopNavBar
+   三段式：Logo(左) + Tab(中 flex:1) + 操作区(右)
+   ============================================ */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-nav-h, 52px);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导必须低于抽屉蒙层(900)与弹窗蒙层(1050)，统一为 100 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+}
+.top-nav-logo .logo-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--color-brand-primary, var(--primary));
+  border-radius: 4px;
+}
+.top-nav-logo .logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.top-nav-menus {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+.top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+.top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+.top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, var(--primary));
+}
+
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+.top-nav-actions .avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ============================================
+   G · 侧导航栏 SideNavBar
+   ============================================ */
+.side-nav {
+  position: fixed;
+  top: var(--top-nav-h);
+  left: 0;
+  bottom: 0;
+  height: calc(100vh - 52px);
+  padding: 6px 0 4px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.side-nav-menu {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.side-nav-menu .mtd-prime-menu-item:not(:has(.mtd-prime-menu-item-custom-icon)) .mtd-prime-menu-item-content {
+  margin-left: 4px;
+}
+
+.side-nav-menu .mtd-prime-menu-item-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+.side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+.side-nav-collapse--collapsed {
+  justify-content: center;
+  border-top: none;
+}
+
+/* ============================================
+   内容区
+   ============================================ */
+.member-card .app-content {
+min-width: 0;
+flex: 1;
+transition: margin-left 0.2s ease;
+overflow: hidden;
+height: calc(100vh - 52px);
+}
+
+/* ============================================
+   F1 · 承载容器 — 顺序落地页
+   灰底 + 白卡 + 16px 四周留白
+   ============================================ */
+.member-card .page-container {
+padding: 16px;
+height: 100%;
+display: flex;
+flex-direction: column;
+}
+
+.member-card .page-card {
+background: #fff;
+border-radius: 8px;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+padding: 20px 24px 0;
+flex: 1;
+min-height: 0;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+/* ============================================
+   F2 · 表头信息区 PageHeader
+   ============================================ */
+.member-card .page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 有 Anchor 时去掉 PageHeader 底线 */
+.member-card .page-header--no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.member-card .page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.member-card .page-header__title--with-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.member-card .page-header__back-icon {
+  font-size: 20px;
+  color: #646a73;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.member-card .page-header__back-icon:hover {
+  color: var(--color-heading-accent, var(--primary));
+}
+
+.member-card .page-header__desc {
+  font-size: 14px;
+  color: #8f959e;
+  line-height: 22px;
+  margin-top: 4px;
+}
+
+/* ============================================
+   §6.2 Anchor 锚点导航（React 版 sticky 吸顶）
+   ============================================ */
+.member-card .page-header__anchor {
+  margin-top: 0;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  padding-top: 16px;
+  padding-bottom: 4px;
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.member-card .page-header__anchor .mtd-prime-anchor-wrapper {
+  margin-left: 0;       /* 覆盖 MTD 默认值，确保与标题左对齐 */
+  width: 100%;          /* 让 anchor 组件占满容器宽度 */
+}
+.member-card .page-header__anchor .mtd-prime-anchor {
+  width: 100%;          /* ink 线拉通全宽 */
+  border-bottom: 1px solid #e8e8e8;  /* 底部分割线拉通 */
+}
+
+/* ============================================
+   F3 · 分组分段 GroupSection
+   分组标题 16px 加粗, 带主色方块装饰
+   ============================================ */
+.member-card .form-section__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 24px;
+  margin: 24px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.member-card .form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--color-brand-primary, var(--primary));
+  flex-shrink: 0;
+}
+/* 首个分组标题不需要上间距 */
+.member-card .form-section .form-section__title:first-child,
+.member-card .section-form > div:first-child .form-section__title {
+  margin-top: 0;
+}
+
+/* ============================================
+   F4 · 单栏布局 SingleLayout
+   Form 统一限宽 640px
+   labelPosition="right", labelWidth="120px"
+   控件撑满所在列 width: 100%
+   ============================================ */
+.member-card .section-form {
+  max-width: 640px;
+}
+
+/* MTD Form 内部是 flex wrap，分组 div 必须撑满整行 */
+.member-card .section-form > div {
+  width: 100%;
+}
+
+/* 控件撑满所在列 */
+.member-card .section-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+
+/* 非 Input 控件强制撑满（Select/DatePicker/InputNumber 等默认宽度非 100%） */
+.member-card .section-form .mtd-prime-select,
+.member-card .section-form .mtd-prime-picker,
+.member-card .section-form .mtd-prime-date-picker,
+.member-card .section-form .mtd-prime-input-number,
+.member-card .section-form .mtd-prime-range-picker,
+.member-card .section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* ============================================
+   可滚动内容区
+   ============================================ */
+.member-card .scroll-content {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ============================================
+   F14 · 操作工具栏 ActionBar
+   固定在白卡底部, 按钮右对齐
+   ============================================ */
+.member-card .action-bar {
+background: #fff;
+padding: 16px 24px;
+border-top: 1px solid #f0f0f0;
+display: flex;
+justify-content: flex-end;
+gap: 12px;
+margin: 0 -24px;
+border-radius: 0 0 8px 8px;
+flex-shrink: 0;
+}
+
+/* ============================================
+   响应式：窄屏 < 768px
+   ============================================ */
+@media (max-width: 767.98px) {
+  .page-container {
+    padding: 12px;
+  }
+}

@@ -1,0 +1,97 @@
+/* ─────────────────────────────────────────────
+   Form3 · 单栏布局（SingleLayout）
+   ───────────────────────────────────────────── */
+
+/* 1. 表单宽度由外层 Row > Col 栅格控制，此处不设 max-width */
+
+/* 2. React Form 内分组 div 撑满整行
+   （MTD React Form 是 flex-wrap 容器，div 子项默认不占满整行） */
+.section-form > div {
+  width: 100%;
+}
+
+/* 3. 控件撑满所在列
+   MTD 的 Select / DatePicker / InputNumber / RangePicker / Cascader
+   默认宽度不是 100%，必须强制撑满 */
+.section-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+.section-form .mtd-prime-select,
+.section-form .mtd-prime-picker,
+.section-form .mtd-prime-date-picker,
+.section-form .mtd-prime-input-number,
+.section-form .mtd-prime-range-picker,
+.section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* 4. 控件区垂直居中 + 校验错误提示换行到下方
+   .mtd-prime-form-item-body 是控件容器(.mtd-prime-form-item-wrapper)和
+   校验错误提示(.mtd-prime-form-item-explain)的共同父容器（二者是同级兄弟节点，
+   explain 并不在 wrapper 内部）。
+   之前误将 body 设为横向 flex + align-items:center，导致 wrapper 与 explain
+   被并排展示在同一行、错误提示挤到控件右侧。
+   这里改为纵向排列（flex-direction: column），使 wrapper 与 explain 各自换行、
+   上下堆叠；控件自身的垂直居中改为单独作用于 wrapper，不影响 explain。 */
+.section-form .mtd-prime-form-item-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 32px;
+}
+.section-form .mtd-prime-form-item-body > .mtd-prime-form-item-wrapper {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+/* 4b. labelPosition="top" 时 label 在上、控件在下。
+   MTD 已将 Form.Item 设为 flex-direction:column，但 label 内的
+   .mtd-prime-form-item-label-ctx 默认 width:6em，导致长标签文字溢出被截断。
+   需要让 label 及其内部文字容器都撑满整行。 */
+.section-form .label-pos-top .mtd-prime-form-item-body {
+  display: block;
+  min-height: unset;
+}
+.section-form .label-pos-top .mtd-prime-form-item-label {
+  width: 100%;
+  height: auto;
+}
+.section-form .label-pos-top .mtd-prime-form-item-label-ctx {
+  width: 100%;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* 5. 多列模式：含多列字段的分组容器需要 flex-wrap
+   使 Form.Item 的 span 栅格生效（span=12 各占 50%，span=8 各占 33.3%） */
+.section-form .form-section--multicol {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* 6. 分组标题在 flex-wrap 容器中独占一行 */
+.section-form .form-section--multicol .form-section__title {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* 7. 紧凑模式（抽屉/弹窗：行间距更小，撑满容器） */
+.section-form--compact {
+  max-width: none;
+}
+.section-form--compact .mtd-prime-form-item {
+  margin-bottom: 12px;
+}
+
+/* 8. 半宽留白提示文字 */
+.single-layout__blank-hint {
+  height: 100%;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-4, rgba(17, 25, 37, 0.25));
+  font-size: 12px;
+}

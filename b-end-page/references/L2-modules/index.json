@@ -1,0 +1,715 @@
+{
+  "_meta": {
+    "description": "L2 模块轻量选型索引，仅维护列表页与数据看板使用的 G、List、D、W 模块。表单页与详情页模块统一从 references/INDEX-form-detail.md 按需加载。",
+    "version": "13.0.0",
+    "lastUpdated": "2026-07-20",
+    "fileStructure": "<文件名>.md — 设计知识 + MTD 实现（ASCII 布局 + JSON token 值 + 约束规则 + 变体 + MTD 组件映射 + 代码骨架 + 踩坑笔记），通用描述与 MTD 实现已合并为单文件",
+    "readStrategy": "读 .md 全文 + 执行 mtd-rag 查询，统一使用 MTD 组件库实现",
+    "numberingScheme": "本索引仅包含可独立选型的 G、D、W 模块：G-1~G-4、G-6 页面共用，D-1~D-15 看板图表/卡片，W-1~W-7 工作台专属。G-5、List-2、List-3 是 G-4 的内联逻辑子模块，不作为独立选型项；G-6 是独立模块（分类导航/左树右表的左侧树面板），不占用 G-5 的内联子模块编号。表单页和详情页不得从本索引选型，必须切换到 references/INDEX-form-detail.md 专用流程。"
+  },
+  "modules": {
+    "G-1+G-2": {
+      "name": "顶导+侧导 Layout",
+      "category": "G-导航",
+      "files": "General-Layout.tsx",
+      "description": "顶导(G-1)+侧导(G-2)一体化模板。顶导三段式布局(Logo+Tabs+操作区)，侧导多级Menu可折叠。直接复制使用，只替换navGroups数据",
+      "triggers": [
+        "所有页面默认带",
+        "顶导",
+        "顶部导航",
+        "导航栏",
+        "header",
+        "TopNav",
+        "侧导",
+        "侧边栏",
+        "左侧导航",
+        "菜单",
+        "SideNav",
+        "Layout"
+      ],
+      "l3Roles": [
+        "Tabs",
+        "Tabs.TabPane",
+        "Menu",
+        "Menu.SubMenu",
+        "Menu.Item",
+        "Icon",
+        "Button"
+      ],
+      "notes": "tsx文件含完整可运行代码+踩坑笔记注释，读取后直接复制使用。一级菜单必带icon(-o线性)，折叠用MTD Button驱动inlineCollapsed"
+    },
+    "G-3": {
+      "name": "看板筛选器栏 (Dashboard Filter Bar)",
+      "category": "G-导航",
+      "files": "General3-filter-bar.md",
+      "description": "页面顶部的全局筛选条，控制整页数据维度，简单档/复杂档两种档位。看板页和列表页统一使用此编号，不再区分 List-1",
+      "triggers": [
+        "看板筛选",
+        "看板顶部筛选",
+        "时间范围",
+        "维度筛选",
+        "看板filter",
+        "筛选",
+        "过滤",
+        "查询条件",
+        "时间选择",
+        "filter",
+        "搜索条件"
+      ],
+      "l3Roles": [
+        "日期选择器",
+        "下拉选择",
+        "输入框",
+        "开关",
+        "按钮"
+      ],
+      "variants": {
+        "simple": "单行筛选栏（≤5个维度）",
+        "advanced": "多行分组筛选器（>5维度/需分组/需保存方案）"
+      },
+      "selectionRule": "维度≤5→简单档；≥6或出现「分组/方案/收起」关键词→复杂档。看板页和列表页统一用 G-3 编号",
+      "notes": "原 List-1 列表页筛选器已合并至此，看板页/列表页共用同一套简单档/复杂档结构"
+    },
+    "G-4": {
+      "name": "数据表格 (Data Table)",
+      "category": "G-共用",
+      "files": "General4-data-table.md",
+      "description": "通用数据表格（含操作栏+分页器一体），所有表格类需求一律收敛到此，差异用 columns/props 配置实现。列表页和看板页均可使用",
+      "triggers": [
+        "表格",
+        "列表",
+        "table",
+        "管理列表",
+        "数据表",
+        "明细",
+        "排名",
+        "操作栏",
+        "分页"
+      ],
+      "l3Roles": [
+        "表格",
+        "标签",
+        "按钮",
+        "空态",
+        "加载态",
+        "分页器"
+      ],
+      "variants": {
+        "纯文字表格": {
+          "triggers": [
+            "管理列表",
+            "XX管理",
+            "CRUD"
+          ],
+          "cellFeatures": "status→Tag, 多操作按钮，标识列固定左/操作列固定右"
+        },
+        "带图片列": {
+          "triggers": [
+            "商品",
+            "带图",
+            "门店列表"
+          ],
+          "cellFeatures": "缩略图+主副文字"
+        },
+        "带切换tab": {
+          "triggers": [
+            "tab切换",
+            "分类切换",
+            "状态切换"
+          ],
+          "cellFeatures": "表格上方内联 G-5 切换tab（MTD Tabs + ghost 按钮二级筛选），tab 与表格在同一个 dash-card 中"
+        }
+      },
+      "embeddedParts": {
+        "G-5": "切换 tab，仅作为「带切换tab」变体的内联实现，不独立选型",
+        "List-2": "操作栏，位于表格上方，不独立选型",
+        "List-3": "分页器，位于表格下方，不独立选型"
+      },
+      "notes": "同一份 g4Variants 定义跨列表页/看板页复用，禁止重复实现。G-5、List-2、List-3 只保留逻辑 ID，文件加载与 Design Spec 均统一归入 G-4"
+    },
+    "G-6": {
+      "name": "分类导航 (Category Tree Nav)",
+      "category": "G-导航",
+      "files": "page-列表页装配逻辑.md §7.2",
+      "description": "左侧固定宽度面板：搜索框 + 树形分类结构 + 附加筛选项，点击树节点联动右侧表格/内容区数据，常见于「左树右表」类列表页。",
+      "triggers": [
+        "分类导航",
+        "树形导航",
+        "分类树",
+        "左树",
+        "左树右表",
+        "组织架构树",
+        "树形层级",
+        "目录树"
+      ],
+      "l3Roles": [
+        "Input（树搜索）",
+        "Tree / mtd-tree",
+        "Select（附加筛选）",
+        "Button（新增节点）"
+      ],
+      "notes": "固定宽度约 240px，白底 dash-card；与右侧内容区之间用 --gap-module 做外部间距；树节点选中态联动右侧数据刷新（onSelect/@node-click 触发右侧数据源过滤）。详细排版与自检见 references/L1-templates/page-列表页装配逻辑.md §7.2"
+    },
+    "D-1": {
+      "name": "指标卡片组 (Metric Cards)",
+      "category": "D-图表卡片",
+      "files": "Dashboard1-metric-cards.md",
+      "description": "横向排列的多张指标卡，每卡一个核心数字 + 同环比涨跌色标，可选迷你环图",
+      "triggers": [
+        "概览",
+        "大盘",
+        "总览",
+        "核心指标",
+        "KPI卡片",
+        "指标卡"
+      ],
+      "l3Roles": [
+        "栅格",
+        "卡片",
+        "数值展示",
+        "标签",
+        "图标",
+        "AntV G2 mini donut"
+      ],
+      "variants": {
+        "纯大数字": "仅数字+同环比色标，无迷你图无操作",
+        "带迷你图": "数字右侧加 mini 折线 sparkline（up/down 两种走势）",
+        "带操作": "标题行右上角加「查看」文字按钮"
+      },
+      "notes": "一行3~6张卡(span=6或4)；可选右上角 MiniDonutChart；3 变体在 Overview/AiSummary/FilterTable/Workbench 四个看板页复用同一套结构"
+    },
+    "D-2": {
+      "name": "进度展示 (Progress) — 含两个独立子模块",
+      "category": "D-图表卡片",
+      "files": "Dashboard2-progress.md",
+      "description": "同一 D-2 编号下有两个视觉/数据完全不同的子模块，各自独立维护头部变体：「D-2 环形进度」(AnnualTargetChart，单一环形/gauge+数字) 与「D-2 进度指标」(MiniDonutChart 2x2 网格，多指标迷你环卡片组)",
+      "triggers": [
+        "目标",
+        "进度",
+        "完成率",
+        "预算",
+        "达成率",
+        "年度目标",
+        "进度指标"
+      ],
+      "l3Roles": [
+        "卡片",
+        "数值展示",
+        "AntV G2 interval+theta"
+      ],
+      "subModules": {
+        "D-2 环形进度": {
+          "component": "AnnualTargetChart",
+          "description": "单一大环形/gauge + 中心百分比数字，如「品牌年度开店目标」",
+          "variants": [
+            "操作型",
+            "筛选型",
+            "筛选（复杂）",
+            "描述型",
+            "纯净型"
+          ]
+        },
+        "D-2 进度指标": {
+          "component": "MiniDonutChart 网格",
+          "description": "2x2（或自适应）灰底卡片网格，每卡一个指标名+数值+右侧迷你环形占比图",
+          "variants": [
+            "纯净型",
+            "操作型",
+            "筛选型",
+            "筛选（复杂）",
+            "描述型"
+          ]
+        }
+      },
+      "notes": "两个子模块的 5 型头部变体命名见 DashboardChartCard.md「头部形态变体」表；render 逻辑互不共享，仅共享外壳与变体词汇"
+    },
+    "D-3": {
+      "name": "折线图/面积图（趋势） (Trend) — 含两个独立子模块",
+      "category": "D-图表卡片",
+      "files": "Dashboard3-trend.md",
+      "description": "同一 D-3 编号下有两个独立的图表实现：「D-3 折线图」(line，如 GMV趋势/全国跟随品牌新开) 与「D-3 面积图」(area，如月度营收趋势)，各自独立维护一套头部变体",
+      "triggers": [
+        "趋势",
+        "走势",
+        "同比环比",
+        "时间序列",
+        "折线图",
+        "面积图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "单选按钮组",
+        "标签页",
+        "下拉选择",
+        "AntV G2 line/area"
+      ],
+      "subModules": {
+        "D-3 折线图": {
+          "component": "line（如 BrandTrendChart / TrendChart）",
+          "variants": [
+            "操作型",
+            "筛选型",
+            "筛选（复杂）",
+            "描述型",
+            "纯净型"
+          ]
+        },
+        "D-3 面积图": {
+          "component": "area（如 AreaChart）",
+          "variants": [
+            "操作型",
+            "筛选型",
+            "筛选（复杂）",
+            "纯净型"
+          ]
+        }
+      },
+      "notes": "外壳统一用 ChartCard（见 DashboardChartCard.md）；5 型头部变体命名见 DashboardChartCard.md「头部形态变体」表"
+    },
+    "D-4": {
+      "name": "柱状图 (Bar Chart)",
+      "category": "D-图表卡片",
+      "files": "Dashboard4-bar.md",
+      "description": "竖向柱状图，表达分类维度上的数值分布/对比；分组柱/横向分组柱为其变体",
+      "triggers": [
+        "分类对比",
+        "区域分布",
+        "达成率",
+        "数量分布",
+        "柱状图",
+        "分组柱"
+      ],
+      "l3Roles": [
+        "卡片",
+        "单选按钮组",
+        "下拉选择",
+        "AntV G2 interval(+dodgeX/transpose)"
+      ],
+      "variants": [
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "纯净型"
+      ]
+    },
+    "D-5": {
+      "name": "双轴组合图 (Combo Chart)",
+      "category": "D-图表卡片",
+      "files": "Dashboard5-combo.md",
+      "description": "柱+线双轴组合，表达两个量纲不同但相关的指标（如存量+增量）",
+      "triggers": [
+        "双指标关联",
+        "存量增量对比",
+        "双轴",
+        "组合图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "单选按钮组",
+        "下拉选择",
+        "AntV G2 view(interval+line)"
+      ],
+      "variants": [
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "描述型",
+        "纯净型"
+      ]
+    },
+    "D-6": {
+      "name": "漏斗图 (Funnel)",
+      "category": "D-图表卡片",
+      "files": "Dashboard6-funnel.md",
+      "description": "逐层递减的转化/流失链路：曝光→点击→加购→下单→支付",
+      "triggers": [
+        "漏斗",
+        "转化",
+        "流失",
+        "链路",
+        "转化率"
+      ],
+      "l3Roles": [
+        "卡片",
+        "单选按钮组",
+        "AntV G2 interval+funnel+symmetryY"
+      ],
+      "variants": [
+        "描述型",
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "纯净型"
+      ]
+    },
+    "D-7": {
+      "name": "饼图/环图 (Pie / Donut)",
+      "category": "D-图表卡片",
+      "files": "Dashboard7-pie-donut.md",
+      "description": "占比/构成分析：环图/饼图+图例，支持阈值筛选合并「其他」类目",
+      "triggers": [
+        "占比",
+        "构成",
+        "饼图",
+        "环图",
+        "类目占比"
+      ],
+      "l3Roles": [
+        "卡片",
+        "标签",
+        "AntV G2 interval+theta"
+      ],
+      "variants": [
+        "操作型",
+        "筛选型",
+        "筛选（复杂）",
+        "描述型",
+        "纯净型"
+      ]
+    },
+    "D-8": {
+      "name": "堆叠进度条 (Stacked Progress Bar)",
+      "category": "D-图表卡片",
+      "files": "Dashboard8-stacked-progress.md",
+      "description": "多阶段堆叠进度条：按对象分行，每行多段色块表达多阶段/状态的数量分布，色块宽度按比例自适应",
+      "triggers": [
+        "开店进度",
+        "审批流转",
+        "多阶段状态占比",
+        "分公司进度对比"
+      ],
+      "l3Roles": [
+        "卡片",
+        "原生 flex/div（非 G2）"
+      ],
+      "variants": [
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "描述型",
+        "纯净型"
+      ],
+      "notes": "⚠️ 非 G2 图表，纯手工 flex/div 实现，不接入 useG2Chart/ChartCard；但头部仍复用 5 型变体命名"
+    },
+    "D-9": {
+      "name": "排名条形图 (Rank Bar)",
+      "category": "D-图表卡片",
+      "files": "Dashboard9-rank-bar.md",
+      "description": "横向条形表达 TOP 排名或占比构成，可带名次/奖杯",
+      "triggers": [
+        "TOP",
+        "排名",
+        "排行",
+        "占比构成条形图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "标签",
+        "图标",
+        "AntV G2 interval+transpose"
+      ],
+      "variants": [
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "纯净型"
+      ]
+    },
+    "D-10": {
+      "name": "散点图 (Scatter)",
+      "category": "D-图表卡片",
+      "files": "Dashboard10-scatter.md",
+      "description": "相关性/分布分析：双变量气泡散点，气泡大小可映射第三维数值",
+      "triggers": [
+        "相关性",
+        "分布分析",
+        "双变量对比",
+        "散点图",
+        "气泡图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "下拉选择",
+        "AntV G2 point"
+      ],
+      "variants": [
+        "操作型",
+        "筛选型",
+        "筛选（复杂）",
+        "描述型",
+        "纯净型"
+      ]
+    },
+    "D-11": {
+      "name": "AI 诊断摘要卡 (DigestCard)",
+      "category": "D-图表卡片",
+      "files": "Dashboard11-digest-card.md",
+      "description": "蓝色渐变背景 + 左侧文字摘要 + 右侧指标列表，用于 AI 总结看板顶部",
+      "triggers": [
+        "AI诊断",
+        "智能总结",
+        "AI摘要",
+        "洞察卡片"
+      ],
+      "l3Roles": [
+        "卡片",
+        "标签",
+        "图标",
+        "CSS gradient"
+      ],
+      "variants": {
+        "列表型": "DigestCard variant=\"list\"，多条摘要纵向列表展示",
+        "卡片型": "DigestCard variant=\"cards\"，多条摘要拆成独立小卡片横排"
+      },
+      "notes": "与 D-2~D-15 的 5 型头部变体是不同的独立变体体系，专属 DigestCard 组件"
+    },
+    "D-12": {
+      "name": "雷达图 (Radar Chart)",
+      "category": "D-图表卡片",
+      "files": "Dashboard12-radar.md",
+      "description": "多维度能力/画像对比，围成闭合多边形表达综合评分分布",
+      "triggers": [
+        "多维能力对比",
+        "画像分析",
+        "综合评分",
+        "雷达图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "AntV G2 area+polar"
+      ],
+      "variants": [
+        "纯净型",
+        "操作型",
+        "筛选型",
+        "筛选（复杂）"
+      ]
+    },
+    "D-13": {
+      "name": "水波球 (Liquid Gauge)",
+      "category": "D-图表卡片",
+      "files": "Dashboard13-liquid.md",
+      "description": "用波浪水位高度表达单一比例，中心叠加百分比数字，强调进度感",
+      "triggers": [
+        "单一比例强调",
+        "目标完成率强调",
+        "水波球",
+        "年度进度"
+      ],
+      "l3Roles": [
+        "AntV G2 liquid"
+      ],
+      "variants": [
+        "纯净型",
+        "筛选型",
+        "筛选（复杂）",
+        "操作型",
+        "描述型"
+      ]
+    },
+    "D-14": {
+      "name": "热力图 (Heatmap)",
+      "category": "D-图表卡片",
+      "files": "Dashboard14-heatmap.md",
+      "description": "用色块矩阵表达两个分类维度交叉下的数值密度（如星期×时段客流）",
+      "triggers": [
+        "时段分布",
+        "区域密度",
+        "两维度交叉分析",
+        "热力图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "AntV G2 cell"
+      ],
+      "variants": [
+        "操作型",
+        "筛选型",
+        "筛选（复杂）",
+        "描述型",
+        "纯净型"
+      ]
+    },
+    "D-15": {
+      "name": "玫瑰图 (Rose / Nightingale Chart)",
+      "category": "D-图表卡片",
+      "files": "Dashboard15-rose.md",
+      "description": "极坐标下的分类占比图，用扇形半径长短表达数值大小（区别于饼图用角度）",
+      "triggers": [
+        "多类目占比",
+        "数值双维",
+        "品牌分布",
+        "玫瑰图",
+        "南丁格尔图"
+      ],
+      "l3Roles": [
+        "卡片",
+        "AntV G2 interval+polar"
+      ],
+      "variants": [
+        "纯净型",
+        "筛选型",
+        "筛选（复杂）",
+        "操作型"
+      ]
+    },
+    "D-ChartCard": {
+      "name": "图表模块统一外壳 (ChartCard)",
+      "category": "D-图表卡片",
+      "files": "DashboardChartCard.md",
+      "description": "所有数据图表类 L2 的唯一外壳：标题+小筛选+图表画布，换图表=换spec里的type",
+      "triggers": [
+        "图表卡片",
+        "数据可视化卡片"
+      ],
+      "l3Roles": [
+        "卡片",
+        "单选按钮组",
+        "下拉选择",
+        "提示气泡",
+        "AntV G2 useG2Chart"
+      ],
+      "notes": "D-1~D-15 中除 D-8（堆叠进度条，非 G2）外全部共用此外壳"
+    },
+    "W-1": {
+      "name": "欢迎栏 (Welcome Banner)",
+      "category": "W-工作台",
+      "files": "Workbench1-welcome-banner.md",
+      "description": "工作台页面最顶部的问候横幅，承载「早上好+姓名」问候语与今日待办摘要，或轮播运营/公告图",
+      "triggers": [
+        "欢迎语",
+        "问候栏",
+        "工作台头部",
+        "早上好",
+        "轮播图",
+        "欢迎横幅"
+      ],
+      "l3Roles": [
+        "卡片",
+        "按钮",
+        "Carousel 轮播"
+      ],
+      "variants": {
+        "文字欢迎": "渐变背景卡片，问候语+今日概述+一个主操作按钮",
+        "轮播图": "Carousel 轮播多张运营/公告卡片，自动播放+hover箭头"
+      },
+      "notes": "工作台页面专属，始终位于左侧主内容区最顶部"
+    },
+    "W-2": {
+      "name": "操作引导卡 (Action Card)",
+      "category": "W-工作台",
+      "files": "Workbench2-action-card.md",
+      "description": "可操作的策略/待办/建议卡片：描述+效果数据+操作按钮",
+      "triggers": [
+        "策略",
+        "待办",
+        "操作",
+        "建议",
+        "运营动作"
+      ],
+      "l3Roles": [
+        "卡片",
+        "按钮",
+        "标签",
+        "数值展示",
+        "栅格"
+      ],
+      "notes": "纯结构组件，无图表；工作台专属模块；无变体，三卡一行 Row type=\"flex\" 等高"
+    },
+    "W-3": {
+      "name": "常用功能/快捷入口网格 (ShortcutGrid)",
+      "category": "W-工作台",
+      "files": "Workbench3-shortcut-grid.md",
+      "description": "2×4 图标网格 + 标题 + 描述，用于工作台首页快捷功能入口",
+      "triggers": [
+        "快捷入口",
+        "功能网格",
+        "工作台入口",
+        "快捷操作",
+        "常用功能"
+      ],
+      "l3Roles": [
+        "栅格",
+        "卡片",
+        "图标"
+      ],
+      "notes": "无变体；由 ShortcutGrid 组件承载"
+    },
+    "W-4": {
+      "name": "今日待办 (Today Todo)",
+      "category": "W-工作台",
+      "files": "Workbench4-todo-list.md",
+      "description": "右侧边栏卡片：待审批/待处理/待回复等工单类目清单，每行「标签+计数+小按钮」，标题栏右侧带「更多」入口",
+      "triggers": [
+        "今日待办",
+        "待办事项",
+        "工单提醒",
+        "待处理清单",
+        "个人待办"
+      ],
+      "l3Roles": [
+        "卡片",
+        "按钮"
+      ],
+      "notes": "无变体；固定出现在工作台右侧边栏（sticky）；每行computed数字用色区分紧急程度"
+    },
+    "W-5": {
+      "name": "公告通知 (Announcement)",
+      "category": "W-工作台",
+      "files": "Workbench5-announcement.md",
+      "description": "右侧边栏卡片：公告/通知列表，单行省略展示",
+      "triggers": [
+        "公告",
+        "通知",
+        "消息列表",
+        "系统公告",
+        "最新公告"
+      ],
+      "l3Roles": [
+        "卡片",
+        "标签"
+      ],
+      "variants": {
+        "日期前缀": "每行以「MM-DD」日期作为前缀标签，纯文字弱化时间感",
+        "标签前缀": "每行以彩色 Tag（活动/系统/会议等分类）作为前缀，强调类型区分"
+      },
+      "notes": "固定出现在工作台右侧边栏；单行文字超长用 ellipsis"
+    },
+    "W-6": {
+      "name": "最新动态 (Latest Updates)",
+      "category": "W-工作台",
+      "files": "Workbench6-latest-updates.md",
+      "description": "右侧边栏卡片：图片/资讯轮播，用于展示运营动态或图文资讯流",
+      "triggers": [
+        "最新动态",
+        "资讯轮播",
+        "动态展示",
+        "运营动态"
+      ],
+      "l3Roles": [
+        "卡片",
+        "Carousel 轮播"
+      ],
+      "notes": "无变体；Carousel 自动播放、无箭头（arrow=\"never\"），与 W-1「轮播图」变体的区别是：W-6 更轻量（纯色块占位），无文案排版"
+    },
+    "W-7": {
+      "name": "常用工具 (Tool Grid)",
+      "category": "W-工作台",
+      "files": "Workbench7-tool-grid.md",
+      "description": "左侧主内容区卡片：3 列工具网格，每格「图标+标题+描述+『立即创建』按钮」，用于营销工具/活动配置类快捷创建入口",
+      "triggers": [
+        "常用工具",
+        "工具网格",
+        "快捷创建",
+        "活动配置入口",
+        "营销工具"
+      ],
+      "l3Roles": [
+        "卡片",
+        "按钮",
+        "栅格"
+      ],
+      "notes": "无变体；与 W-3 常用功能的区别：W-3 是纯图标跳转入口（无描述无按钮），W-7 每格自带描述文案+独立创建按钮，信息密度更高"
+    }
+  }
+}

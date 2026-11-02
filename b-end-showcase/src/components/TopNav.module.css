@@ -1,0 +1,147 @@
+/* TopNav — 首页专属顶部导航栏 */
+
+.topNav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(24px, 5vw, 80px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(17, 25, 37, 0.06);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111925;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navBtn {
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(17, 25, 37, 0.65);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navBtn:hover {
+  background: rgba(17, 25, 37, 0.05);
+  color: #111925;
+}
+
+.divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(17, 25, 37, 0.1);
+  margin: 0 8px;
+}
+
+/* ===== Token 版本切换下拉 ===== */
+.themeDropdown {
+  position: relative;
+}
+
+.themeTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(17, 25, 37, 0.1);
+  background: #ffffff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111925;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.themeTrigger:hover {
+  border-color: rgba(17, 25, 37, 0.2);
+}
+
+.themeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.themeArrow {
+  font-size: 10px !important;
+  color: rgba(17, 25, 37, 0.4) !important;
+  margin-left: 2px;
+}
+
+.themeMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid rgba(17, 25, 37, 0.08);
+  box-shadow: 0 8px 24px rgba(17, 25, 37, 0.12);
+  padding: 4px;
+  z-index: 300;
+}
+
+.themeMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #111925;
+  cursor: pointer;
+  text-align: left;
+}
+
+.themeMenuItem:hover {
+  background: rgba(17, 25, 37, 0.05);
+}
+
+.themeMenuItemActive {
+  font-weight: 600;
+}
+
+.themeCheck {
+  margin-left: auto;
+  font-size: 12px !important;
+  color: var(--color-heading-accent, #166FF7) !important;
+}

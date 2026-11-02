@@ -1,0 +1,282 @@
+/**
+ * B 端设计规范 · Design Token 中心（默认主题 = primary / 工具蓝）
+ *
+ * 用途：唯一权威的 Token 取值来源，可直接复制为项目 src/styles/tokens.css（React）
+ * 或 src/assets/tokens.css（Vue3），框架无关——CSS 自定义属性两端语法完全一致，
+ * 不需要区分 React/Vue 版本。
+ *
+ * ─────────────────────────────────────────────
+ * 颜色部分采用「原子层 + 语义层」两层结构，变量命名与美团官方 _base_color.scss
+ * 源文件（km.sankuai.com/collabpage/1961097729）逐项对齐：
+ *
+ *   1) 原子层（命名与源文件 $Blue-1 / $Grey-7_2 一致，仅把 $ 换成 --，
+ *      如 --blue-1、--grey-7_2）：纯色板字典，只表达「这是什么颜色的第几级」，
+ *      不表达任何界面角色语义。业务代码/组件样式**禁止直接引用原子层变量**，
+ *      只能通过下方语义层间接使用。
+ *   2) 语义层（命名与源文件 $color-primary-1 / $color-text-1 完全一致）：
+ *      命名表达「这个颜色在界面里扮演什么角色」，值引用原子层。
+ *
+ * 主题切换的本质 = 让同一批语义变量，在不同主题下引用不同色系的原子层。
+ * 因此原子层本身不随主题变化，随主题变化的只是「语义层 → 原子层」的引用关系，
+ * 由 tokens.brand-yellow.overrides.css 中的 html[data-theme='brand-yellow']
+ * 覆盖块实现（CSS 属性选择器驱动，不需要 JS 注入变量值）。
+ *
+ * ⚠️ 关键提醒：--color-primary-N 的编号语义来自官方源文件，**不是**按深浅递增排列：
+ *      -1 = hover 态、-2 = active 态、-3 = disabled 态、-4 = 浅色背景、-5 = 备用。
+ *    需要「浅色背景」时用 --color-primary-4（不是 -1），需要「hover 态」时用
+ *    --color-primary-1（不是 -4），写代码时务必按语义而非编号大小取用。
+ * ─────────────────────────────────────────────
+ *
+ * 配套文件：
+ *   - tokens.brand-yellow.overrides.css → 黄色主题（美团黄）的 data-theme 覆盖块。
+ *   - theme.react.tsx / theme.vue3.ts → 主题切换运行时逻辑（MTD CSS 层 + data-theme 属性双联动）。
+ *
+ * 完整机制说明见 references/theme-system.md；本文件只负责"取值"，不重复写机制文字。
+ * 生成代码时 Token 名称对照表：直接在本文件内搜索变量名即可，不需要另外去 markdown 表格里找。
+ */
+:root {
+  /* ═══════════════ 原子层：与 _base_color.scss 基础色板逐项对齐（私有，禁止业务代码直接引用） ═══════════════ */
+  /* Blue-1~6 */
+  --blue-1: #F0F6FF;
+  --blue-2: #BFD8FE;
+  --blue-3: #8FBCFF;
+  --blue-4: #468DFB;
+  --blue-5: #166FF7;
+  --blue-6: #0E65E8;
+
+  /* Yellow-1~7（原子层，与 Blue-1~6 结构对称，Yellow-5 为主黄色，Yellow-7 为黄底强调文字专用深棕色） */
+  --yellow-1: #FFFADB;
+  --yellow-2: #FFF6B8;
+  --yellow-3: #FFEF8A;
+  --yellow-4: #FFE852;
+  --yellow-5: #FFDD00;
+  --yellow-6: #F5C800;
+  --yellow-7: #7A3100;
+
+  /* Green-1~6 */
+  --green-1: #E6FFF0;
+  --green-2: #B2F9D3;
+  --green-3: #7FEBB2;
+  --green-4: #08C969;
+  --green-5: #00A854;
+  --green-6: #00994D;
+
+  /* Red-1~6 */
+  --red-1: #FFF2F2;
+  --red-2: #FFC9C9;
+  --red-3: #FFA0A0;
+  --red-4: #FF4040;
+  --red-5: #FF1F1F;
+  --red-6: #F01D1D;
+
+  /* Orange-1~6 */
+  --orange-1: #FFF6F0;
+  --orange-2: #FFD9BF;
+  --orange-3: #FFBE8F;
+  --orange-4: #FF8827;
+  --orange-5: #FF7700;
+  --orange-6: #F56200;
+
+  /* Grey-1~10（透明灰）与 Grey-7_2~10_2（实体灰，_2 后缀沿用源文件记法） */
+  --grey-1: #111925;
+  --grey-2: rgba(17, 25, 37, .85);
+  --grey-3: rgba(17, 25, 37, .65);
+  --grey-4: rgba(17, 25, 37, .45);
+  --grey-5: rgba(17, 25, 37, .30);
+  --grey-6: rgba(17, 25, 37, .20);
+  --grey-7: rgba(17, 25, 37, .15);
+  --grey-8: rgba(17, 25, 37, .10);
+  --grey-9: rgba(17, 25, 37, .05);
+  --grey-10: rgba(17, 25, 37, .03);
+  --grey-7_2: #DCDDDF;
+  --grey-8_2: #E7E8E9;
+  --grey-9_2: #F3F3F4;
+  --grey-10_2: #F8F8F8;
+  --white: #FFFFFF;
+  --black: #000000;
+  --black-transparent: rgba(0, 0, 0, .5);
+  --blue-grey: #303640;
+
+  /* 扩展功能色（不属于 _base_color.scss 标准色板，为图表分类色板补充） */
+  --teal-5: #00A3A3;
+  --purple-5: #882EFF;
+  --pink-5: #EB2F93;
+  --brown-5: #9E7549;
+
+  /* ═══════════════ 规范语义层：变量名与 _base_color.scss 完全对齐 ═══════════════ */
+  /* primary（使用场景名称对齐源文件 @name 注释，注意编号语义，见文件头提醒）：
+     -primary=标准色、-1=主色 hover、-2=主色激活、-3=主色禁用、-4=背景色、-5=备用 1 */
+  --color-primary: var(--blue-5);      /* @name 标准色 */
+  --color-primary-1: var(--blue-4);    /* @name 主色 hover */
+  --color-primary-2: var(--blue-6);    /* @name 主色激活 */
+  --color-primary-3: var(--blue-2);    /* @name 主色禁用 */
+  --color-primary-4: var(--blue-1);    /* @name 背景色 */
+  --color-primary-5: var(--blue-3);    /* @name 备用 1 */
+
+  /* text：1=禁用、2=次要、3=辅助、4=正文、5=一级标题、6=纯黑 */
+  --color-text-1: var(--grey-5);
+  --color-text-2: var(--grey-4);
+  --color-text-3: var(--grey-3);
+  --color-text-4: var(--grey-2);
+  --color-text-5: var(--grey-1);
+  --color-text-6: var(--black);
+
+  /* bgc / line / fill */
+  --color-bgc-1: rgba(0, 0, 0, .04);
+  --color-bgc-2: rgba(0, 0, 0, .06);
+  --color-bgc-3: var(--blue-1);
+  --color-disabled-bgc-1: rgba(0, 0, 0, .2);
+  --color-disabled-bgc-2: rgba(0, 0, 0, .25);
+  --color-line-1: var(--grey-7);
+  --color-line-2: var(--grey-8);
+  --color-line-1_2: var(--grey-7_2);
+  --color-line-2_2: var(--grey-8_2);
+  --color-fill-1: var(--grey-10);
+  --color-fill-2: var(--grey-9);
+  --color-fill-1_2: var(--grey-9_2);
+  --color-fill-2_2: var(--grey-10_2);
+  --color-fill-3: var(--grey-8);
+
+  /* link */
+  --color-link: var(--color-primary);
+  --color-link-1: var(--color-primary-1);
+  --color-link-2: var(--color-primary-2);
+  --color-link-3: var(--color-primary-3);
+  --color-link-4: var(--color-primary-4);
+  --color-link-hover: var(--color-link-1);
+  --color-link-pressed: var(--color-link-2);
+  --color-link-active: var(--color-link-2);
+  --color-link-disabled: var(--color-link-3);
+
+  /* success / danger / warning */
+  --color-success-1: var(--green-5);
+  --color-success-2: var(--green-1);
+  --color-success-3: var(--green-4);
+  --color-success-4: var(--green-6);
+  --color-success-5: var(--green-2);
+  --color-success-6: #007038;
+  --color-danger-1: var(--red-5);
+  --color-danger-2: var(--red-1);
+  --color-danger-3: var(--red-4);
+  --color-danger-4: var(--red-6);
+  --color-danger-5: var(--red-2);
+  --color-danger-6: #B3090E;
+  --color-warning-1: var(--orange-5);
+  --color-warning-2: var(--orange-1);
+  --color-warning-3: var(--orange-4);
+  --color-warning-4: var(--orange-6);
+  --color-warning-5: var(--orange-2);
+  --color-warning-6: #8A4100;
+
+  /* ═══════════════ 兼容别名：业务代码常用的简写名，全部反向引用规范语义层 ═══════════════ */
+  --color-brand-primary: var(--color-primary);
+  --color-accent: var(--yellow-5);        /* 固定不随主题变化的美团黄点缀色 */
+  --color-accent-text: var(--yellow-7);   /* 黄底强调文字专用深棕色，禁止直接用 --color-accent 做文字色 */
+  --color-heading-accent: var(--color-primary); /* 标题强调色：黄色主题需覆盖为橙色，见 theme-system.md §2.3 */
+  --chart-primary-weak: var(--color-primary-5);
+  --color-red: var(--color-danger-1);
+  --color-orange: var(--color-warning-1);
+  --color-green: var(--color-success-1);
+  --color-teal: var(--teal-5);
+  --color-purple: var(--purple-5);
+  --color-pink: var(--pink-5);
+  --color-brown: var(--brown-5);
+
+  /* ⚠️ --text-N 与 --color-text-N 的编号方向相反：--text-1 是最深的标题色，
+     而 --color-text-1 是最浅的禁用色。业务代码用 --text-N 这套更直觉的编号。 */
+  --text-1: var(--color-text-5);  /* #111925 标题/强调 */
+  --text-2: var(--color-text-4);  /* 85% 常规正文 */
+  --text-3: var(--color-text-3);  /* 65% 次要说明 */
+  --text-4: var(--color-text-2);  /* 45% 辅助说明 */
+  --text-5: var(--color-text-1);  /* 30% 禁用态 */
+  --text-6: var(--grey-6);        /* 20% 最弱层级 */
+
+  --bg-page: var(--color-fill-1_2);      /* #F3F3F4 页面背景 */
+  --bg-card: var(--white);
+  --bg-card-inner: var(--color-fill-2_2); /* #F8F8F8 卡片内层背景 */
+  --border: var(--color-line-1);
+  --divider: var(--color-line-2);
+  --bg-nav-dark: var(--blue-grey);        /* 深色导航标准色值 */
+  --mask: var(--black-transparent);       /* 遮罩色：弹窗/半页弹窗背景遮罩，禁止另写字面量 */
+
+  /* === 深色背景专用中性色阶（用于深色导航/深色卡片，不与上方浅色背景中性色阶混用，不随主题变化） === */
+  --text-dark-1: #FFFFFF;
+  --text-dark-2: rgba(255, 255, 255, .9);
+  --text-dark-3: rgba(255, 255, 255, .75);
+  --text-dark-4: rgba(255, 255, 255, .55);
+  --text-dark-5: rgba(255, 255, 255, .4);
+  --text-dark-6: rgba(255, 255, 255, .3);
+  --border-dark: rgba(255, 255, 255, .2);
+  --divider-dark: rgba(255, 255, 255, .1);
+  --bg-dark-inner: rgba(255, 255, 255, .05);
+
+  /* === 文字 Token（不随主题变化） === */
+  --fs-30: 30px; --lh-30: 38px;
+  --fs-24: 24px; --lh-24: 32px;
+  --fs-20: 20px; --lh-20: 28px;
+  --fs-18: 18px; --lh-18: 26px;
+  --fs-16: 16px; --lh-16: 24px;
+  --fs-14: 14px; --lh-14: 22px;
+  --fs-12: 12px; --lh-12: 20px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* === 间距（不随主题变化） ===
+     gap-* 系列负责「元素/模块之间的外部间距」，card-padding 单独负责
+     「卡片容器内部的内边距」，两者语义不同，不可混用。 */
+  --gap-elem: 8px;
+  --gap-module: 8px;
+  --card-padding: 16px;
+  --gap-section: 24px;
+  --gap-page: 16px;
+
+  /* === 导航专用 token（仅用于非 MTD 自定义导航元素，不覆盖 MTD Sidebar/Menu 组件内部） === */
+  --nav-header-height: 52px;
+  --nav-width: 168px;
+  --nav-collapsed-width: 60px;
+  --nav-tab-gap: 24px;
+  --nav-tab-offset: 32px;
+  --nav-icon-size: 20px;
+  --nav-tab-color: var(--text-2);
+  --nav-tab-color-active: var(--text-1);
+  --nav-active-color: var(--color-brand-primary);
+  --nav-active-bg: var(--color-primary-4);  /* 浅色选中底色 = Blue-1 */
+  --nav-item-color: var(--text-2);
+  --nav-hover-bg: var(--bg-card-inner);
+
+  /* === 圆角（不随主题变化） === */
+  --radius-1: 16px;
+  --radius-2: 10px;
+  --radius-3: 6px;
+  --radius-4: 4px;
+  --radius: var(--radius-3);
+
+  /* === 阴影（不随主题变化） === */
+  --shadow-high: 0 13px 39px rgba(0, 0, 0, .15);
+  --shadow-mid: 0 8px 24px rgba(0, 0, 0, .12);
+  --shadow-low: 0 4px 12px rgba(0, 0, 0, .10);
+  --shadow-min: 0 2px 6px rgba(0, 0, 0, .08);
+  --shadow-card: var(--shadow-min);
+
+  /* === 图表色板（对齐学城《【1】色彩》最新规范） === */
+  /* 分类色板：主题色 → 绿 → 橙 → 蓝绿 → 紫 → 粉 → 棕，共 7 色不含黄，--chart-1 随主题联动 */
+  --chart-1: var(--color-brand-primary);
+  --chart-2: var(--green-5);    /* 绿色 */
+  --chart-3: var(--orange-5);   /* 橙色 */
+  --chart-4: var(--teal-5);     /* 蓝绿色 */
+  --chart-5: var(--purple-5);   /* 紫色 */
+  --chart-6: var(--pink-5);     /* 粉色 */
+  --chart-7: var(--brown-5);    /* 棕色 */
+  /* 主题色单色色阶（用于排名/渐变图表），随主题联动。
+     --chart-primary-weak 已在上方兼容别名区统一声明，此处不重复。 */
+  --chart-primary-strong: var(--color-primary-2);  /* = Blue-6 最深 */
+  /* 涨跌色（固定，不随主题变化） */
+  --chart-up: var(--red-5);     /* Red-5 */
+  --chart-down: var(--green-5); /* Green-5 */
+
+  /* === 字体族（不随主题变化） === */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+}

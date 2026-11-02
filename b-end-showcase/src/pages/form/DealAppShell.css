@@ -1,0 +1,219 @@
+:root {
+  --deal-top-nav-h: 52px;
+  --deal-side-nav-w: 200px;
+  --deal-side-nav-w-collapsed: 60px;
+  --deal-primary: var(--color-brand-primary, #166FF7);
+}
+
+.deal-app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.deal-app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding-top: var(--deal-top-nav-h, 52px);
+}
+
+/* G-top */
+.deal-top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--deal-top-nav-h, 52px);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  /* 顶导统一为 100：低于抽屉蒙层(900)与弹窗蒙层(1050) */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.deal-top-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.deal-logo-mark {
+width: 24px;
+height: 24px;
+background: var(--deal-primary, #166FF7);
+border-radius: 4px;
+flex-shrink: 0;
+}
+
+.deal-logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.deal-top-nav-menus {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  gap: 24px;
+  margin-left: 32px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.deal-top-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 52px;
+  line-height: 52px;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.deal-top-nav-tab:hover {
+  color: #1d1f24;
+  text-decoration: none;
+}
+
+.deal-top-nav-tab.active {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.deal-top-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+background: var(--deal-primary, #166FF7);
+border-radius: 1px;
+}
+
+.deal-top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.deal-top-nav-icon {
+  font-size: 20px !important;
+  color: #646a73 !important;
+  cursor: pointer;
+}
+
+.deal-top-nav-icon:hover {
+color: var(--deal-primary, #166FF7) !important;
+}
+
+.deal-top-nav-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* G-side */
+.deal-side-nav {
+  position: fixed;
+  top: var(--deal-top-nav-h, 52px);
+  left: 0;
+  bottom: 0;
+  width: var(--deal-side-nav-w, 200px);
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  transition: width 0.2s ease;
+  padding: 6px 0 4px;
+}
+
+.deal-side-nav--collapsed {
+  width: var(--deal-side-nav-w-collapsed, 60px);
+}
+
+.deal-side-nav-menus {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.deal-side-nav-menus::-webkit-scrollbar {
+  display: none;
+}
+
+.deal-side-nav-menu {
+  width: 100%;
+}
+
+.deal-side-nav-menu :global(.mtd-prime-menu-sub-wrap .mtd-prime-menu-item) {
+  margin-left: 4px;
+}
+
+.deal-side-nav-collapse {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.deal-side-nav--collapsed .deal-side-nav-collapse {
+  justify-content: center;
+  border-top: none;
+}
+
+.deal-side-nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.deal-side-nav-collapse-btn:hover {
+  background: #f3f3f4;
+}
+
+/* Main content */
+.deal-app-content {
+  margin-left: var(--deal-side-nav-w, 200px);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: #f5f6f7;
+  transition: margin-left 0.2s ease;
+  height: calc(100vh - var(--deal-top-nav-h));
+}
+
+.deal-app-content.deal-app-content--collapsed {
+  margin-left: var(--deal-side-nav-w-collapsed, 60px);
+}

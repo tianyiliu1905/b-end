@@ -1,0 +1,481 @@
+/* ============================================================
+ * F1 顺序落地页容器 (Sequential Page)
+ * ============================================================ */
+.deal-app-content {
+  overflow: hidden;
+  height: calc(100vh - var(--deal-top-nav-h));
+}
+
+.deal-page-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.deal-page-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 20px 24px 0; /* padding-bottom 必须为 0 */
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.deal-scroll-content {
+flex: 1;
+min-height: 0;
+overflow-y: auto;
+overflow-x: hidden;
+}
+
+/* ============================================================
+ * F2 表头信息区 (PageHeader)
+ * ============================================================ */
+.deal-page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.deal-page-header--no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0; /* Anchor 容器接管间距 */
+}
+
+.deal-page-header__breadcrumb {
+  margin-bottom: 8px;
+}
+
+.deal-page-header__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 28px;
+  margin: 0;
+}
+
+.deal-page-header__desc {
+  font-size: 14px;
+  color: #646a73;
+  line-height: 22px;
+  margin: 4px 0 0;
+}
+
+/* Anchor 导航容器 — affix={false}，放在 .deal-page-header 外部、.deal-scroll-content 外部，
+ * 作为 .deal-page-card 的直接 flex 子节点（flex-shrink:0），自然固定在滚动区上方。
+ * 负 margin 抵消 deal-page-card 的左右 24px padding，使 ink 线拉通全宽。 */
+.deal-page-header__anchor {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: auto;
+  margin: 0 -24px 24px;
+  padding: 16px 24px 4px;
+  background: #fff;
+  z-index: 10;
+}
+.deal-page-header__anchor .mtd-prime-anchor-wrapper {
+  margin-left: 0;
+  width: 100%;
+}
+.deal-page-header__anchor .mtd-prime-anchor {
+  width: 100%;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/* ============================================================
+ * F4 分组分段 (GroupSection)
+ * ============================================================ */
+.deal-form-section {
+  padding: 8px 0;
+}
+
+.deal-form-section__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 24px;
+  margin: 24px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deal-form-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--deal-primary, #166FF7);
+  flex-shrink: 0;
+}
+
+.deal-form-section:first-child .deal-form-section__title {
+  margin-top: 0;
+}
+
+.deal-form-section__hint {
+  font-size: 13px;
+  color: #8a8f99;
+  line-height: 20px;
+  margin: -8px 0 12px;
+}
+
+/* ============================================================
+ * F5 单栏 / 多栏布局 (SingleLayout)
+ * ============================================================ */
+.deal-section-form > div {
+  width: 100%;
+}
+
+.deal-section-form .mtd-prime-form-item-wrapper {
+  width: 100%;
+}
+.deal-section-form .mtd-prime-select,
+.deal-section-form .mtd-prime-picker,
+.deal-section-form .mtd-prime-date-picker,
+.deal-section-form .mtd-prime-input-number,
+.deal-section-form .mtd-prime-range-picker,
+.deal-section-form .mtd-prime-cascader {
+  width: 100%;
+}
+
+/* 控件区垂直居中（Radio.Group / Switch 等） */
+.deal-section-form .mtd-prime-form-item-body {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+/* Radio.Group / Checkbox.Group 横向平铺，选项文字不逐字换行 */
+.deal-section-form .mtd-prime-radio-group,
+.deal-section-form .mtd-prime-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.deal-section-form .mtd-prime-radio,
+.deal-section-form .mtd-prime-checkbox {
+  white-space: nowrap;
+}
+
+/* 多列模式：分组容器需要 flex-wrap */
+.deal-section-form .deal-form-section--multicol {
+  display: flex;
+  flex-wrap: wrap;
+}
+.deal-section-form .deal-form-section--multicol .deal-form-section__title {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+ * F9 复选组 · 分组多选矩阵 (CheckboxGroup Variant B)
+ * ============================================================ */
+/* 能力 Form.Item：label 与控件区都撑满整行（操作栏上移至 label 行） */
+.deal-form-item--capability.mtd-prime-form-item {
+  width: 100%;
+}
+.deal-form-item--capability .mtd-prime-form-item-label {
+  width: 100%;
+}
+/* 覆盖 MTD 对 label-ctx 的内联宽度(120px)与右对齐，使 label 行撑满整行、左对齐 */
+.deal-form-item--capability .mtd-prime-form-item-label-ctx {
+  width: 100% !important;
+  text-align: left;
+}
+.deal-form-item--capability .mtd-prime-form-item-body {
+  display: block;
+  min-height: 0;
+}
+
+/* label 行：标题在左，全选/清空操作栏在右 */
+.deal-checkbox-grid__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.deal-checkbox-grid__label-row > span {
+  white-space: nowrap;
+}
+.deal-checkbox-grid__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+}
+/* 全选/清空按钮文字统一 14px */
+.deal-checkbox-grid__actions .mtd-prime-button {
+  font-size: 14px;
+}
+.deal-checkbox-grid__count {
+  font-size: 14px;
+  color: #8a8f99;
+  margin-left: 4px;
+}
+
+.deal-checkbox-grid-wrapper {
+  padding: 4px 0;
+}
+
+/* Checkbox.Group 渲染的外层是 display:flex，子节点默认收缩到内容宽度，
+ * 必须让其撑满，网格才不会塌成内容宽度 */
+.deal-checkbox-grid-wrapper .mtd-prime-checkbox-group {
+  width: 100%;
+}
+
+/* 分组：横向四栏等宽网格，每个分组占一栏，多余分组换行仍保持四栏对齐；
+ * grid-auto-rows: 1fr 使同一行分组卡片高度统一（跨行高度对齐） */
+.deal-checkbox-grid__groups {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 8px;
+}
+
+/* 分组卡片：浅灰底色（不描边）、圆角 */
+.deal-checkbox-grid__group {
+  background: #fafbfc;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.deal-checkbox-grid__group-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(17, 25, 37, 0.65);
+  margin-bottom: 10px;
+}
+
+/* 组内选项：纵向单列排列 */
+.deal-checkbox-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deal-checkbox-grid__item {
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+ * F10 文件上传 (FileUpload) — 仅图片上传
+ * ============================================================ */
+.deal-section-form .deal-upload-item.mtd-prime-form-item .mtd-prime-form-item-label {
+  margin-bottom: 8px;
+}
+
+/* 上传项的控件区不强制垂直居中（顶部对齐） */
+.deal-section-form .deal-upload-item .mtd-prime-form-item-body {
+  display: block;
+  min-height: 0;
+}
+
+/* ============================================================
+ * F12 增删标签组 (TagGroupEditor)
+ * ============================================================ */
+.deal-tag-groups-block {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #f0f0f0;
+}
+
+/* 控件区垂直居中 */
+.deal-tag-groups-block .mtd-prime-form-item-body {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.deal-tag-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ============================================================
+ * F11 公式编辑器 (FormulaEditor · 变体 B 计算公式配置型)
+ * ============================================================ */
+.deal-formula-config-container {
+  width: 75%;
+  min-width: 480px;
+  background: #fafbfc;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.deal-formula-config-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.deal-formula-config-row__label {
+  flex-shrink: 0;
+  width: 98px;
+  font-size: 14px;
+  color: #8a8f99;
+  line-height: 32px;
+  white-space: nowrap;
+}
+.deal-formula-config-row__body {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.deal-formula-template {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+}
+.deal-formula-fixed-text {
+  font-size: 14px;
+  color: #1f2329;
+  white-space: nowrap;
+}
+.deal-formula-template__op {
+  font-size: 14px;
+  color: #8a8f99;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.deal-formula-sub-formula {
+  margin-top: 4px;
+}
+
+.deal-formula-config-divider {
+  border-top: 1px solid #e8e8e8;
+  margin: 16px 0;
+}
+
+.deal-formula-config-row__delete {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #8a8f99;
+  font-size: 16px;
+  transition: color 0.15s, background 0.15s;
+}
+.deal-formula-config-row__delete:hover {
+  color: #f5483b;
+  background: rgba(245, 72, 59, 0.08);
+}
+
+/* ============================================================
+ * F7 可编辑表格 (EditableTable)
+ * ============================================================ */
+.deal-editable-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.deal-editable-table__add-row {
+  margin-top: 0;
+}
+
+.deal-editable-table .mtd-prime-table-cell {
+  padding: 8px 8px;
+}
+
+.deal-editable-table .mtd-prime-input,
+.deal-editable-table .mtd-prime-select,
+.deal-editable-table .mtd-prime-input-number {
+  width: 100%;
+}
+
+.deal-editable-table .mtd-prime-table-header-cell {
+  white-space: nowrap;
+}
+
+.deal-editable-table__summary {
+  text-align: right;
+  font-size: 14px;
+  color: #646a73;
+  padding: 8px 0;
+}
+.deal-editable-table__summary strong {
+  color: #1f2329;
+  font-size: 16px;
+}
+
+/* ============================================================
+ * F8 只读数据表格 (ReadonlyTable)
+ * ============================================================ */
+.deal-readonly-table {
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.deal-readonly-table .mtd-prime-table-wrapper {
+  background: #fff;
+}
+
+.deal-readonly-table .mtd-prime-table-cell {
+  padding: 8px 8px;
+}
+
+.deal-readonly-table .mtd-prime-table-header-cell {
+  white-space: nowrap;
+}
+
+.deal-readonly-table__pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.deal-readonly-table a {
+  color: var(--deal-primary, #166ff6);
+  cursor: pointer;
+  font-size: 14px;
+}
+.deal-readonly-table a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+ * F3 操作栏 (ActionBar) — 顺序落地页版本
+ * ============================================================ */
+.deal-action-bar {
+  background: #fff;
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 0 -24px;
+  border-radius: 0 0 8px 8px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+ * 响应式
+ * ============================================================ */
+@media (max-width: 767.98px) {
+  .deal-page-container {
+    padding: 12px;
+  }
+  .deal-formula-config-container {
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -1,0 +1,202 @@
+/* MtdLayout — 同步团购会员卡侧导/顶导样式 */
+
+.layout {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== G-1 顶部导航 ===== */
+.header {
+  position: relative;
+  height: 52px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  /* 顶导必须低于 MTD 抽屉蒙层(z-index 900)，否则抽屉打开时蒙层无法覆盖顶导 */
+  z-index: 100;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.logoMark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background: var(--color-brand-primary, #166FF7);
+  border-radius: 4px;
+}
+
+.logo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+  white-space: nowrap;
+  line-height: 24px;
+}
+
+.domainNav {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  gap: 24px;
+  margin-left: 32px;
+}
+
+.domainItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  line-height: 52px;
+  font-size: 14px;
+  color: #5a5f66;
+  text-decoration: none;
+  cursor: default;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.domainItem:hover {
+  color: #1d1f24;
+}
+
+.domainItemActive {
+  color: #1d1f24;
+  font-weight: 600;
+}
+
+.domainItemActive::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-brand-primary, #166FF7);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerAction {
+  font-size: 20px !important;
+  color: #646a73 !important;
+  cursor: pointer;
+}
+
+.headerAction:hover {
+  color: var(--color-heading-accent, #166FF7) !important;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8e8ea;
+}
+
+/* ===== 主体区 ===== */
+.body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ===== G-2 侧边栏 ===== */
+.sider {
+  position: relative;
+  flex: 0 0 200px;
+  min-width: 0;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: flex-basis 0.2s ease;
+  z-index: 50;
+}
+
+.siderCollapsed {
+  flex-basis: 60px;
+}
+
+.siderMenus {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0 4px;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+
+.siderMenus::-webkit-scrollbar {
+  display: none;                  /* Chrome/Safari */
+}
+
+.sideMenu {
+  width: 100%;
+}
+
+/* 二级菜单项左侧缩进 4px（只作用于 SubMenu 展开区内的子项） */
+.sideMenu :global(.mtd-prime-menu-sub-wrap .mtd-prime-menu-item) {
+  margin-left: 4px;
+}
+
+/* 折叠按钮 */
+.siderFooter {
+  width: 100%;
+  height: 40px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  border-top: 1px solid #f0f1f2;
+}
+
+.collapseBtn {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  color: #646a73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.collapseBtn:hover {
+  background: #f3f3f4;
+}
+
+.siderCollapsed .siderFooter {
+  justify-content: center;
+  border-top: none;
+}
+
+/* ===== 主内容区 ===== */
+.content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  background: #f5f6f7;
+}

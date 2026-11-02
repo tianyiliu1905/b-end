@@ -1,0 +1,292 @@
+/* 列表页通用样式 */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-module);
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-elem);
+}
+
+.filterLabel {
+  font-size: var(--fs-14);
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: var(--text-1);
+  background: var(--bg-card);
+  outline: none;
+}
+
+.filterInput {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: var(--text-1);
+  background: var(--bg-card);
+  outline: none;
+  width: 200px;
+}
+
+.filterInput:focus,
+.filterSelect:focus {
+  border-color: var(--color-brand-primary);
+}
+
+.filterBtn {
+  padding: 4px 12px;
+  border: 1px solid var(--color-brand-primary);
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: var(--color-heading-accent);
+  background: var(--bg-card);
+  cursor: pointer;
+}
+
+.filterBtnPrimary {
+  padding: 4px 12px;
+  border: none;
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: #fff;
+  background: var(--color-brand-primary);
+  cursor: pointer;
+}
+
+.filterBtnPrimary:hover {
+  background: var(--color-primary-2);
+}
+
+/* 操作栏 L-4 */
+.actionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionLeft {
+  font-size: var(--fs-14);
+  color: var(--text-3);
+}
+
+.actionRight {
+  display: flex;
+  gap: var(--gap-elem);
+}
+
+/* 表格 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  /* 单元格内边距属于组件内部排版，不跟随模块间距 token */
+  padding: var(--gap-elem) var(--card-padding);
+  text-align: left;
+  font-size: var(--fs-14);
+  border-bottom: 1px solid var(--divider);
+}
+
+.table th {
+  font-weight: var(--fw-medium);
+  color: var(--text-3);
+  background: var(--bg-card-inner);
+}
+
+.table td {
+  color: var(--text-2);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-4);
+  font-size: var(--fs-12);
+}
+
+.tagGreen { background: #e6f7ef; color: var(--color-green); }
+.tagRed { background: #fff1f0; color: var(--color-red); }
+.tagOrange { background: #fff7e6; color: var(--color-orange); }
+.tagBlue { background: var(--color-primary-4); color: var(--color-heading-accent); }
+.tagGray { background: var(--bg-card-inner); color: var(--text-4); }
+
+.link {
+  color: var(--color-heading-accent);
+  cursor: pointer;
+  text-decoration: none;
+  font-size: var(--fs-14);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--gap-elem);
+  padding: var(--card-padding) 0 0;
+}
+
+.pageBtn {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-4);
+  background: var(--bg-card);
+  font-size: var(--fs-12);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.pageBtn:hover {
+  border-color: var(--color-brand-primary);
+  color: var(--color-heading-accent);
+}
+
+.pageInfo {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+
+/* 树形布局 */
+.treeLayout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--gap-module);
+  min-height: calc(100vh - 52px - var(--gap-page) * 2);
+}
+
+.treePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-elem);
+}
+
+.treeNode {
+  padding: 6px 12px;
+  font-size: var(--fs-14);
+  color: var(--text-2);
+  cursor: pointer;
+  border-radius: var(--radius-4);
+}
+
+.treeNode:hover {
+  background: var(--bg-card-inner);
+}
+
+.treeNodeActive {
+background: var(--color-primary-4);
+  color: var(--color-heading-accent);
+  font-weight: var(--fw-medium);
+}
+
+.treeChild {
+  padding-left: 24px;
+}
+
+/* 时间轴 */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 24px;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--divider);
+}
+
+.timelineItem {
+  position: relative;
+  padding: var(--card-padding) 0 var(--card-padding) 24px;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 22px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 2px var(--color-brand-primary);
+}
+
+.timelineDate {
+  font-size: var(--fs-12);
+  color: var(--text-4);
+  margin-bottom: 4px;
+}
+
+.timelineTitle {
+  font-size: var(--fs-14);
+  font-weight: var(--fw-medium);
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+
+.timelineDesc {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+
+.timelineOperator {
+  font-size: var(--fs-12);
+  color: var(--text-4);
+  margin-top: 4px;
+}
+
+/* 指标+明细 */
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-module);
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-elem);
+}
+
+.metricLabel {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+
+.metricValue {
+  font-size: var(--fs-24);
+  line-height: var(--lh-24);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+.chartArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-module);
+}
