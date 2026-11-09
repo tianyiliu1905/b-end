@@ -1,5 +1,7 @@
 # FD1 · 承载容器（PresentationContainer）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：表单页/详情页对外用多大的外壳出现。L1 容器语义匹配：默认顺序落地页；表单页提到「左侧点选/按对象配置」时可切主从落地页；任一页面类型提到「抽屉」时切抽屉；表单页提到「弹窗」或命中极少字段的聚焦操作时可切弹窗。详情页不开放弹窗。
 
 ---
@@ -109,6 +111,8 @@
 | 页面外边距（卡片距视口四周） | `16px` | 白色内容卡片四周与视口边缘的统一留白 |
 | 卡片内边距 | `20px 24px 0` | 上 `20px`、左右 `24px`、底部 `0`（由 ActionBar 自带 padding） |
 
+**间距归属与自检**：外部留白指导航壳层内的内容区到白卡的距离，统一为 16px，仅由 `.page-container` 提供，父级不再叠加 padding。白卡内部左右留白统一为 24px，页头、正文、操作栏的内容左边缘对齐。若实现中由各区域分别承担内边距，则白卡对应方向不再设置 padding；不要将白卡与子区域的 24px 叠加。生成后核对实际计算样式及最终距离，不仅检查变量名。
+
 > 「视口灰底 + 四周 16px 留白 + 白色卡片」三者配套使用。白卡底部 padding 为 0，操作栏通过自身 padding 和 `margin: 0 -24px` 撑满底部。
 
 ### 3.2 响应式适配
@@ -122,19 +126,19 @@
 
 **DOM 结构参考（⚠️ 硬约束，必须严格一致）**：
 
-顺序落地页的 DOM 层级必须是「外层灰底容器 → 页面外边距容器 → 一整张白卡（flex column）→ 固定头部 + 可滚动内容区 + 操作栏」。**所有分组（F2）、表头（G2）、锚点（Anchor）等模块都在同一张白卡内部**，分组本身不要独立设置白色背景、圆角或投影。操作栏（F1 ActionBar）在白卡内部底部，通过 flex 布局固定不滚动。
+顺序落地页的 DOM 层级必须是「外层灰底容器 → 页面外边距容器 → 一整张白卡（flex column）→ 固定头部 + 可滚动内容区 + 操作栏」。**所有分组（Form2）、表头（FD2）、锚点（Anchor）等模块都在同一张白卡内部**，分组本身不要独立设置白色背景、圆角或投影。操作栏（Form1 ActionBar）在白卡内部底部，通过 flex 布局固定不滚动。
 
 ```
 .app-content（灰底 var(--bg-page)，overflow: hidden）
   └─ .page-container（padding: 16px，height: 100%，flex column）
        └─ .page-card（白卡：flex: 1，flex column，overflow: hidden，padding 20px 24px 0）
-            ├─ .page-header（G2 表头信息区 — 固定不滚动）
+            ├─ .page-header（FD2 表头信息区 — 固定不滚动）
             ├─ .page-header__anchor（Anchor 锚点导航 — 固定不滚动）
             ├─ .scroll-content（flex: 1，overflow-y: auto — 可滚动内容区）
-            │    ├─ .form-section#group-1（F2 分组，无独立背景/圆角/投影）
+            │    ├─ .form-section#group-1（Form2 分组，无独立背景/圆角/投影）
             │    ├─ .form-section#group-2
             │    └─ ...
-            └─ .action-bar（F1 操作栏，flex-shrink: 0，固定底部）
+            └─ .action-bar（Form1 操作栏，flex-shrink: 0，固定底部）
 ```
 
 React 技术栈示例：
@@ -143,7 +147,7 @@ React 技术栈示例：
 <main className="app-content">
   <div className="page-container">
     <div className="page-card">
-      {/* G2 PageHeader — 固定不滚动 */}
+      {/* FD2 PageHeader — 固定不滚动 */}
       <div className="page-header">...</div>
       {/* Anchor（可选）— 固定不滚动 */}
       <div className="page-header__anchor">...</div>
@@ -154,7 +158,7 @@ React 技术栈示例：
           <div className="form-section" id="group-2">...</div>
         </Form>
       </div>
-      {/* F1 ActionBar — 白卡内固定底部 */}
+      {/* Form1 ActionBar — 白卡内固定底部 */}
       <div className="action-bar">
         <Button>取消</Button>
         <Button type="primary">提交</Button>
@@ -170,7 +174,7 @@ Vue3 技术栈示例：
 <main class="app-content">
   <div class="page-container">
     <div class="page-card">
-      <!-- G2 PageHeader — 固定不滚动 -->
+      <!-- FD2 PageHeader — 固定不滚动 -->
       <div class="page-header">...</div>
       <!-- Anchor（可选）— 固定不滚动 -->
       <div class="page-header__anchor">...</div>
@@ -181,7 +185,7 @@ Vue3 技术栈示例：
           <div class="form-section" id="group-2">...</div>
         </form>
       </div>
-      <!-- F1 ActionBar — 白卡内固定底部 -->
+      <!-- Form1 ActionBar — 白卡内固定底部 -->
       <div class="action-bar">
         <button>取消</button>
         <button class="primary">提交</button>
@@ -232,23 +236,23 @@ Vue3 技术栈示例：
 
 ```
 .page-card（白卡：flex column，overflow: hidden）
-     ├─ .page-header（G2 表头 — flex-shrink: 0，固定不滚动）
-     ├─ <Steps>（F4 步骤条 — flex-shrink: 0，固定不滚动）
+     ├─ .page-header（FD2 表头 — flex-shrink: 0，固定不滚动）
+     ├─ <Steps>（Form4 步骤条 — flex-shrink: 0，固定不滚动）
      ├─ .step-content（当前步表单 — flex: 1，overflow-y: auto）
-     └─ .action-bar（F1 操作栏 — flex-shrink: 0）
+     └─ .action-bar（Form1 操作栏 — flex-shrink: 0）
 ```
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  G2 PageHeader（标题 + 描述）                          │
+│  FD2 PageHeader（标题 + 描述）                          │
 │──────────────────────────────────────────────────────│
-│     ① 主体信息 ———— ② 资质证照 ———— ③ 经营信息       │  ← F4 步骤条
+│     ① 主体信息 ———— ② 资质证照 ———— ③ 经营信息       │  ← Form4 步骤条
 │──────────────────────────────────────────────────────│
 │  .step-content（当前步表单，可滚动）                    │
 │    ▌分组标题                                          │
 │       字段A    ………………………                           │
 │──────────────────────────────────────────────────────│
-│                          [上一步]  [下一步]            │  ← F1 操作栏
+│                          [上一步]  [下一步]            │  ← Form1 操作栏
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -258,9 +262,9 @@ Vue3 技术栈示例：
 
 - **维护 `current` state**：步骤条不控制导航，当前步索引由容器持有，通过操作栏按钮推进。
 - **每步一个独立 `<Form>`，条件渲染**：用 `{current === N && <StepN />}`。不要用 `display: none` 隐藏——会导致多个 Form 并存、校验冲突。
-- **切步前校验**：点「下一步」先校验当前步必填项，不通过则不推进，并对当前步标 `status="error"`（见 F4 §四）。
+- **切步前校验**：点「下一步」先校验当前步必填项，不通过则不推进，并对当前步标 `status="error"`（见 Form4 §四）。
 - **操作栏按钮随步变化**：首步 [下一步]；中间步 [上一步][下一步]；末步 [上一步][提交]。规则见 `Form1-action-bar.md` §三。
-- **每步内容可叠加任意内容区模块**：分组分段（F2）、基础布局（F3）、文件上传、可编辑表格等。
+- **每步内容可叠加任意内容区模块**：分组分段（Form2）、基础布局（Form3）、文件上传、可编辑表格等。
 
 ### 3附.4 CSS
 
@@ -283,7 +287,7 @@ export default function StepForm() {
             <p className="page-header__desc">请按步骤填写入驻信息</p>
           </div>
 
-          {/* F4 步骤条 — 固定不滚动 */}
+          {/* Form4 步骤条 — 固定不滚动 */}
           <Steps active={current} labelPlacement="horizontal" className="merchant-steps">
             {STEPS.map((t, i) => <Steps.Step key={i} title={t} />)}
           </Steps>
@@ -295,7 +299,7 @@ export default function StepForm() {
             {current === 2 && <Step2 />}
           </div>
 
-          {/* F1 操作栏 */}
+          {/* Form1 操作栏 */}
           <div className="action-bar">
             {current > 0 && (
               <Button onClick={() => setCurrent(current - 1)}>上一步</Button>
@@ -551,7 +555,7 @@ React 技术栈示例：
 | 项目 | 取值 | 说明 |
 | --- | --- | --- |
 | 按钮对齐 | `justify-content: flex-end` | 按钮右对齐 |
-| 按钮间距 | `gap: 12px` | 与 F1 ActionBar 一致 |
+| 按钮间距 | `gap: 12px` | 与 Form1 ActionBar 一致 |
 | 主操作 | 最多 1 个 `type="primary"` | 如「提交」「保存」 |
 | 次操作 | 默认按钮 | 如「取消」 |
 | 按钮顺序 | 左次右主（先「取消」后「提交」） | 主操作按钮靠最右 |
@@ -584,7 +588,7 @@ React 技术栈示例：
     </div>
   }
 >
-  {/* G2 · 辅助描述 */}
+  {/* FD2 · 辅助描述 */}
   <p className="drawer-desc">
     请填写表单信息，带 * 为必填项。
   </p>
@@ -596,7 +600,7 @@ React 技术栈示例：
     labelPosition="right"
     className="your-form"
   >
-    {/* F2 · 分组 */}
+    {/* Form2 · 分组 */}
     <div className="form-section">
       <h3 className="form-section__title">分组标题</h3>
       <Form.Item formItemKey="field1" label="字段" required>
@@ -617,7 +621,7 @@ Vue3 技术栈示例：
   :mask-closable="false"
   @close="handleClose"
 >
-  <!-- G2 · 辅助描述 -->
+  <!-- FD2 · 辅助描述 -->
   <p class="drawer-desc">
     请填写表单信息，带 * 为必填项。
   </p>
@@ -629,7 +633,7 @@ Vue3 技术栈示例：
     label-position="right"
     class="your-form"
   >
-    <!-- F2 · 分组 -->
+    <!-- Form2 · 分组 -->
     <div class="form-section">
       <h3 class="form-section__title">分组标题</h3>
       <mtd-form-item prop="field1" label="字段" required>
@@ -654,7 +658,7 @@ Vue3 技术栈示例：
 /* 抽屉辅助描述 */
 .drawer-desc { font-size: 14px; color: var(--text-3); line-height: 22px; margin-bottom: 16px; }
 
-/* F3 · Form 宽度与 Drawer 拉通，不设 max-width */
+/* Form3 · Form 宽度与 Drawer 拉通，不设 max-width */
 .your-form {
   width: 100%;
 }
@@ -679,7 +683,7 @@ Vue3 技术栈示例：
   margin-bottom: 12px;
 }
 
-/* F1 · 抽屉操作栏 */
+/* Form1 · 抽屉操作栏 */
 .drawer-action-bar {
   display: flex;
   justify-content: flex-end;

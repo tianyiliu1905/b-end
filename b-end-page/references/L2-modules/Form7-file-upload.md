@@ -1,5 +1,7 @@
 # Form7 · 文件上传（FileUpload）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：上传附件/图片/证件/凭证等文件的区域。
 
 ---
@@ -99,7 +101,7 @@
 
 ### 布局约束
 
-- 在 F3 BaseLayout 中使用时，包含上传组件的 Form.Item 必须使用 `labelPosition="top"`（上下排列），其他字段保持 `"right"`（左右排列）。
+- 在 Form3 BaseLayout 中使用时，包含上传组件的 Form.Item 必须使用 `labelPosition="top"`（上下排列），其他字段保持 `"right"`（左右排列）。
 - 上传 Form.Item 需加 `className="upload-item"`，通过 CSS 单独控制 label 与控件间距（`margin-bottom: 8px`），不影响其他 Form.Item。
 - 拖拽上传（DraggerUpload）的容器宽度为固定 480px，不随 Form.Item 的 span 拉伸。
 

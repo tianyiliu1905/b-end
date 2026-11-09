@@ -1,6 +1,8 @@
 # Detail1 · Tab 切换（TabPanel）
 
-> **一句话定位**：详情页内部用横向 Tab 标签切换查看不同维度的信息面板，管详情页**内部**的信息切换，与承载容器（G1，管**对外**用多大外壳）互不冲突、可叠加。
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
+> **一句话定位**：详情页内部用横向 Tab 标签切换查看不同维度的信息面板，管详情页**内部**的信息切换，与承载容器（FD1，管**对外**用多大外壳）互不冲突、可叠加。
 
 ---
 
@@ -13,7 +15,7 @@
 ## 二、布局
 
 - **Tab 样式**：线条式（line），默认风格，选中态为底部主色下划线 + 文字加粗。
-- **Tab 位置**：位于 G2 表头信息区下方、内容区顶部，作为内容区的维度切换入口。
+- **Tab 位置**：位于 FD2 表头信息区下方、内容区顶部，作为内容区的维度切换入口。
 - **选中态**：选中 Tab 文字颜色加深（`#1f2329`），底部出现 2px 主色（`--primary`）下划线；非选中 Tab 文字为次要色（`rgba(17, 25, 37, 0.45)`）。
 - **Tab 数量上限**：建议 ≤ 5 个；超过 5 个时启用横向滚动箭头（MTD Tabs 组件内置），不要换行。
 - **间距**：Tab 栏与上方表头信息区间距 16px（由 `.detail-tabs` 的 `margin-top` 控制）；Tab 栏与下方内容区间距由 TabPane 内部 padding 自然撑开。
@@ -38,15 +40,15 @@
 | 参数 | 说明 | 默认值 |
 | --- | --- | --- |
 | Tab 数量 | 根据信息维度数量决定，建议 2~5 个 | — |
-| 每个 Tab 面板内容 | 可承载当前已开放的内容区模块（F2 分组 / G3 只读表格 / D2 描述列表 / MTD Timeline 时间线 / D3 附件预览等） | — |
+| 每个 Tab 面板内容 | 可承载当前已开放的内容区模块（Form2 分组 / FD3 只读表格 / Detail2 描述列表 / MTD Timeline 时间线 / Detail3 附件预览等） | — |
 | 默认选中项 | 第一个 Tab | `activeKey = tabs[0].key` |
 | 受控模式 | 推荐受控用法（`activeKey` + `onChange`），便于与外部状态联动 | 受控 |
 | type | Tab 风格：`line`（线条）/ `card`（卡片）/ `text`（文本） | `line` |
 
 ## 四、约束
 
-1. **与分组分段（F2）的选择边界**：内容互斥（同一时刻只看一个维度）用 Tab；内容并列（所有分组同时展示）用 F2 分组。不要把并列的信息塞进 Tab 里强制切换。
-2. **Tab 内不要再嵌套 Tab**：一个详情页只允许一层 Tab 切换。如果维度太多需要二级切换，考虑用 F2 分组在 Tab 面板内部组织，而不是嵌套 Tabs。
+1. **与分组分段（Form2）的选择边界**：内容互斥（同一时刻只看一个维度）用 Tab；内容并列（所有分组同时展示）用 Form2 分组。不要把并列的信息塞进 Tab 里强制切换。
+2. **Tab 内不要再嵌套 Tab**：一个详情页只允许一层 Tab 切换。如果维度太多需要二级切换，考虑用 Form2 分组在 Tab 面板内部组织，而不是嵌套 Tabs。
 3. **弹窗容器内慎用 Tab**：弹窗信息量少（1~5 字段），Tab 会增加交互成本。如果信息量确实需要 Tab，说明应该升级为抽屉或落地页容器。
 4. **Tab 标签文字简洁**：每个 Tab 标签建议 ≤ 4 个汉字，不要放完整句子。超长文字会被截断并显示 tooltip（MTD 内置 `tabBarItemMaxWidth` 机制）。
 5. **每个 TabPane 的 key 必须唯一且稳定**：使用有语义的字符串（如 `basic`、`capacity`），不要用数组索引，避免动态增删时状态错乱。
@@ -85,8 +87,8 @@ import { Tabs } from '@ss/mtd-react3';
 const { TabPane } = Tabs;
 
 const tabItems = [
-  { key: 'basic', label: '基本信息', content: '/* D2 描述列表 / F2 分组等 */' },
-  { key: 'capacity', label: '运力明细', content: '/* G3 只读数据表格等 */' },
+  { key: 'basic', label: '基本信息', content: '/* Detail2 描述列表 / Form2 分组等 */' },
+  { key: 'capacity', label: '运力明细', content: '/* FD3 只读数据表格等 */' },
   { key: 'history', label: '审批记录', content: '/* MTD Timeline 时间线等 */' },
 ];
 
@@ -115,8 +117,8 @@ import { ref } from 'vue';
 
 const activeTab = ref('basic');
 const tabItems = [
-  { key: 'basic', label: '基本信息', content: '/* D2 描述列表 / F2 分组等 */' },
-  { key: 'capacity', label: '运力明细', content: '/* G3 只读数据表格等 */' },
+  { key: 'basic', label: '基本信息', content: '/* Detail2 描述列表 / Form2 分组等 */' },
+  { key: 'capacity', label: '运力明细', content: '/* FD3 只读数据表格等 */' },
   { key: 'history', label: '审批记录', content: '/* MTD Timeline 时间线等 */' },
 ];
 </script>

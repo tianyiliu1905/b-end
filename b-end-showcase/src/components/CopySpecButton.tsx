@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { getDesignSpec, hasDesignSpec } from '../data/designSpecs';
 
 interface CopySpecButtonProps {
@@ -14,9 +14,12 @@ function doCopy(text: string) {
     ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
     document.body.appendChild(ta);
     ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    return Promise.resolve();
+    try {
+      if (!document.execCommand('copy')) return Promise.reject(new Error('Copy unavailable'));
+      return Promise.resolve();
+    } finally {
+      document.body.removeChild(ta);
+    }
   };
   if (navigator.clipboard?.writeText) {
     return navigator.clipboard.writeText(text).catch(fallbackCopy);
@@ -30,8 +33,10 @@ function doCopy(text: string) {
  */
 export default function CopySpecButton({ moduleId, variantName, className }: CopySpecButtonProps) {
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const specAvailable = hasDesignSpec(moduleId);
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     // 卡片本身可能是 <Link>，阻止冒泡/默认跳转，避免点击复制按钮时触发导航
@@ -39,11 +44,12 @@ export default function CopySpecButton({ moduleId, variantName, className }: Cop
     e.stopPropagation();
     if (!specAvailable) return;
     const spec = getDesignSpec(moduleId, variantName);
+    setFailed(false);
     doCopy(spec).then(() => {
       setCopied(true);
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => setCopied(false), 2000);
-    });
+    }).catch(() => { setCopied(false); setFailed(true); });
   };
 
   return (
@@ -53,7 +59,7 @@ export default function CopySpecButton({ moduleId, variantName, className }: Cop
       disabled={!specAvailable}
       title={specAvailable ? '复制该模块的 Design Spec' : '暂无 Design Spec，无法复制'}
     >
-      {copied ? (
+      {failed ? '复制失败，请重试' : copied ? (
         <>
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

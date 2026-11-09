@@ -1,149 +1,75 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import TopNav from '../components/TopNav';
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, ChevronRight, Code2, Eye, Monitor, RotateCcw, Tablet } from 'lucide-react';
 import { modulePreviews, modulePreviewVariants, modulePreviewSubGroups } from '../components/modulePreviews';
-import VariantSwitcher from '../components/VariantSwitcher';
-import { L2_CATEGORIES, L2_MODULES, getModuleById, getModulesByCategory } from '../data/l2Modules';
+import { L2_MODULES, getModuleById, type L2Module } from '../data/l2Modules';
+import { getDesignSpec, hasDesignSpec } from '../data/designSpecs';
+import { categoryLabels } from '../components/ShowcaseLayout';
 import CopySpecButton from '../components/CopySpecButton';
 import styles from './ModuleDetail.module.css';
-
-const CATEGORY_LABEL: Record<string, string> = {
-  'G-导航': '导航与共用',
-  'D-图表卡片': '看板图表卡片',
-  'W-工作台': '工作台专属',
-  '表单+详情': '表单 / 详情共用',
-  '表单专属': '表单页专属',
-  '详情专属': '详情页专属',
-};
-
-export default function ModuleDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const activeId = id || L2_MODULES[0]?.id;
-  const mod = getModuleById(activeId || '');
-
-  return (
-    <div className={styles.page}>
-      <TopNav />
-
-      <div className={styles.body}>
-        {/* 左侧目录：按场景分组，支持切换模块 */}
-        <aside className={styles.sidebar}>
-          {L2_CATEGORIES.map((category) => (
-            <div key={category} className={styles.sidebarGroup}>
-              <div className={styles.sidebarGroupTitle}>{CATEGORY_LABEL[category] || category}</div>
-              {getModulesByCategory(category).map((m) => (
-                <button
-                  key={m.id}
-                  className={`${styles.sidebarItem} ${m.id === activeId ? styles.sidebarItemActive : ''}`}
-                  onClick={() => navigate(`/modules/${m.id}`)}
-                >
-                  <span className={styles.sidebarItemCode}>{m.id}</span>
-                  <span className={styles.sidebarItemName}>{m.name}</span>
-                </button>
-              ))}
-            </div>
-          ))}
-        </aside>
-
-        {/* 右侧内容区 */}
-        <main className={styles.content}>
-          {mod ? (
-            <>
-              <div className={styles.breadcrumb}>
-                <button className={styles.breadcrumbLink} onClick={() => navigate('/modules')}>模块库</button>
-                <span className={styles.breadcrumbSep}>/</span>
-                <span>{CATEGORY_LABEL[mod.category] || mod.category}</span>
-              </div>
-
-              <div className={styles.contentHeader}>
-                <span className={styles.contentCode}>{mod.id}</span>
-                <h1 className={styles.contentTitle}>{mod.name}</h1>
-              </div>
-
-              <p className={styles.contentDesc}>{mod.description}</p>
-
-              {/* 实际渲染预览：优先展示可切换的真实变体样式，
-                  子模块（如 D-2 环形进度/进度指标）依次展示多组 VariantSwitcher；
-                  仅单一变体或无变体的模块回退到静态 Preview 组件。 */}
-              {(() => {
-                const subGroups = modulePreviewSubGroups[mod.id];
-                if (subGroups) {
-                  return (
-                    <div className={styles.previewArea}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 32, width: '100%' }}>
-                        {subGroups.map((g) => (
-                          <div key={g.label}>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-2)', marginBottom: 12, textAlign: 'center' }}>{g.label}</div>
-                            <VariantSwitcher key={`${mod.id}-${g.label}`} variants={g.variants} moduleId={`${mod.id} ${g.label}`} />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-                const variants = modulePreviewVariants[mod.id];
-                if (variants) {
-                  return (
-                    <div className={styles.previewArea}>
-                      <VariantSwitcher key={mod.id} variants={variants} moduleId={mod.id} />
-                    </div>
-                  );
-                }
-                const Preview = modulePreviews[mod.id];
-                return (
-                  <>
-                    <div className={styles.previewToolbar}>
-                      <CopySpecButton moduleId={mod.id} className={styles.copyBtn} />
-                    </div>
-                    <div className={styles.previewArea}>
-                      {Preview ? <Preview /> : <p className={styles.previewPlaceholder}>暂无预览</p>}
-                    </div>
-                  </>
-                );
-              })()}
-
-              {mod.triggers && mod.triggers.length > 0 && (
-                <div className={styles.block}>
-                  <h2 className={styles.blockTitle}>触发关键词</h2>
-                  <div className={styles.tagList}>
-                    {mod.triggers.map((t) => (
-                      <span key={t} className={styles.tag}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {mod.l3Roles && mod.l3Roles.length > 0 && (
-                <div className={styles.block}>
-                  <h2 className={styles.blockTitle}>L3 组件角色</h2>
-                  <div className={styles.tagList}>
-                    {mod.l3Roles.map((r) => (
-                      <span key={r} className={`${styles.tag} ${styles.tagNeutral}`}>{r}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 变体说明：当变体是 Record（有文字描述）时才展示这块文字说明，
-                  因为上方 VariantSwitcher 已经展示了每个变体的真实样式，
-                  仅当描述本身携带额外信息（而不只是变体名）时才需要在此重复展示。 */}
-              {mod.variants && !Array.isArray(mod.variants) && (
-                <div className={styles.block}>
-                  <h2 className={styles.blockTitle}>变体说明</h2>
-                  <ul className={styles.variantList}>
-                    {Object.entries(mod.variants).map(([key, desc]) => (
-                      <li key={key}><strong>{key}</strong>：{desc}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-            </>
-          ) : (
-            <p>未找到该模块</p>
-          )}
-        </main>
+function ModuleDocument({ mod }: {
+    mod: L2Module;
+}) {
+    const [tab, setTab] = useState<'preview' | 'spec'>('preview');
+    const [groupIndex, setGroupIndex] = useState(0);
+    const [variantIndex, setVariantIndex] = useState(0);
+    const [revision, setRevision] = useState(0);
+    const [compact, setCompact] = useState(false);
+    const groups = modulePreviewSubGroups[mod.id];
+    const group = groups?.[groupIndex];
+    const variants = group?.variants || modulePreviewVariants[mod.id];
+    const variant = variants?.[variantIndex];
+    const Preview = modulePreviews[mod.id];
+    const specId = group ? `${mod.id} ${group.label}` : mod.id;
+    const specAvailable = hasDesignSpec(specId);
+    const position = L2_MODULES.findIndex(m => m.id === mod.id);
+    const previous = L2_MODULES[position - 1], next = L2_MODULES[position + 1];
+    return <article className={styles.content}>
+    <nav className={styles.breadcrumb} aria-label="面包屑"><Link to="/modules">模块库</Link><ChevronRight size={12}/><span>{categoryLabels[mod.category] || mod.category}</span><ChevronRight size={12}/><span>{mod.id}</span></nav>
+    <div className={styles.heading}><h1>{mod.name.replace(/ \(.*\)/, '')}</h1><span className={styles.badge}>L2 MODULE</span></div>
+    <p className={styles.description}>{mod.description}</p>
+    <div className={styles.specStrip}><Code2 size={15}/><code>{mod.id} <span>/</span> {mod.name.match(/\(([^)]+)\)/)?.[1] || 'MTD · Design Spec'}</code><CopySpecButton key={specId + (variant?.name || '')} moduleId={specId} variantName={variant?.name} className={styles.copyButton}/></div>
+    <section className={styles.playground} aria-label="模块交互演示">
+      <div className={styles.previewHeader}>
+        <div className={styles.tabs} role="tablist" aria-label="查看方式">{(['preview', 'spec'] as const).map(t => <button key={t} id={`tab-${t}`} role="tab" aria-selected={tab === t} aria-controls="module-panel" tabIndex={tab === t ? 0 : -1} className={tab === t ? styles.selected : ''} onClick={() => setTab(t)} onKeyDown={e => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) {
+        e.preventDefault();
+        const target = e.key === 'Home' ? 'preview' : e.key === 'End' ? 'spec' : t === 'preview' ? 'spec' : 'preview';
+        setTab(target);
+        document.getElementById(`tab-${target}`)?.focus();
+    } }}>{t === 'preview' ? <Eye size={14}/> : <Code2 size={14}/>}{t === 'preview' ? '预览' : 'Design Spec'}</button>)}</div>
+        <span className={styles.previewLabel}>{tab === 'preview' ? '交互式组件预览' : '规范 · Token · 代码骨架'}</span>
       </div>
+      <div className={styles.toolbar}>
+        <div className={styles.selects}>
+          {groups && <select aria-label="子模块" value={groupIndex} onChange={e => { setGroupIndex(Number(e.target.value)); setVariantIndex(0); }}>{groups.map((g, i) => <option key={g.label} value={i}>{g.label}</option>)}</select>}
+          {variants ? <select aria-label="组件变体" value={variantIndex} onChange={e => setVariantIndex(Number(e.target.value))}>{variants.map((v, i) => <option key={v.name} value={i}>{v.name}</option>)}</select> : <span className={styles.defaultVariant}>默认样式</span>}
+        </div>
+        <div className={styles.tools}>
+          <button title="宽屏预览" aria-label="宽屏预览" aria-pressed={!compact} onClick={() => setCompact(false)}><Monitor size={15}/></button>
+          <button title="窄屏预览（768px）" aria-label="窄屏预览" aria-pressed={compact} onClick={() => setCompact(true)}><Tablet size={15}/></button>
+          <span className={styles.separator}/>
+          <button title="重置组件交互" aria-label="重置组件交互" onClick={() => setRevision(r => r + 1)}><RotateCcw size={14}/></button>
+        </div>
+      </div>
+      <div id="module-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} tabIndex={0}>
+        {tab === 'preview' ? <div className={styles.canvas}><div className={`${styles.stage} ${compact ? styles.compact : ''}`} key={`${specId}-${variantIndex}-${revision}`}>
+          {variant ? variant.render() : Preview ? <Preview /> : <p className={styles.empty}>该模块暂未配置交互预览，请参考下方规范。</p>}
+        </div><span className={styles.canvasCaption}>{compact ? '768 PX' : 'FLUID'}<span>·</span>{group?.label || mod.id}{variant && ` / ${variant.name}`}</span></div> : <div className={styles.codePanel}><div className={styles.codeHeader}><span>design-spec.md</span><CopySpecButton key={specId + (variant?.name || '')} moduleId={specId} variantName={variant?.name} className={styles.copyButton}/></div><pre>{specAvailable ? getDesignSpec(specId, variant?.name) : '该模块暂未收录 Design Spec。可先参考下方组件角色与使用说明。'}</pre></div>}
+      </div>
+    </section>
+    <div className={styles.docsGrid}>
+      <section className={styles.block}><p className={styles.eyebrow}>CONTEXT</p><h2>适用场景</h2><p>在需求包含以下场景或关键词时，优先查看此模块及其变体。</p><div className={styles.tags}>{mod.triggers?.map(t => <span key={t}>{t}</span>)}</div>{mod.notes && <aside className={styles.note}>{mod.notes}</aside>}</section>
+      <section className={styles.block}><p className={styles.eyebrow}>COMPOSITION</p><h2>组件构成</h2><p>由以下 L3 组件角色组合，具体配置参见 Design Spec。</p><div className={styles.roles}>{mod.l3Roles?.length ? mod.l3Roles.map((r, i) => <div key={r}><span>{String(i + 1).padStart(2, '0')}</span>{r}</div>) : <p>组合关系见模块预览与规范。</p>}</div></section>
     </div>
-  );
+    {mod.variants && !Array.isArray(mod.variants) && <section className={styles.variants}><h2>变体说明</h2>{Object.entries(mod.variants).map(([name, desc]) => <div key={name}><strong>{name}</strong><p>{desc}</p></div>)}</section>}
+    <div className={styles.usage}><h2>用于页面生成</h2><p>选择合适的变体，复制 Design Spec，将其与业务字段、数据和页面需求一并交给生成工具。Spec 包含此模块的布局、视觉规则和实现参考。</p><CopySpecButton key={specId + (variant?.name || '')} moduleId={specId} variantName={variant?.name} className={styles.copyButton}/></div>
+    <nav className={styles.pagination} aria-label="相邻模块">{previous ? <Link to={`/modules/${previous.id}`}><ArrowLeft size={15}/><span><small>上一个模块</small>{previous.name.replace(/ \(.*\)/, '')}</span></Link> : <span />}{next && <Link to={`/modules/${next.id}`}><span><small>下一个模块</small>{next.name.replace(/ \(.*\)/, '')}</span><ArrowRight size={15}/></Link>}</nav>
+  </article>;
+}
+export default function ModuleDetail() {
+    const { id } = useParams<{
+        id: string;
+    }>();
+    const mod = getModuleById(id || '');
+    return mod ? <ModuleDocument key={mod.id} mod={mod}/> : <div className={styles.content}><h1>未找到该模块</h1><Link to="/modules">返回模块库</Link></div>;
 }

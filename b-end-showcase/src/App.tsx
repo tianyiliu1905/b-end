@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import Landing from './pages/Landing';
 import ModulesIndex from './pages/ModulesIndex';
 import ModuleDetail from './pages/ModuleDetail';
-import TopNav from './components/TopNav';
+import ShowcaseLayout from './components/ShowcaseLayout';
+import GeneratedExample from './pages/GeneratedExample';
 import VersionSwitcher from './components/VersionSwitcher';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import { ThemeProvider } from './theme/useTheme';
@@ -53,7 +54,6 @@ function ScrollLockCleanup() {
 function Home() {
   return (
     <>
-      <TopNav />
       <Landing />
     </>
   );
@@ -62,7 +62,7 @@ function Home() {
 /** 全局主题切换悬浮栏：首页/模板/模块相关页面已在 TopNav 内置主题下拉，此处隐藏避免重复 */
 function GlobalThemeSwitcher() {
   const location = useLocation();
-  const hideOn = location.pathname.startsWith('/examples/') || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens';
+  const hideOn = (location.pathname.startsWith('/examples/') || location.pathname.startsWith('/showcase/')) || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens';
   if (hideOn) return null;
   return <ThemeSwitcher />;
 }
@@ -71,7 +71,7 @@ function GlobalThemeSwitcher() {
 function HomeFloatingButton() {
   const location = useLocation();
   const navigate = useNavigate();
-  if (location.pathname.startsWith('/examples/') || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens') return null;
+  if ((location.pathname.startsWith('/examples/') || location.pathname.startsWith('/showcase/')) || location.pathname === '/' || location.pathname === '/templates' || location.pathname === '/modules' || location.pathname.startsWith('/modules/') || location.pathname === '/tokens') return null;
   return (
     <div style={{
       position: 'fixed',
@@ -117,11 +117,14 @@ function App() {
         <HomeFloatingButton />
         <GlobalThemeSwitcher />
         <Routes>
+          <Route element={<ShowcaseLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/templates" element={<Home />} />
           <Route path="/modules" element={<ModulesIndex />} />
           <Route path="/modules/:id" element={<ModuleDetail />} />
           <Route path="/tokens" element={<TokenSheet />} />
+          <Route path="/showcase/store-operations" element={<GeneratedExample />} />
+          </Route>
           <Route path="/examples/store-operations" element={<StoreOperations />} />
 
           {/* Dashboard 页面 */}

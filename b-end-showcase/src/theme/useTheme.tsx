@@ -97,6 +97,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return (saved as ThemeKey) || DEFAULT_THEME;
   });
 
+  // Keep embedded previews and independently opened examples in sync.
+  useEffect(() => {
+    const syncTheme = (event: StorageEvent) => {
+      if (event.key === STORAGE_KEY && (event.newValue === 'primary' || event.newValue === 'brand-yellow')) {
+        setThemeState(event.newValue);
+      }
+    };
+    window.addEventListener('storage', syncTheme);
+    return () => window.removeEventListener('storage', syncTheme);
+  }, []);
+
   const setTheme = useCallback((key: ThemeKey) => {
     setThemeState(key);
     localStorage.setItem(STORAGE_KEY, key);

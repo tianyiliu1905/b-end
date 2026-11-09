@@ -1,5 +1,7 @@
 # FD2 · 表头信息区（PageHeader）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：页面白色卡片内顶部的标题信息区域，由多个可选原子自由组合，承载"我在哪、这是什么页面"的信息。
 
 ---
@@ -836,7 +838,7 @@ const summaryColumnCount = Math.max(summaryRow1.length, summaryRow2.length);
 ## 八、CSS
 
 ```css
-/* G2 · 表头信息区 (PageHeader) */
+/* FD2 · 表头信息区 (PageHeader) */
 .page-header {
   margin-bottom: 24px;
   padding-bottom: 16px;

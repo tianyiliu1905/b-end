@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import TopNav from '../components/TopNav';
 import styles from './TokenSheet.module.css';
 
 /* ────────────────────────────────────────────
@@ -468,7 +467,7 @@ export default function TokenSheet() {
 
   return (
     <div className={styles.page}>
-      <TopNav />
+
 
       <div className={styles.header}>
         <div className={styles.headerLabel}>

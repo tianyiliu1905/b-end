@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import TopNav from '../components/TopNav';
 import { L2_CATEGORIES, getModulesByCategory } from '../data/l2Modules';
 import CopySpecButton from '../components/CopySpecButton';
 import styles from './ModulesIndex.module.css';
@@ -16,7 +15,7 @@ const CATEGORY_LABEL: Record<string, string> = {
 export default function ModulesIndex() {
   return (
     <div className={styles.page}>
-      <TopNav />
+
 
       <div className={styles.header}>
         <p className={styles.label}>L2 Modules</p>

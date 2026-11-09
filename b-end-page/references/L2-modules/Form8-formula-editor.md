@@ -1,5 +1,7 @@
 # Form8 · 公式编辑器（FormulaEditor）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：输入计算规则/表达式/指标定义的编辑器，或以条件组形式配置筛选/判断规则。
 > **信号**：该模块出现基本可反推用户在做配置型表单。
 
@@ -68,7 +70,7 @@
 
 以固定文本 + 变量下拉 + 运算符 + 可选 checkbox 组合的公式模板形式配置计算规则。核心组成：
 
-- **灰底配置容器**：整体包裹在浅灰背景容器（`var(--bg-card-inner)`，与 F6 多选组分组卡片背景统一），`border-radius: 8px`，`padding: 16px`
+- **灰底配置容器**：整体包裹在浅灰背景容器（`var(--bg-card-inner)`，与 Form6 多选组分组卡片背景统一），`border-radius: 8px`，`padding: 16px`
 - **键值对左右布局**：每组公式用自定义 `.formula-config-row`（flex 布局）包裹，标签（如「默认计算配置」「例外计算配置」）在左，公式内容在右
 - **公式行**：由固定文本（`span.formula-fixed-text`）、运算符（`span.formula-template__op`）、Checkbox、Select 横向排列组成，语意连续的元素保持在同一行
 - **子公式行**：紧跟主公式下方，如「其中：安全存量 = [下拉选择] × 安全系数」
@@ -750,7 +752,7 @@ export default function FormulaTemplateEditor({
 ### 变体 B · 计算公式配置器 CSS
 
 ```css
-/* ===== 变体 B · 计算公式配置器（统一灰底 var(--bg-card-inner)，与 F6 多选组卡片对齐） ===== */
+/* ===== 变体 B · 计算公式配置器（统一灰底 var(--bg-card-inner)，与 Form6 多选组卡片对齐） ===== */
 .formula-config-container {
   background: var(--bg-card-inner); border-radius: 8px; padding: 16px;
 }

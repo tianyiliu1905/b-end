@@ -1,0 +1,296 @@
+.showcase-shell {
+  --docs-ink:#202124;
+  --docs-muted:#81838a;
+  --docs-line:#e9e9ec;
+  color:var(--docs-ink);
+  background:#f7f7f8;
+  min-height:100vh;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;
+  padding:0 18px 0 254px;
+  font-size:14px
+}
+.showcase-shell * {
+  box-sizing:border-box
+}
+.showcase-sidebar {
+  width:238px;
+  position:fixed;
+  inset:0 auto 0 0;
+  display:flex;
+  flex-direction:column;
+  padding:26px 16px 16px 22px;
+  z-index:30;
+  background:#f7f7f8
+}
+.showcase-brand-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:27px
+}
+.showcase-brand {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:23px;
+  font-weight:650;
+  letter-spacing:-1px;
+  color:#202124;
+  text-decoration:none
+}
+.showcase-mark {
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  background:#232426;
+  color:white;
+  border-radius:9px
+}
+.showcase-beta {
+  font-size:10px;
+  letter-spacing:.5px;
+  border:1px solid #dddde1;
+  border-radius:5px;
+  padding:2px 4px;
+  color:#777
+}
+.showcase-icon {
+  background:transparent;
+  border:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px;
+  border-radius:6px;
+  cursor:pointer;
+  color:#777
+}
+.showcase-icon:hover {
+  background:#ededf0;
+  color:#202124
+}
+.showcase-search {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 9px;
+  border:1px solid #e1e1e5;
+  border-radius:8px;
+  background:#fff;
+  color:#9a9a9f
+}
+.showcase-search input {
+  width:100%;
+  min-width:0;
+  background:transparent;
+  border:0;
+  outline:none;
+  font:inherit;
+  font-size:12px;
+  color:#333
+}
+.showcase-search:focus-within {
+  outline:2px solid #aaa;
+  outline-offset:2px
+}
+.showcase-search kbd {
+  white-space:nowrap;
+  font:10px monospace
+}
+.showcase-search button {
+  background:none;
+  border:0;
+  cursor:pointer;
+  display:flex
+}
+.showcase-nav {
+  padding:19px 0;
+  border-bottom:1px solid #e6e6e9;
+  margin-bottom:10px
+}
+.showcase-nav a,.showcase-directory a {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:#686970;
+  border-radius:7px;
+  padding:9px 10px;
+  font-size:13px;
+  line-height:1.4
+}
+.showcase-nav a span {
+  margin-left:auto;
+  font-size:10px;
+  color:#8c8d93
+}
+.showcase-nav a:hover,.showcase-directory a:hover {
+  background:#ededf0;
+  color:#222
+}
+.showcase-nav a.active,.showcase-directory a.active {
+  background:#eaeaec;
+  color:#17181b;
+  font-weight:600
+}
+.showcase-directory {
+  overflow:auto;
+  scrollbar-width:thin;
+  flex:1;
+  padding-right:2px
+}
+.showcase-directory section {
+  margin:18px 0 24px
+}
+.showcase-directory h2 {
+  font-size:11px;
+  font-weight:500;
+  color:#92939a;
+  display:flex;
+  justify-content:space-between;
+  margin:0 10px 10px
+}
+.showcase-directory h2 span {
+  font-size:10px
+}
+.showcase-directory a {
+  font-size:12px;
+  justify-content:space-between;
+  gap:5px;
+  padding:8px 10px
+}
+.showcase-directory a span {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+.showcase-directory small {
+  font:9px monospace;
+  color:#96979d;
+  flex-shrink:0
+}
+.showcase-empty {
+  padding:12px;
+  color:#888;
+  line-height:1.8;
+  font-size:12px
+}
+.showcase-side-footer {
+  padding-top:15px;
+  font-size:10px;
+  color:#999;
+  border-top:1px solid #e6e6e9;
+  display:flex;
+  gap:6px;
+  align-items:center
+}
+.showcase-status {
+  width:5px;
+  height:5px;
+  background:#6b8d74;
+  border-radius:50%
+}
+.showcase-main {
+  min-width:0
+}
+.showcase-topbar {
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#96979e;
+  font-size:11px;
+  padding:0 10px;
+  gap:15px
+}
+.showcase-topbar>div,.showcase-topbar a {
+  display:flex;
+  align-items:center;
+  gap:9px
+}
+.showcase-topbar a {
+  color:#5b5c63;
+  text-decoration:none
+}
+.showcase-paper {
+  border:1px solid #e4e4e8;
+  background:white;
+  border-radius:18px;
+  min-height:calc(100vh - 125px);
+  overflow:clip
+}
+.showcase-footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 8px;
+  color:#919298;
+  font-size:10px;
+  gap:12px
+}
+.showcase-footer label {
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+.showcase-footer select {
+  font-size:11px;
+  border:0;
+  color:#555;
+  background:transparent
+}
+.showcase-shell.is-collapsed {
+  padding-left:18px
+}
+.showcase-shell.is-collapsed .showcase-sidebar {
+  display:none
+}
+.showcase-shell button:focus-visible,.showcase-shell a:focus-visible,.showcase-shell select:focus-visible {
+  outline:2px solid #737780;
+  outline-offset:3px
+}
+@media(min-width:1700px) {
+  .showcase-main {
+    max-width:1500px;
+    margin:auto
+  }
+}
+@media(max-width:800px) {
+  .showcase-shell {
+    padding-left:212px;
+    padding-right:10px
+  }
+  .showcase-sidebar {
+    width:202px;
+    padding-left:14px
+  }
+  .showcase-topbar>div>span {
+    display:none
+  }
+}
+@media(max-width:600px) {
+  .showcase-shell {
+    padding:0 10px
+  }
+  .showcase-sidebar {
+    width:238px;
+    box-shadow:10px 0 40px #0002
+  }
+  .showcase-shell:not(.is-collapsed) .showcase-main {
+    opacity:.35;
+    pointer-events:none
+  }
+  .showcase-topbar {
+    height:50px
+  }
+  .showcase-footer>span {
+    display:none
+  }
+}
+
+.showcase-brand-row { margin-bottom: 18px; }
+.showcase-theme { display: flex; gap: 3px; padding: 3px; margin-bottom: 14px; border: 1px solid #e5e5e9; border-radius: 8px; background: #efeff2; }
+.showcase-theme button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 5px; background: transparent; padding: 7px 5px; color: #85868e; font-size: 11px; cursor: pointer; }
+.showcase-theme button[aria-pressed="true"] { background: #fff; color: #303138; box-shadow: 0 1px 3px #0000000d; }
+.showcase-theme button > span { width: 7px; height: 7px; border-radius: 50%; }

@@ -1,5 +1,7 @@
 # Form1 · 操作栏（ActionBar）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：承载提交/保存/取消等动作的按钮区。
 > **基础底座**：任何表单页默认包含「基础布局 + 操作栏」，prompt 即使没提交按钮也要补上。
 
@@ -185,7 +187,7 @@ node "<skill>/mtd3/scripts/mtd-rag.js" query_components_direct \
 <main className="app-content">
   <div className="page-container">
     <div className="page-card">
-      {/* G2 PageHeader — 固定不滚动 */}
+      {/* FD2 PageHeader — 固定不滚动 */}
       <div className="page-header">...</div>
       {/* Anchor（可选）— 固定不滚动 */}
       <div className="page-header__anchor">...</div>
@@ -196,7 +198,7 @@ node "<skill>/mtd3/scripts/mtd-rag.js" query_components_direct \
           <div className="form-section" id="group-2">...</div>
         </Form>
       </div>
-      {/* F1 ActionBar — 固定底部 */}
+      {/* Form1 ActionBar — 固定底部 */}
       <div className="action-bar">
         <Button>取消</Button>
         <Button type="primary">提交</Button>
@@ -219,7 +221,7 @@ node "<skill>/mtd3/scripts/mtd-rag.js" query_components_direct \
         {current === 0 && <Step0 />}
         {current === 1 && <Step1 />}
       </div>
-      {/* F1 ActionBar — 固定底部 */}
+      {/* Form1 ActionBar — 固定底部 */}
       <div className="action-bar">
         {current > 0 && <Button>上一步</Button>}
         {current < STEPS.length - 1 ? (
@@ -289,7 +291,7 @@ export default function MasterDetailPage() {
               </Form>
             </div>
 
-            {/* F1 ActionBar — 在 detail-panel 内底部，不是 page-card 内 */}
+            {/* Form1 ActionBar — 在 detail-panel 内底部，不是 page-card 内 */}
             <footer className="action-bar">
               <div className="action-bar__inner">
                 <Button onClick={handleReset}>重置</Button>
@@ -356,7 +358,7 @@ function DrawerWithActionBar({ visible, onClose }: { visible: boolean; onClose: 
   <main class="app-content">
     <div class="page-container">
       <div class="page-card">
-        <!-- G2 PageHeader -->
+        <!-- FD2 PageHeader -->
         <div class="page-header">
           <h1 class="page-header__title">创建活动</h1>
         </div>
@@ -379,7 +381,7 @@ function DrawerWithActionBar({ visible, onClose }: { visible: boolean; onClose: 
           </mtd-form>
         </div>
 
-        <!-- F1 ActionBar -->
+        <!-- Form1 ActionBar -->
         <div class="action-bar">
           <mtd-button @click="handleCancel">取消</mtd-button>
           <mtd-button type="primary" @click="handleSubmit">提交</mtd-button>
@@ -418,7 +420,7 @@ const handleSubmit = () => {
 ### 7.1 操作栏 CSS
 
 ```css
-/* F1 操作栏 — 白卡内 flex 固定底部 */
+/* Form1 操作栏 — 白卡内 flex 固定底部 */
 .action-bar {
   background: var(--bg-card);
   padding: 16px 24px;

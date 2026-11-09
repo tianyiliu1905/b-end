@@ -1,7 +1,9 @@
 # Form3 · 基础布局（BaseLayout）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：表单的最小成立单元，决定「表单区占多宽」与「每行放几个字段」。
-> **基础底座**：任何表单页默认包含「基础布局 + 操作栏」。F2（分组分段）、主从布局的内部填充物都是 F3。
+> **基础底座**：任何表单页默认包含「基础布局 + 操作栏」。Form2（分组分段）、主从布局的内部填充物都是 Form3。
 > **命名说明**：Base 指它是所有表单内容的承载底座（不预设列数，支持单列/双列/三列/混合），Layout 强调这是一个布局模块。
 
 ---
@@ -11,12 +13,12 @@
 - 任何表单页都默认包含（基础底座之一）
 - 需要填写/录入一组字段
 - 字段不多时，单独使用即可
-- 字段较多时，作为 F2（分组分段）每个组的内部承载
+- 字段较多时，作为 Form2（分组分段）每个组的内部承载
 
 **不适用场景：**
 
 - 需要按对象切换表单 → 用主从落地页（左列表 + 右详情）
-- 字段需要按业务切块并加标题 → 用 F2 分组分段包裹多个 F3
+- 字段需要按业务切块并加标题 → 用 Form2 分组分段包裹多个 Form3
 
 > **L3 优先级声明**：本文中的颜色、字号、间距等视觉参数属于模式层推荐值；如与 L3 原子规范冲突，应以 L3 为准。
 
@@ -94,7 +96,7 @@
 | 字段类别 | 典型控件 | 宽度取值 | 对齐要求 |
 | --- | --- | --- | --- |
 | 普通键值对字段 | 单行 Input、Select、Switch、DatePicker、InputNumber、Radio/Checkbox 组、**多行文本域 Textarea** | 按本组列数（单列 `span={24}` / 双列 `span={12}` / 三列 `span={8}`） | 同组内等宽、左边缘对齐 |
-| 横向密集复合组件 | F8 公式编辑器、F5 可编辑表格、G3 只读表格、F6 复选组 | 更宽列宽（如公式编辑器 3/4 宽 `form-item--col-3`）或独占整行 `span={24}` | 独占其所在行，不与普通字段并列 |
+| 横向密集复合组件 | Form8 公式编辑器、Form5 可编辑表格、FD3 只读表格、Form6 复选组 | 更宽列宽（如公式编辑器 3/4 宽 `form-item--col-3`）或独占整行 `span={24}` | 独占其所在行，不与普通字段并列 |
 
 - **Textarea 归入普通字段**：多行文本域的"多行"由 `rows` 决定，是高度维度，**不构成加宽的理由**。它与同组单行字段等宽即可，不得单独放大到 3/4 宽或整行（除非该组整体就是单列 `span={24}`）。
 - **宽度类有专属边界**：`form-item--col-3`（75%）等宽度类是为复合组件预留的，**不得挪用到普通键值对字段**。误用会破坏该组字段的等宽对齐与视觉节奏。
@@ -178,9 +180,9 @@
 
 5. **混合列布局中单行字段与多列对齐** —— 混合列模式下，单行字段与多列字段共享同一个 Form 宽度（由外层栅格分栏决定），单行控件不再有独立的 max-width 限制，直接撑满 Form 宽度。
 
-6. **MTD React Form 内部是 `display: flex; flex-wrap: wrap`** —— （React 技术栈专属）MTD React 的 Form 组件渲染为 flex 容器。当 Form 内部使用 `<div>` 包裹分组（如 F2 分组分段场景）时，这些 div 作为 flex 子项不会自动占满整行，**必须显式设置 `width: 100%`**，否则分组内字段宽度会收缩而无法拉通到 Form 全宽。
+6. **MTD React Form 内部是 `display: flex; flex-wrap: wrap`** —— （React 技术栈专属）MTD React 的 Form 组件渲染为 flex 容器。当 Form 内部使用 `<div>` 包裹分组（如 Form2 分组分段场景）时，这些 div 作为 flex 子项不会自动占满整行，**必须显式设置 `width: 100%`**，否则分组内字段宽度会收缩而无法拉通到 Form 全宽。
 
-7. **F2 分组 div 必须撑满 Form 宽度** —— 当 F3 与 F2（分组分段）结合使用时，Form 内每个分组的包裹容器（`<div>`）需要设置 `width: 100%`，确保分组内的 FormItem 和控件能正确继承 Form 宽度并拉通。CSS 写法：`.your-form > div { width: 100%; }`。
+7. **Form2 分组 div 必须撑满 Form 宽度** —— 当 Form3 与 Form2（分组分段）结合使用时，Form 内每个分组的包裹容器（`<div>`）需要设置 `width: 100%`，确保分组内的 FormItem 和控件能正确继承 Form 宽度并拉通。CSS 写法：`.your-form > div { width: 100%; }`。
 
 8. **控件区垂直居中对齐（注意别写错层级）** —— `.mtd-prime-form-item-body` 下有两个**兄弟**子节点：控件容器 `.mtd-prime-form-item-wrapper` 与校验错误提示 `.mtd-prime-form-item-explain`（explain 不在 wrapper 内部）。
 
@@ -192,18 +194,18 @@
 
 9. **字段先归类，再定宽（禁止按控件"看起来大小"定宽）** —— 设定任何字段的列宽（`span` 或宽度类）前，必须先判断字段类别，再决定宽度：
    - **普通键值对录入字段**（单行 Input、Select、Switch、DatePicker、InputNumber、Radio/Checkbox 组、以及多行文本域 Textarea 等）→ 属于常规表单字段，按本组统一的列数取宽（单列 `span={24}` / 双列 `span={12}` / 三列 `span={8}`），**同组内保持一致列宽、左边缘对齐**。
-   - **横向信息密集的复合组件**（F8 公式编辑器、F5 可编辑表格、G3 只读表格、F6 复选组等）→ 需要更大横向空间，使用更宽的列宽（如公式编辑器 3/4 宽 `form-item--col-3`）或独占整行（`span={24}`），并按各自模块的混排规则放置（详见 §二 2.4 与 §十各混排章节）。
+   - **横向信息密集的复合组件**（Form8 公式编辑器、Form5 可编辑表格、FD3 只读表格、Form6 复选组等）→ 需要更大横向空间，使用更宽的列宽（如公式编辑器 3/4 宽 `form-item--col-3`）或独占整行（`span={24}`），并按各自模块的混排规则放置（详见 §二 2.4 与 §十各混排章节）。
    - ⚠️ **高频误区（必须规避）**：Textarea 是普通字段，高度由 `rows` 控制，**与宽度无关**，不得单独加宽（完整说明见 §二 2.4）。**专供复合组件的宽度类（如 `form-item--col-3` = 75%）严禁用在普通字段上**。判断依据永远是"字段类别"，不是"控件视觉大小"。
 
 ### ⚠️ 生码前强制决策步骤（按顺序执行，不得跳步）
 
-写任何 F3 代码前，必须依次走完以下判断，**尤其是第 0 步**：
+写任何 Form3 代码前，必须依次走完以下判断，**尤其是第 0 步**：
 
 0. **用户是否明确指定了布局？** —— 若用户已说明"占一列 / 半宽 / 两列 / 右侧留白"等任何宽度或列数要求，**无条件照抄执行，直接跳到实现**，不得用"这样看起来更紧凑/更好看"等主观理由去覆盖用户的明确指令。用户指令的优先级高于本规范的默认值与你的审美判断。
 1. **确定参数①（表单区宽度）** —— 无特殊要求时取默认「半宽留白」（外层 `Col span={12}`）；仅当用户要求或内容区本身很窄时才用「全宽拉通」。
 2. **确定参数②（列数）** —— 无特殊要求时取默认「单列」（字段 `span={24}`）。仅在**同时满足**"字段较多（≥6）"且"标签长度接近、控件较窄"时，才考虑升级到双列 `span={12}`；三列仅用于标签短、控件小的密集属性录入。
 3. **偏离默认前先写理由** —— 若打算不用「半宽留白 + 单列」这个默认组合，必须能说出具体依据（对照 §二 2.4 的字段类别规则），不能凭"看起来"。
-4. **字段归类核对** —— 普通键值对字段（含 Textarea）在同组内等宽对齐；复合组件（F8/F5/G3/F6）才可用宽列/整行（见 §二 2.4）。
+4. **字段归类核对** —— 普通键值对字段（含 Textarea）在同组内等宽对齐；复合组件（Form8/Form5/FD3/Form6）才可用宽列/整行（见 §二 2.4）。
 
 ---
 
@@ -446,15 +448,15 @@ export default function TwoColumnForm() {
 
 ### 10.1 模块关系总览
 
-| 模块 | 与 F3 的关系 |
+| 模块 | 与 Form3 的关系 |
 | --- | --- |
-| F2 分组分段 | F2 是 F3 的上层组织模块——把多个 F3 按业务分组并加标题 |
-| 主从落地页 | 主从落地页右侧的详情表单就是一个 F3，左侧是对象列表 |
-| G1 承载容器 | F3 放在 G1 的白色卡片内，卡片的 padding/圆角/投影由 G1 规范定义 |
+| Form2 分组分段 | Form2 是 Form3 的上层组织模块——把多个 Form3 按业务分组并加标题 |
+| 主从落地页 | 主从落地页右侧的详情表单就是一个 Form3，左侧是对象列表 |
+| FD1 承载容器 | Form3 放在 FD1 的白色卡片内，卡片的 padding/圆角/投影由 FD1 规范定义 |
 
-### 10.2 与可编辑表格（F5）混排规则
+### 10.2 与可编辑表格（Form5）混排规则
 
-当同一页面中 F3（表单区）和 F5（可编辑表格）需要上下混排时，两者的宽度策略不同：表单区宽度由外层 Row/Col 栅格分栏控制，而可编辑表格通常列数多、需要更大的水平空间，应**拉通整个内容区宽度**。
+当同一页面中 Form3（表单区）和 Form5（可编辑表格）需要上下混排时，两者的宽度策略不同：表单区宽度由外层 Row/Col 栅格分栏控制，而可编辑表格通常列数多、需要更大的水平空间，应**拉通整个内容区宽度**。
 
 #### ⚠️ 硬约束
 
@@ -466,7 +468,7 @@ export default function TwoColumnForm() {
 
 ```tsx
 <div className="scroll-content">
-  {/* F3 表单区 — 宽度由外层 Row/Col 栅格控制 */}
+  {/* Form3 表单区 — 宽度由外层 Row/Col 栅格控制 */}
   <Form className="section-form" labelPosition="right" labelWidth="120px" useContext={true}>
     <div className="form-section form-section--multicol">
       <h3 className="form-section__title">基本信息</h3>
@@ -477,7 +479,7 @@ export default function TwoColumnForm() {
     </div>
   </Form>
 
-  {/* F5 可编辑表格 — 宽度拉通内容区，不受 section-form 限宽 */}
+  {/* Form5 可编辑表格 — 宽度拉通内容区，不受 section-form 限宽 */}
   <div className="form-section">
     <h3 className="form-section__title">明细表</h3>
     <div className="editable-table">
@@ -504,9 +506,9 @@ export default function TwoColumnForm() {
 </Form>
 ```
 
-### 10.3 与公式编辑器（F8）混排规则
+### 10.3 与公式编辑器（Form8）混排规则
 
-当同一页面中 F3（普通键值对表单区）和 F8（公式编辑器）需要上下混排时，两者的栅格占比不同：普通键值对表单区占页面 1/2 宽（半宽留白），内部字段单列纵向排列；公式编辑器占 3/4 宽（75%），比普通键值对更宽，不要挤在半列中。
+当同一页面中 Form3（普通键值对表单区）和 Form8（公式编辑器）需要上下混排时，两者的栅格占比不同：普通键值对表单区占页面 1/2 宽（半宽留白），内部字段单列纵向排列；公式编辑器占 3/4 宽（75%），比普通键值对更宽，不要挤在半列中。
 
 #### ⚠️ 硬约束
 
@@ -515,13 +517,13 @@ export default function TwoColumnForm() {
    - ⚠️ **`form-item--col-3`（75%）是复合组件专属宽度类，严禁挪用到普通字段**：Textarea 是普通字段，不得单独放大到 3/4 宽（完整说明见 §二 2.4）。
 3. **计算公式配置型（变体 C）内部不用 Form.Item**：用自定义 `.formula-config-row`（flex 布局）替代，label 用 `<span>` 实现，避免外层 Form.Item label + 内层 Form.Item label 双层叠加浮费空间
 4. **普通键值对保持默认左右布局**：`labelPosition="right"`，`labelWidth="120px"`，不受公式编辑器布局影响
-5. **公式编辑器放在 `<Form className="section-form">` 外部**：与 F5 混排同理，公式编辑器宽度策略与普通字段不同，放在 Form 外部避免栅格限宽约束
+5. **公式编辑器放在 `<Form className="section-form">` 外部**：与 Form5 混排同理，公式编辑器宽度策略与普通字段不同，放在 Form 外部避免栅格限宽约束
 
 #### 结构示意（React）
 
 ```tsx
 <div className="scroll-content">
-  {/* F3 普通键值对 — 外层 Col span={12} 限到半宽，字段 span={24} 单列，右侧留白 */}
+  {/* Form3 普通键值对 — 外层 Col span={12} 限到半宽，字段 span={24} 单列，右侧留白 */}
   <Row>
     <Col span={12}>
       <Form className="section-form" labelPosition="right" labelWidth="120px" useContext={true}>
@@ -540,7 +542,7 @@ export default function TwoColumnForm() {
     </Col>
   </Row>
 
-  {/* F8 公式编辑器 — 占 3/4 宽，放在 Form 外部 */}
+  {/* Form8 公式编辑器 — 占 3/4 宽，放在 Form 外部 */}
   <div className="form-section">
     <h3 className="form-section__title">定价公式</h3>
     <div className="formula-config-container">
@@ -556,7 +558,7 @@ export default function TwoColumnForm() {
 
 ### ⚠️ 生码后必须自查清单（React 技术栈）
 
-生成 F3 相关代码后，**逐条核对**以下项，缺一不可：
+生成 Form3 相关代码后，**逐条核对**以下项，缺一不可：
 
 - [ ] 若用户明确指定了宽度/列数，已**无条件照抄**，未用主观审美覆盖（见 §五「生码前强制决策步骤」第 0 步）
 - [ ] **参数①（表单区宽度）已确认**：默认半宽留白用外层 `Row > Col span={12}`；全宽拉通才省略 Row/Col。切勿用"给字段设 span={12}"冒充半宽
@@ -567,7 +569,7 @@ export default function TwoColumnForm() {
 - [ ] `.mtd-prime-form-item-body` 用 `flex-direction: column`（**不是**横向 flex + `align-items: center`，那会把校验提示挤到控件右侧）；垂直居中单独作用于 `> .mtd-prime-form-item-wrapper`；**页面内其它 Form 容器（如增删标签组）需各自补一条对应选择器**
 - [ ] 多列时：含多列的 `.form-section` 加 `form-section--multicol`（flex-wrap）+ `.form-section__title { width: 100% }`
 - [ ] 多列时：`Form.Item` 用 `span={12}`（双列）或 `span={8}`（三列），**禁止**用外层 CSS Grid
-- [ ] 字段定宽前已归类：普通键值对字段（含 **Textarea**）与同组字段等宽对齐；`form-item--col-3` 等宽度类**仅**用于复合组件（F8/F5/G3/F6），未挪用到普通字段（见 §二 2.4）
+- [ ] 字段定宽前已归类：普通键值对字段（含 **Textarea**）与同组字段等宽对齐；`form-item--col-3` 等宽度类**仅**用于复合组件（Form8/Form5/FD3/Form6），未挪用到普通字段（见 §二 2.4）
 
 > **根因解释**：这些规则之所以容易遗漏，是因为 MTD 的 Input 组件默认 `width: 100%` 没问题，但 Select / DatePicker / InputNumber 等组件默认宽度由内容决定；同时 React Form 的 flex 容器使 div 子项默认收缩。两个隐性行为叠加导致"看起来没写错但视觉不撑满"。
 
@@ -575,7 +577,7 @@ export default function TwoColumnForm() {
 
 ## 十二、在主从落地页中的适配
 
-当 F3 用在主从落地页的右侧面板（`.detail-panel__content`）内时，需要注意以下适配要点：
+当 Form3 用在主从落地页的右侧面板（`.detail-panel__content`）内时，需要注意以下适配要点：
 
 ### 12.1 栅格限宽的适配
 

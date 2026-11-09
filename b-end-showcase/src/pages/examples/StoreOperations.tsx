@@ -80,8 +80,8 @@ export default function StoreOperations() {
         <Tabs.TabPane key="stores" label="门店经营" /><Tabs.TabPane key="templates" label="设计知识库" />
       </Tabs></div>
       <span className={styles.workspace}>谷里咖啡 <span className={styles.divider}>/</span> 华东运营组</span>
-      <Select aria-label="页面主题" size="small" value={theme} onlyKeyValue clearable={false} filterable={false} style={{ width: 100 }}
-        options={[{ label: '工具蓝', value: 'primary' }, { label: '美团黄', value: 'brand-yellow' }]} onChange={value => setTheme(value as ThemeKey)} />
+      {new URLSearchParams(window.location.search).get('embedded') !== '1' && <Select aria-label="页面主题" size="small" value={theme} onlyKeyValue clearable={false} filterable={false} style={{ width: 100 }}
+        options={[{ label: '工具蓝', value: 'primary' }, { label: '美团黄', value: 'brand-yellow' }]} onChange={value => setTheme(value as ThemeKey)} />}
       <span className={styles.avatar}>林</span>
     </header>
     <aside className={styles.sidebar}>

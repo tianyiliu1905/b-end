@@ -1,5 +1,7 @@
 # Form5 · 可编辑表格（EditableTable）
 
+> **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
+
 > **一句话定位**：支持增删行、行内编辑的明细录入表格。
 
 ---
@@ -403,7 +405,7 @@ const handleDelete = (index: number) => {
 
 ```tsx
 <div className="scroll-content">
-  {/* F3 表单区 — 宽度由外层 Row/Col 栅格控制 */}
+  {/* Form3 表单区 — 宽度由外层 Row/Col 栅格控制 */}
   <Form className="section-form" labelPosition="right" labelWidth="120px" useContext={true}>
     <div className="form-section form-section--multicol">
       <h3 className="form-section__title">基本信息</h3>
@@ -413,7 +415,7 @@ const handleDelete = (index: number) => {
     </div>
   </Form>
 
-  {/* F5 可编辑表格 — 宽度拉通内容区，不受 section-form 限宽 */}
+  {/* Form5 可编辑表格 — 宽度拉通内容区，不受 section-form 限宽 */}
   <div className="form-section">
     <h3 className="form-section__title">明细表</h3>
     <div className="editable-table">

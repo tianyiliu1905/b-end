@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './Landing.module.css';
+import TemplateThumbnail from '../components/TemplateThumbnail';
 
 /** L2 模块编号 → 中文名（新编号体系 v4：D 系列以图表类型为单位） */
 const MODULE_NAMES: Record<string, string> = {
@@ -48,7 +49,7 @@ const dashboardEntries = [
 ];
 
 const listEntries = [
-  { path: '/examples/store-operations', title: 'Skill 实测 · 门店经营管理', desc: '有依据的 Spec → 指标 + 筛选 + 图文表格，支持批量关注、CSV 导出和详情抽屉', modules: ['G-1', 'G-2', 'D-1', 'G-3', 'G-4'], featured: true },
+  { path: '/showcase/store-operations', title: 'Skill 实测 · 门店经营管理', desc: '有依据的 Spec → 指标 + 筛选 + 图文表格，支持批量关注、CSV 导出和详情抽屉', modules: ['G-1', 'G-2', 'D-1', 'G-3', 'G-4'], featured: true },
   { path: '/list/crud', title: 'CRUD 管理列表', desc: '筛选栏 + 操作工具条 + 数据表格（带切换tab）+ 分页', modules: ['G-1', 'G-2', 'G-3', 'G-4'], featured: true },
   { path: '/list/tree', title: '树形层级', desc: '左侧树导航 + 右侧纯文字表格，层级分类管理', modules: ['G-1', 'G-2', 'G-3', 'G-4'] },
   { path: '/list/metric-detail', title: '指标 + 明细', desc: '顶部指标概览 + 趋势图 + 底部带图片列表格', modules: ['G-1', 'G-2', 'G-3', 'D-1', 'D-3', 'G-4'] },
@@ -84,10 +85,10 @@ export default function Landing() {
             L1 - L2 - L3 三层架构
           </div>
           <h1 className={styles.heroTitle}>
-            <span className={styles.heroTitleAccent}>MTD B端</span>知识库预览
+            <span className={styles.heroTitleAccent}>B-end </span>页面模板
           </h1>
           <p className={styles.heroSub}>
-            17 套生产级页面模板，覆盖数据看板、列表管理、表单录入、详情展示、营销活动五大场景
+            从真实业务场景出发，浏览页面结构、理解模块组合，再把设计知识用于生成。
           </p>
         </div>
       </section>
@@ -107,7 +108,7 @@ export default function Landing() {
                 className={styles.card}
               >
                 <div className={styles.cardPreview}>
-                  <span className={styles.cardPreviewLabel}>页面截图占位</span>
+                  <TemplateThumbnail path={item.path} />
                   <div className={styles.cardTop}>
                     <div className={styles.cardArrow}>&#8599;</div>
                   </div>
@@ -139,7 +140,7 @@ export default function Landing() {
           <div className={styles.sectionHeader}>
             <p className={styles.sectionLabel}>List Pages</p>
             <h2 className={styles.sectionTitle}>列表页</h2>
-            <span className={styles.sectionCount}>3 套模板</span>
+            <span className={styles.sectionCount}>4 套模板</span>
           </div>
           <div className={styles.grid}>
             {listEntries.map((item) => (
@@ -149,7 +150,7 @@ export default function Landing() {
                 className={styles.card}
               >
                 <div className={styles.cardPreview}>
-                  <span className={styles.cardPreviewLabel}>页面截图占位</span>
+                  <TemplateThumbnail path={item.path} />
                   <div className={styles.cardTop}>
                     <div className={styles.cardArrow}>&#8599;</div>
                   </div>
@@ -190,7 +191,7 @@ export default function Landing() {
                 className={styles.card}
               >
                 <div className={styles.cardPreview}>
-                  <span className={styles.cardPreviewLabel}>页面截图占位</span>
+                  <TemplateThumbnail path={item.path} />
                   <div className={styles.cardTop}>
                     <div className={styles.cardArrow}>&#8599;</div>
                   </div>
@@ -231,7 +232,7 @@ export default function Landing() {
                 className={styles.card}
               >
                 <div className={styles.cardPreview}>
-                  <span className={styles.cardPreviewLabel}>页面截图占位</span>
+                  <TemplateThumbnail path={item.path} />
                   <div className={styles.cardTop}>
                     <div className={styles.cardArrow}>&#8599;</div>
                   </div>
@@ -308,7 +309,7 @@ export default function Landing() {
         <span className={styles.footerText}>B端通用设计规范 v1.0</span>
         <div className={styles.footerStats}>
           <span className={styles.footerStat}>
-            <span className={styles.footerStatValue}>16</span> 页面模板
+            <span className={styles.footerStatValue}>{dashboardEntries.length + listEntries.length + formEntries.length + detailEntries.length}</span> 页面模板
           </span>
           <span className={styles.footerStat}>
             <span className={styles.footerStatValue}>5</span> 页面类型

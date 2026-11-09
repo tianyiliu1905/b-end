@@ -31,7 +31,7 @@ metadata:
 > - 脚手架切换完成后，再按本 skill 后续流程生成页面代码。
 > - 如果 `nocode-frontend-init` skill 不可用（未安装），则跳过此步骤，直接按本 skill 流程生成代码（MTD 依赖通过 npm install 安装）。
 
-> **模块体系分流**：列表页与数据看板继续使用本目录的 G / List / D / W 模块。表单页与详情页不再使用 `references/L2-modules/` 中的旧 Form/Detail 模块，也不复用旧 L1 文件；两类页面统一读取 `references/INDEX-form-detail.md` 索引，按其中 G/F/D 模块编号、L1 装配逻辑和 L3 MTD 查询流程执行。两套 D 编号语义不同：看板 D-* 仅在看板分支使用；表单/详情的 D3/D5/D9 仅在详情页分支使用，禁止跨分支混用。
+> **模块体系分流**：列表页与数据看板继续使用本目录的 G / List / D / W 模块。表单页与详情页使用当前 FD/Form/Detail 模块；两类页面统一读取 `references/INDEX-form-detail.md` 索引，按其中 FD/Form/Detail 模块编号、L1 装配逻辑和 L3 MTD 查询流程执行。看板 D-* 与详情 Detail1/Detail2/Detail3 是不同模块系列，按各自索引选型，禁止混用。
 
 ---
 
@@ -74,7 +74,7 @@ metadata:
 └── 表单页 / 详情页
     └── references/INDEX-form-detail.md
         ├── L1：references/L1-templates/page-表单页装配逻辑 / page-详情页装配逻辑
-        ├── L2：按 INDEX 命中的 G/F/D 单文件模块（references/L2-modules/）
+        ├── L2：按 INDEX 命中的 FD/Form/Detail 单文件模块（references/L2-modules/）
         └── L3：references/L3-notes/component-MTD组件清单.md + mtd3/ 实时知识库
 ```
 
@@ -88,9 +88,11 @@ metadata:
 
 ## 2. L2 模块库
 
+所有 L2 模块使用 [统一模块描述规范](references/module-contract.md) 的字段语义：用途与边界、输入、布局与组合、状态、事件、约束与验证、实现映射。首次选型时读取该规范；具体参数与代码仍按需读取命中的模块。列表／看板与表单／详情保留各自索引和生成分支。
+
 ### 表单页 / 详情页专用模块库（最高优先级）
 
-识别到表单页或详情页后，不读取 `references/L2-modules/index.json` 进行选型，立即读取 `references/INDEX-form-detail.md`。该索引是这两类页面的唯一模块入口：G 系为表单/详情共用，F 系为表单模块（F3/F4 可按规范复用于详情），D3/D5/D9 为详情专属。只读取 L1 装配清单命中的模块文件，禁止一次性全读。
+识别到表单页或详情页后，不读取 `references/L2-modules/index.json` 进行选型，立即读取 `references/INDEX-form-detail.md`。该索引是这两类页面的唯一模块入口：FD 系为表单/详情共用，Form 系为表单模块（Form1/Form2 可按各自适用范围复用于详情），Detail1/Detail2/Detail3 为详情专属。只读取 L1 装配清单命中的模块文件，禁止一次性全读。
 
 `references/L2-modules/index.json` 只服务列表页和数据看板。
 
@@ -453,7 +455,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 
 识别到表单页 L1 时必读：`references/INDEX-form-detail.md`、`references/L1-templates/page-表单页装配逻辑.md`。
 
-识别到详情页 L1 时必读：`references/INDEX-form-detail.md`、`references/L1-templates/page-详情页装配逻辑.md`。全局视觉规则由命中的 G/F/D 模块各自提供，不再加载未完成的页面级全局样式文件。
+识别到详情页 L1 时必读：`references/INDEX-form-detail.md`、`references/L1-templates/page-详情页装配逻辑.md`。全局视觉规则由命中的 FD/Form/Detail 模块各自提供，不再加载未完成的页面级全局样式文件。
 
 随后根据 L1 得到的模块清单，只读取 `references/L2-modules/` 中命中的单文件模块，并通过 `mtd3/scripts/mtd-rag.js` 查询组件知识。
 
@@ -472,9 +474,9 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 3. **组件库铁律：使用本 skill = 使用 MTD**。不需要用户额外说“用 MTD”，也不得因检测到项目已有 shadcn/ui、Ant Design 等而跳过。只有用户亲口说“用存量组件库”“不要引入 MTD”时才可放弃，没提 = 同意用 MTD。直接按 MTD 生成代码，无需询问确认。
 4. **建立索引认知**：读取 `references/INDEX-form-detail.md`，判断页面大类与需要的模块，不一次性读取全部规范。
 5. **加载 L1**：表单页读取 `references/L1-templates/page-表单页装配逻辑.md`，详情页读取 `references/L1-templates/page-详情页装配逻辑.md`。表单按顺序/步骤/主从落地页、抽屉或弹窗选容器；弹窗仅用于约 1–5 个字段且无分组、无分步的聚焦操作。详情仍按落地页（默认）或抽屉选容器，不开放弹窗。
-6. **装配 L2**：按 L1 的触发词与容器约束生成「容器 + 模块清单」，只读取清单命中的 `references/L2-modules/*.md`。优先复用 G/F；详情专属语义才用 D3/D5/D9。
+6. **装配 L2**：按 L1 的触发词与容器约束生成「容器 + 模块清单」，只读取清单命中的 `references/L2-modules/*.md`。优先复用 FD 和适用的 Form 模块；详情专属语义使用 Detail1/Detail2/Detail3。
 7. **查询 L3**：先读 `references/L3-notes/component-MTD组件清单.md`，校验组件名，再使用 `mtd3/scripts/mtd-rag.js` 查询当前框架的 API；读取 precautions 与 base 规范。不得凭记忆写 MTD API。
-8. **直接生成代码**：遵循 L1 容器与全局样式、L2 排版和 L3 API 生成可运行代码。此分支**不强制输出通用 Design Spec，也不等待确认**。
+8. **直接生成代码**：涉及字段联动、提交或跨模块更新时，按需读取 `references/page-contract.md`，内部梳理相关状态和动作即可，不增加通用 Spec 输出要求。遵循 L1 容器与全局样式、L2 排版和 L3 API 生成可运行代码。此分支**不强制输出通用 Design Spec，也不等待确认**。
 9. **验证**：执行项目可用的构建/类型检查/测试，并逐项核对表单/详情 L1/L2/L3 规则；有组件报错时重新查询知识库，最多重试 3 次。
 
 完成该分支后直接结束，不再进入下方通用步骤 2–8。下方通用 Design Spec 流程只适用于列表页和数据看板。
@@ -583,6 +585,8 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 - [ ] 同行卡片等高：tokens.css 同时覆盖 `.mtd-prime-row` 和 `.mtd-prime-row-flex`
 ```
 
+**页面描述扩展**：涉及跨模块联动、业务动作或数据驱动选型时，读取 [页面描述契约](references/page-contract.md)，按需补充实例 ID、数据源、状态绑定与动作。先核对用户任务和数据条件，再选模块；关键词仅用于产生候选。下方 JSON 是基础模板，实际输出应替换占位值，并删除本页未选用的模块、图表和交互。组件 API 问答和纯样式修改不强制生成完整契约。
+
 **JSON 格式**（紧随 Markdown 之后输出，供程序解析）：
 
 ```json
@@ -628,7 +632,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 
 ### 步骤 7：实施前自检（不等待用户确认）
 
-核对 Spec 与用户需求、项目约束、L1/L2 规范及已查询的 L3 API 一致，假设明确、模块不过度叠加，然后直接进入步骤 8。若用户补充需求或调整模块/变体，更新 Markdown + JSON Spec 并增量生成，不重新设置确认关卡。用户明确要求先审方案时，按用户要求等待。
+涉及页面描述扩展时，按 `references/page-contract.md` 检查模块组合、引用完整性及事件参数，并确认数据变化后关联区域如何更新。核对 Spec 与用户需求、项目约束、L1/L2 规范及已查询的 L3 API 一致，假设明确、模块不过度叠加，然后直接进入步骤 8。若用户补充需求或调整模块/变体，更新 Markdown + JSON Spec 并增量生成，不重新设置确认关卡。用户明确要求先审方案时，按用户要求等待。
 
 ### 步骤 8：代码生成
 
@@ -639,6 +643,7 @@ node "<本skill路径>/mtd3/scripts/mtd-rag.js" query_components_direct \
 4. React：函数组件 + JSX + 大驼峰标签 + `onClick`/`onChange`
 5. Vue：`<script setup>` + `<template>` + kebab-case 标签 + `@click`/`v-model`
 6. message/Form/Tabs 等差异点见 `references/framework-guide.md` §3
+7. 若有页面描述扩展，将 bindings/events/actions 落实为当前框架的状态、组件输入和事件处理函数；按实际操作验证筛选、分页、总数及异步反馈，不以存在按钮或成功提示代替功能实现。
 
 ### 步骤 9：自检
 
