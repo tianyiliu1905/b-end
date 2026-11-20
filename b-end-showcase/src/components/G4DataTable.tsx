@@ -68,7 +68,7 @@ function TextTableVariant() {
   const [current, setCurrent] = useState(1);
   return (
     <div className="dash-card" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-module)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-page)' }}>
         <span style={{ fontSize: 'var(--fs-14)', fontWeight: 500, color: 'var(--text-1)' }}>门店明细</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-elem)' }}>
           <Radio.Group defaultValue="revenue" size="small">
@@ -95,7 +95,7 @@ function ImageTableVariant() {
   const [current, setCurrent] = useState(1);
   return (
     <div className="dash-card" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-module)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-page)' }}>
         <span style={{ fontSize: 'var(--fs-14)', fontWeight: 500, color: 'var(--text-1)' }}>门店列表</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-elem)' }}>
           <Radio.Group defaultValue="revenue" size="small">

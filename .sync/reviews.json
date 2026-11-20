@@ -1,0 +1,62 @@
+{
+  "D-13": {
+    "fingerprint": "860f8ccf2603ab71a465b05270ec698a2a2bf6c16d4ecbeafa75e13c864f21c4",
+    "reviewed_at": "2026-11-13T01:16:33.969890+00:00",
+    "evidence": ".sync/evidence/D-13-2026-11-13-catalog-repair.json",
+    "evidence_sha256": "50abb07cee8a9f5c6ae51260cec81f96126a18ace4dba42e1542f01b0529e5dd"
+  },
+  "W-4": {
+    "fingerprint": "62f6cdded0f3c0915eb03ecd6b5e76cbc3a2a828f85b57d1b1d10547c43ba489",
+    "reviewed_at": "2026-11-13T01:16:34.498457+00:00",
+    "evidence": ".sync/evidence/W-4-2026-11-13-catalog-repair.json",
+    "evidence_sha256": "1ed0aa95e9815579067ef132cf8aa798585a7e83e94b3c76419bbd9b2b0fa0ad"
+  },
+  "W-6": {
+    "fingerprint": "3f5e6e249063e045bc6b47d6c298bffa1cfd7512f9fe24912c98a3b4ca7cdefb",
+    "reviewed_at": "2026-11-13T01:16:35.083291+00:00",
+    "evidence": ".sync/evidence/W-6-2026-11-13-catalog-repair.json",
+    "evidence_sha256": "9be260083813774b55a5cb4af29ed2960cfb038ca579bde965dc8a93d7af3a1c"
+  },
+  "W-7": {
+    "fingerprint": "a95acc44c4d155161b7f020f2eb08d42fdcc02a87e726a067da8e56c4a391160",
+    "reviewed_at": "2026-11-13T01:16:35.613787+00:00",
+    "evidence": ".sync/evidence/W-7-2026-11-13-catalog-repair.json",
+    "evidence_sha256": "d1f3a470bc5c91b35016fc0f8618d4bc4fea31beacc51ea0787405999dc42d3e"
+  },
+  "G-6": {
+    "fingerprint": "050b5b57b9b5677a7f5871113632ac895b2640060077b23173423aadefbb8933",
+    "reviewed_at": "2026-11-13T01:16:36.548049+00:00",
+    "evidence": ".sync/evidence/G-6-2026-11-13-catalog-repair.json",
+    "evidence_sha256": "0269e95f214462a7d843eda535c1cf5ab4fb31305801a62f2a869ecde394d7c4"
+  },
+  "catalog": {
+    "fingerprint": "4bec4da7b762eb1716cee4c238ec65c3800044416fa2945b43ac938d4aa4e5bf",
+    "reviewed_at": "2026-11-13T02:01:13.521675+00:00",
+    "evidence": ".sync/evidence/catalog-2026-11-13-ai-approval.json",
+    "evidence_sha256": "e9a02cbcb7cd5318d19e9b929a6cc009f6e2d6748058ece338b90788574f3b91"
+  },
+  "AI-1": {
+    "fingerprint": "ab400778f1ac3599ab3e04e50152ee35bdb0620f5454e02d4e13f8c956041a13",
+    "reviewed_at": "2026-11-13T02:01:10.363871+00:00",
+    "evidence": ".sync/evidence/AI-1-2026-11-13-ai-approval.json",
+    "evidence_sha256": "58f5cb663d5f61d81bd9ba4900009ae05c717bb38a7990b94ab2cd61a30a2e81"
+  },
+  "AI-2": {
+    "fingerprint": "7bcf9d18a5c27c15c543bf4e4e3350bf668b085b1138835dfc8113c111622884",
+    "reviewed_at": "2026-11-13T02:01:11.121910+00:00",
+    "evidence": ".sync/evidence/AI-2-2026-11-13-ai-approval.json",
+    "evidence_sha256": "44096fce61335177f73b1dedf56e7168ff39f6fe0023026f633f29b1f45fd776"
+  },
+  "AI-3": {
+    "fingerprint": "3e54bbb5ba64d7b9693eac86fdc008fb3a9a8d16fbad49421342bd375e0c3577",
+    "reviewed_at": "2026-11-13T02:01:11.958713+00:00",
+    "evidence": ".sync/evidence/AI-3-2026-11-13-ai-approval.json",
+    "evidence_sha256": "20e404d8fa96b6fc87f25747b434dbeb8772732200b58efefdf6393fdf54182b"
+  },
+  "Detail4": {
+    "fingerprint": "f2839e2aa204870dd00366f80f9e97a727794970169b2e80b18645e691b8ac30",
+    "reviewed_at": "2026-11-13T02:01:12.760935+00:00",
+    "evidence": ".sync/evidence/Detail4-2026-11-13-ai-approval.json",
+    "evidence_sha256": "3f9c1544690127191cd1091b51410b9af268c40548b7a27696244cdfed596a4e"
+  }
+}

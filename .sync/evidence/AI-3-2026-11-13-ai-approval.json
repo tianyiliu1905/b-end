@@ -1,0 +1,14 @@
+{
+  "scope": "AI-3",
+  "fingerprint": "3e54bbb5ba64d7b9693eac86fdc008fb3a9a8d16fbad49421342bd375e0c3577",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 AI模块与审批状态补齐；按实际本地交互、复制代码与知识规则核验，不宣称后端服务或全仓库已核验。",
+  "checks": {
+    "identity": "AI-3 目录、3种预览、INDEX-ai、L2与受控 AgentTask/本地Demo对齐；区分公开执行与模型内部思考。",
+    "variants": "任务执行、等待确认、失败重试均在浏览器切换并逐项复制；初态与nodes匹配。",
+    "visual_tokens": "padding16，步骤gap16、8px状态点+文字双编码，确认区padding12/灰底，标题16px。截图 docs/ai-modules/agent.png。",
+    "behavior": "实测开始→两次推进→等待确认，确认前末步未执行，点击确认后全部完成；失败初态重试后仅失败步骤恢复，推进至确认后取消，保留已完成两步。展开执行记录通过。实际工具和取消请求未接后端；Demo仅本地状态。",
+    "copy_spec": "浏览器复制三变体各仅一个变体章节，核心实现包含可传title和confirmation；复制核心代码类型检查通过。",
+    "validation": "最终 npm run build --prefix b-end-showcase 通过（原有大包提示）；新增组件、taxonomy与从4个复制Spec提取的核心tsx严格独立tsc均通过。MTD远程查询进程退出失败，改核对已安装0.12.14的Input.TextArea/Select/Button/Tag类型与实现。浏览器库forwardRef警告仍存在。全工程既有类型错误未在本轮重做清理；未验证真实模型/上传/审批接口，因为尚未接入。"
+  }
+}

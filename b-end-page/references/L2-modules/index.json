@@ -146,9 +146,9 @@
         "Input（树搜索）",
         "Tree / mtd-tree",
         "Select（附加筛选）",
-        "Button（新增节点）"
+        "Button（按需节点维护）"
       ],
-      "notes": "固定宽度约 240px，白底 dash-card；与右侧内容区之间用 --gap-module 做外部间距；树节点选中态联动右侧数据刷新（onSelect/@node-click 触发右侧数据源过滤）。详细排版与自检见 references/L1-templates/page-列表页装配逻辑.md §7.2"
+      "notes": "固定宽度约 240px；外部间距 --gap-module。父页面持有节点与状态筛选并过滤结果；树搜索保留祖先路径。React 0.12.14 用 nodeExpansion / nodeSelection / onSelectChange，详细规则见 L1 列表 §7.2。节点维护按需接入，不显示无响应按钮。"
     },
     "D-1": {
       "name": "指标卡片组 (Metric Cards)",

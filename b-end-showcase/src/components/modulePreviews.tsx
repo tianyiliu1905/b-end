@@ -1,3 +1,5 @@
+import { ComposerDemo, AnswerDemo, AgentTaskDemo } from './AiConversationModules';
+import { ApprovalFlowDemo } from './ApprovalFlow';
 /**
  * 模块预览注册表
  * ─────────────────────────────────────────────
@@ -6,11 +8,14 @@
  *
  * 预览区会在右侧内容面板中水平居中展示。
  */
-import { useRef, useState, type ReactNode, type CSSProperties } from 'react';
-import { Button, Input, InputNumber, Select, Tag, Table, Tabs, Radio, Card, Row, Col, Switch, RangePicker, Icon, Checkbox, Pagination, Progress } from '@ss/mtd-react3';
+import { useState, type ReactNode, type CSSProperties } from 'react';
+import { Button, Input, InputNumber, Select, Tag, Table, Tabs, Radio, Card, Row, Col, RangePicker, Icon, Progress } from '@ss/mtd-react3';
 import { useG2Chart } from '../hooks/useG2Chart';
 import { chartPalette, chartMono, chartTrend, getChartCategoricalPalette, getChartMonoScale } from '../lib/chartTokens';
-import G4DataTable, { g4Variants } from './G4DataTable';
+import { g4Variants } from './G4DataTable';
+import LiquidProgress from './LiquidProgress';
+import { TodoCardDemo, LatestUpdates, exampleUpdates, ToolGridDemo } from './WorkbenchModules';
+import { CategoryTreeExample } from './CategoryTreeNav';
 import DigestCard from './DigestCard';
 import ShortcutGrid from './ShortcutGrid';
 import { ConditionGroupEditor, FormulaTemplateEditor } from './FormulaEditor';
@@ -868,30 +873,24 @@ export const d12Variants: PreviewVariant[] = buildHeaderVariants('门店综合�
 }).map((v) => ({ name: v.name, render: () => <PreviewShell maxW={560}>{v.render()}</PreviewShell> }));
 
 /* ═══════════════════════════════════════════════
-   D-13 仪表盘
+   D-13 水波球
    ═══════════════════════════════════════════════ */
-function GaugeChartPreview() {
-  const ref = useG2Chart(() => ({
-    type: 'gauge',
-    data: { target: 82, total: 100 },
-    scale: { color: { range: [chartTrend.down, '#FFD700', chartTrend.up] } },
-    style: { arcLineCap: 'round' },
-  }), []);
-  return <div ref={ref} style={{ height: 220 }} />;
+function LiquidChartPreview() {
+  return <LiquidProgress actual={4280} target={5500} />;
 }
 function D13Preview() {
   return (
     <PreviewShell maxW={420}>
       <Card>
-        <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12, color: 'var(--text-1)' }}>健康度评分</div>
-        <GaugeChartPreview />
+        <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12, color: 'var(--text-1)' }}>营收目标完成率</div>
+        <LiquidChartPreview />
       </Card>
     </PreviewShell>
   );
 }
-export const d13Variants: PreviewVariant[] = buildHeaderVariants('健康度评分', <GaugeChartPreview />, {
+export const d13Variants: PreviewVariant[] = buildHeaderVariants('营收目标完成率', <LiquidChartPreview />, {
   order: ['纯净型', '筛选型', '筛选（复杂）', '操作型', '描述型'],
-  descText: '评分周期：本月',
+  descText: '统计周期：本月',
 }).map((v) => ({ name: v.name, render: () => <PreviewShell maxW={460}>{v.render()}</PreviewShell> }));
 
 /* ═══════════════════════════════════════════════
@@ -1061,31 +1060,10 @@ function W3Preview() {
 }
 
 /* ═══════════════════════════════════════════════
-   W-4 个人信息卡
+   W-4 今日待办
    ═══════════════════════════════════════════════ */
 function W4Preview() {
-  return (
-    <PreviewShell maxW={400}>
-      <Card>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-          <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--color-primary-4, #F0F6FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 600, color: 'var(--color-heading-accent, #FF7700)' }}>张</div>
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)' }}>张三</div>
-            <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>技术部 · 前端工程师</div>
-            <div style={{ marginTop: 4 }}><Tag type="bordered" size="small" theme="blue">P6</Tag></div>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, textAlign: 'center' }}>
-          {[{ l: '管理门店', v: '12' }, { l: '本月订单', v: '1,286' }, { l: '任务完成', v: '89%' }].map((s) => (
-            <div key={s.l} style={{ padding: '8px 0', background: 'rgba(17,25,37,0.03)', borderRadius: 6 }}>
-              <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-1)' }}>{s.v}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-3)' }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </Card>
-    </PreviewShell>
-  );
+  return <PreviewShell maxW={240}><TodoCardDemo /></PreviewShell>;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1149,62 +1127,17 @@ export const w5Variants: PreviewVariant[] = [
 ];
 
 /* ═══════════════════════════════════════════════
-   W-6 工作台指标区
+   W-6 最新动态
    ═══════════════════════════════════════════════ */
 function W6Preview() {
-  const items = [
-    { label: '今日营收', value: '¥38.6万', icon: 'money-o', color: '#166FF7' },
-    { label: '今日订单', value: '1,580', icon: 'file-text-o', color: '#00A854' },
-    { label: '新增用户', value: '126', icon: 'user-add-o', color: '#FF7700' },
-  ];
-  return (
-    <PreviewShell maxW={520}>
-      <Row gutter={[8, 8]}>
-        {items.map((it) => (
-          <Col key={it.label} span={8}>
-            <Card>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: `${it.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon type={it.icon} style={{ fontSize: 16, color: it.color }} />
-                </div>
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--text-1)' }}>{it.value}</div>
-              <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{it.label}</div>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </PreviewShell>
-  );
+  return <PreviewShell maxW={240}><LatestUpdates slides={exampleUpdates} /></PreviewShell>;
 }
 
 /* ═══════════════════════════════════════════════
-   W-7 待办列表
+   W-7 常用工具
    ═══════════════════════════════════════════════ */
 function W7Preview() {
-  const todos = [
-    { title: '审核「春熙路店」资质变更', priority: '紧急', done: false },
-    { title: '确认 8 月营销活动预算', priority: '高', done: false },
-    { title: '回复区域经理周报', priority: '中', done: true },
-  ];
-  const priColor: Record<string, string> = { '紧急': '#FF1F1F', '高': '#FF7700', '中': '#166FF7' };
-  return (
-    <PreviewShell maxW={520}>
-      <Card>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-1)' }}>待办事项</span>
-          <Tag type="bordered" size="small" theme="blue">3 项</Tag>
-        </div>
-        {todos.map((t, i) => (
-          <div key={t.title} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', borderBottom: i < todos.length - 1 ? '1px solid rgba(17,25,37,0.06)' : 'none' }}>
-            <Checkbox checked={t.done} />
-            <span style={{ flex: 1, fontSize: 13, color: t.done ? 'var(--text-4)' : 'var(--text-1)', textDecoration: t.done ? 'line-through' : 'none' }}>{t.title}</span>
-            {!t.done && <span style={{ fontSize: 11, color: priColor[t.priority], background: `${priColor[t.priority]}10`, padding: '2px 6px', borderRadius: 4 }}>{t.priority}</span>}
-          </div>
-        ))}
-      </Card>
-    </PreviewShell>
-  );
+  return <PreviewShell maxW={900}><ToolGridDemo /></PreviewShell>;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1663,9 +1596,14 @@ function Detail3Preview() {
    注册表
    ═══════════════════════════════════════════════ */
 export const modulePreviews: Record<string, React.ComponentType> = {
+  'AI-1': () => <PreviewShell maxW={760}><ComposerDemo /></PreviewShell>,
+  'AI-2': () => <PreviewShell maxW={760}><AnswerDemo /></PreviewShell>,
+  'AI-3': () => <PreviewShell maxW={640}><AgentTaskDemo /></PreviewShell>,
+  'Detail4': () => <PreviewShell maxW={640}><ApprovalFlowDemo /></PreviewShell>,
   'G-1+G-2': G1G2Preview,
   'G-3': G3Preview,
   'G-4': G4Preview,
+  'G-6': () => <PreviewShell maxW={960}><CategoryTreeExample /></PreviewShell>,
   'D-1': D1Preview,
   'D-2': D2Preview,
   'D-3': D3Preview,
@@ -1711,6 +1649,24 @@ export const modulePreviews: Record<string, React.ComponentType> = {
    这里用 { subModule: variants[] } 的分组形式表达，ModuleDetail 按分组依次渲染多个 VariantSwitcher。
    ═══════════════════════════════════════════════ */
 export const modulePreviewVariants: Record<string, PreviewVariant[]> = {
+  'AI-1': [
+    { name: '面板式', render: () => <PreviewShell maxW={760}><ComposerDemo variant="panel" /></PreviewShell> },
+    { name: '紧凑式', render: () => <PreviewShell maxW={760}><ComposerDemo variant="compact" /></PreviewShell> },
+  ],
+  'AI-2': [
+    { name: '完整回答', render: () => <PreviewShell maxW={760}><AnswerDemo /></PreviewShell> },
+    { name: '失败重试', render: () => <PreviewShell maxW={760}><AnswerDemo initial="failed" /></PreviewShell> },
+  ],
+  'AI-3': [
+    { name: '任务执行', render: () => <PreviewShell maxW={640}><AgentTaskDemo /></PreviewShell> },
+    { name: '等待确认', render: () => <PreviewShell maxW={640}><AgentTaskDemo initial="awaiting_confirmation" /></PreviewShell> },
+    { name: '失败重试', render: () => <PreviewShell maxW={640}><AgentTaskDemo initial="failed" /></PreviewShell> },
+  ],
+  'Detail4': [
+    { name: '审批中', render: () => <PreviewShell maxW={640}><ApprovalFlowDemo /></PreviewShell> },
+    { name: '已通过', render: () => <PreviewShell maxW={640}><ApprovalFlowDemo initial="approved" /></PreviewShell> },
+    { name: '已驳回', render: () => <PreviewShell maxW={640}><ApprovalFlowDemo initial="rejected" /></PreviewShell> },
+  ],
   'G-3': g3Variants,
   'G-4': g4PreviewVariants,
   'D-1': d1Variants,

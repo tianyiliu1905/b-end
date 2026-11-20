@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './Landing.module.css';
-import TemplateThumbnail from '../components/TemplateThumbnail';
+import { useEffect, useRef, useState } from 'react';
 
 /** L2 模块编号 → 中文名（新编号体系 v4：D 系列以图表类型为单位） */
 const MODULE_NAMES: Record<string, string> = {
@@ -70,252 +70,72 @@ const detailEntries = [
   { path: '/detail/modal', title: '弹窗详情页', desc: '弹窗承载详情，适合轻量信息查看确认', modules: ['G-1', 'G-2', 'DT-1', 'DT-2'] },
 ];
 
-/** 营销类页面模板占位：暂无实际页面，先建分区，后续补充具体模板 */
-const marketingEntries: { path: string; title: string; desc: string; modules: string[]; comingSoon?: boolean }[] = [
-  { path: '', title: '营销活动页', desc: '营销活动配置、优惠券管理等场景的页面模板正在规划中', modules: [], comingSoon: true },
+const groups = [
+  { id: 'dashboard', name: '数据看板', label: 'Dashboard', entries: dashboardEntries },
+  { id: 'list', name: '列表页', label: 'List pages', entries: listEntries },
+  { id: 'form', name: '表单页', label: 'Form pages', entries: formEntries },
+  { id: 'detail', name: '详情页', label: 'Detail pages', entries: detailEntries },
 ];
 
+/** Render the actual route at desktop size, loading previews near the viewport only. */
+function PagePreview({ path, title }: { path: string; title: string }) {
+  const host = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const node = host.current;
+    if (!node) return;
+    const resize = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    resize.observe(node);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
+    }, { rootMargin: '200px' });
+    observer.observe(node);
+    return () => { resize.disconnect(); observer.disconnect(); };
+  }, []);
+  const route = path === '/showcase/store-operations' ? '/examples/store-operations' : path;
+  return <div ref={host} className={styles.livePreview}>
+    {visible && width > 0 && <iframe title={`${title}实际页面预览`} src={`${route}?embedded=1`}
+      tabIndex={-1} aria-hidden="true" loading="lazy"
+      style={{ width: 1440, height: 900, transform: `scale(${width / 1440})` }} />}
+  </div>;
+}
+
 export default function Landing() {
-  return (
-    <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <div className={styles.heroTag}>
-            <span className={styles.heroTagDot} />
-            L1 - L2 - L3 三层架构
-          </div>
-          <h1 className={styles.heroTitle}>
-            <span className={styles.heroTitleAccent}>B-end </span>页面模板
-          </h1>
-          <p className={styles.heroSub}>
-            从真实业务场景出发，浏览页面结构、理解模块组合，再把设计知识用于生成。
-          </p>
+  return <div className={styles.page}>
+    <header className={styles.hero}>
+      <span className={styles.eyebrow}>B-END / PAGE TEMPLATES</span>
+      <h1>从完整页面开始。</h1>
+      <p>浏览真实业务场景中的页面结构，找到适合你的模板，再探索其中的模块组合。</p>
+      <nav className={styles.categories} aria-label="页面模板分类">
+        {groups.map(group => <a key={group.id} href={`#templates-${group.id}`}>
+          {group.name}<span>{group.entries.length}</span>
+        </a>)}
+      </nav>
+    </header>
+    <main className={styles.main}>
+      {groups.map(group => <section key={group.id} id={`templates-${group.id}`} className={styles.section}>
+        <header className={styles.sectionHeader}>
+          <h2>{group.name}</h2><span>{group.label} · {group.entries.length} 套模板</span>
+        </header>
+        <div className={styles.grid}>
+          {group.entries.map(item => <article key={item.path} className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div><span className={styles.eyebrow}>PAGE TEMPLATE</span><h3>{item.title}</h3><p>{item.desc}</p></div>
+              <Link to={item.path} className={styles.previewButton} aria-label={`预览${item.title}`}>查看页面 <span aria-hidden="true">↗</span></Link>
+            <details className={styles.composition}>
+              <summary>模块组合 <span>{item.modules.length} 个模块</span></summary>
+              <div className={styles.cardModules}>{item.modules.map(m => <span key={m}>{m} · {MODULE_NAMES[m] || m}</span>)}</div>
+            </details>
+            </div>
+            <Link to={item.path} className={styles.cardPreview} aria-label={`打开${item.title}`}>
+              <PagePreview path={item.path} title={item.title} />
+            </Link>
+          </article>)}
         </div>
-      </section>
-
-      <main className={styles.main}>
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>Dashboard</p>
-            <h2 className={styles.sectionTitle}>数据看板</h2>
-            <span className={styles.sectionCount}>4 套模板</span>
-          </div>
-          <div className={styles.grid}>
-            {dashboardEntries.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={styles.card}
-              >
-                <div className={styles.cardPreview}>
-                  <TemplateThumbnail path={item.path} />
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardArrow}>&#8599;</div>
-                  </div>
-                </div>
-                <div className={styles.cardInfo}>
-                  <h3 className={styles.cardTitle}>
-                    <span className={styles.cardIcon} style={{ background: 'color-mix(in srgb, var(--color-brand-primary, #166FF7) 15%, transparent)' }}>
-                      <span className={styles.cardIconInner} style={{ background: 'var(--color-brand-primary, #166FF7)' }} />
-                    </span>
-                    {item.title}
-                    {'tag' in item && <span className={styles.cardTag}>{(item as any).tag}</span>}
-                  </h3>
-                  <p className={styles.cardDesc}>{item.desc}</p>
-                  <div className={styles.cardModules}>
-                    {item.modules.map(m => (
-                      <span key={m} className={styles.cardModule}>
-                        <span className={styles.moduleCode}>{m}</span>
-                        <span className={styles.moduleName}>{MODULE_NAMES[m]}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>List Pages</p>
-            <h2 className={styles.sectionTitle}>列表页</h2>
-            <span className={styles.sectionCount}>4 套模板</span>
-          </div>
-          <div className={styles.grid}>
-            {listEntries.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={styles.card}
-              >
-                <div className={styles.cardPreview}>
-                  <TemplateThumbnail path={item.path} />
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardArrow}>&#8599;</div>
-                  </div>
-                </div>
-                <div className={styles.cardInfo}>
-                  <h3 className={styles.cardTitle}>
-                    <span className={styles.cardIcon} style={{ background: 'rgba(0, 168, 84, 0.15)' }}>
-                      <span className={styles.cardIconInner} style={{ background: '#00A854' }} />
-                    </span>
-                    {item.title}
-                  </h3>
-                  <p className={styles.cardDesc}>{item.desc}</p>
-                  <div className={styles.cardModules}>
-                    {item.modules.map(m => (
-                      <span key={m} className={styles.cardModule}>
-                        <span className={styles.moduleCode}>{m}</span>
-                        <span className={styles.moduleName}>{MODULE_NAMES[m]}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>Form Pages</p>
-            <h2 className={styles.sectionTitle}>表单页</h2>
-            <span className={styles.sectionCount}>5 套模板</span>
-          </div>
-          <div className={styles.grid}>
-            {formEntries.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={styles.card}
-              >
-                <div className={styles.cardPreview}>
-                  <TemplateThumbnail path={item.path} />
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardArrow}>&#8599;</div>
-                  </div>
-                </div>
-                <div className={styles.cardInfo}>
-                  <h3 className={styles.cardTitle}>
-                    <span className={styles.cardIcon} style={{ background: 'rgba(250, 140, 22, 0.15)' }}>
-                      <span className={styles.cardIconInner} style={{ background: '#FF7700' }} /* Orange-5 */ />
-                    </span>
-                    {item.title}
-                  </h3>
-                  <p className={styles.cardDesc}>{item.desc}</p>
-                  <div className={styles.cardModules}>
-                    {item.modules.map(m => (
-                      <span key={m} className={styles.cardModule}>
-                        <span className={styles.moduleCode}>{m}</span>
-                        <span className={styles.moduleName}>{MODULE_NAMES[m]}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>Detail Pages</p>
-            <h2 className={styles.sectionTitle}>详情页</h2>
-            <span className={styles.sectionCount}>4 套模板</span>
-          </div>
-          <div className={styles.grid}>
-            {detailEntries.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={styles.card}
-              >
-                <div className={styles.cardPreview}>
-                  <TemplateThumbnail path={item.path} />
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardArrow}>&#8599;</div>
-                  </div>
-                </div>
-                <div className={styles.cardInfo}>
-                  <h3 className={styles.cardTitle}>
-                    <span className={styles.cardIcon} style={{ background: 'rgba(114, 46, 209, 0.15)' }}>
-                      <span className={styles.cardIconInner} style={{ background: '#722ED1' }} />
-                    </span>
-                    {item.title}
-                  </h3>
-                  <p className={styles.cardDesc}>{item.desc}</p>
-                  <div className={styles.cardModules}>
-                    {item.modules.map(m => (
-                      <span key={m} className={styles.cardModule}>
-                        <span className={styles.moduleCode}>{m}</span>
-                        <span className={styles.moduleName}>{MODULE_NAMES[m]}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.sectionLabel}>Marketing Pages</p>
-            <h2 className={styles.sectionTitle}>营销类</h2>
-            <span className={styles.sectionCount}>规划中</span>
-          </div>
-          <div className={styles.grid}>
-            {marketingEntries.map((item) => (
-              <div
-                key={item.title}
-                className={`${styles.card} ${item.comingSoon ? styles.cardDisabled : ''}`}
-              >
-                <div className={styles.cardPreview}>
-                  <span className={styles.cardPreviewLabel}>
-                    {item.comingSoon ? '页面模板规划中' : '页面截图占位'}
-                  </span>
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardArrow}>&#8599;</div>
-                  </div>
-                </div>
-                <div className={styles.cardInfo}>
-                  <h3 className={styles.cardTitle}>
-                    <span className={styles.cardIcon} style={{ background: 'rgba(235, 47, 150, 0.15)' }}>
-                      <span className={styles.cardIconInner} style={{ background: '#EB2F96' }} />
-                    </span>
-                    {item.title}
-                    {item.comingSoon && <span className={styles.cardTag}>待补充</span>}
-                  </h3>
-                  <p className={styles.cardDesc}>{item.desc}</p>
-                  {item.modules.length > 0 && (
-                    <div className={styles.cardModules}>
-                      {item.modules.map(m => (
-                        <span key={m} className={styles.cardModule}>
-                          <span className={styles.moduleCode}>{m}</span>
-                          <span className={styles.moduleName}>{MODULE_NAMES[m]}</span>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <footer className={styles.footer}>
-        <span className={styles.footerText}>B端通用设计规范 v1.0</span>
-        <div className={styles.footerStats}>
-          <span className={styles.footerStat}>
-            <span className={styles.footerStatValue}>{dashboardEntries.length + listEntries.length + formEntries.length + detailEntries.length}</span> 页面模板
-          </span>
-          <span className={styles.footerStat}>
-            <span className={styles.footerStatValue}>5</span> 页面类型
-          </span>
-        </div>
-      </footer>
-    </div>
-  );
+      </section>)}
+      <aside className={styles.planned}><span>营销类模板</span><span>规划中</span></aside>
+    </main>
+    <footer className={styles.footer}>17 套页面模板 · 4 类业务场景<span>基于 MTD · 为页面生成而设计</span></footer>
+  </div>;
 }

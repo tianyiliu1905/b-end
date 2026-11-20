@@ -1,0 +1,14 @@
+{
+  "scope": "AI-1",
+  "fingerprint": "ab400778f1ac3599ab3e04e50152ee35bdb0620f5454e02d4e13f8c956041a13",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 AI模块与审批状态补齐；按实际本地交互、复制代码与知识规则核验，不宣称后端服务或全仓库已核验。",
+  "checks": {
+    "identity": "AI-1 目录、面板式/紧凑式注册、INDEX-ai、L2与 ConversationComposer/ComposerDemo 对齐；可移植实现与网站源代码逐文件核对，Spec含核心实现和CSS。",
+    "variants": "浏览器切换面板式和紧凑式；前者显示context条且3–10行，后者无context条且1–3行；复制两种各只有所选变体章节。",
+    "visual_tokens": "卡片padding16、border/radius语义token，controls gap8。蓝→黄→蓝实测发送按钮为 rgb(22,111,247)/白字、rgb(255,221,0)/深字，再恢复蓝；截图 docs/ai-modules/composer.png。",
+    "behavior": "实测空输入发送受aria-disabled标注且send guard不提交；失败时保留测试草稿和本地txt附件；取消失败模拟后Enter受理，反馈附件1个且清稿；停止生成、Shift+Enter换行、模式/模型切换后的payload已实测。附件超限、IME guard、pending锁静态核对，未模拟原生IME或浏览器超限文件。文件只本地选择，不上传。",
+    "copy_spec": "实际复制面板式与紧凑式，均含核心实现与CSS；从复制文本提取核心tsx并严格类型检查通过。",
+    "validation": "最终 npm run build --prefix b-end-showcase 通过（原有大包提示）；新增组件、taxonomy与从4个复制Spec提取的核心tsx严格独立tsc均通过。MTD远程查询进程退出失败，改核对已安装0.12.14的Input.TextArea/Select/Button/Tag类型与实现。浏览器库forwardRef警告仍存在。全工程既有类型错误未在本轮重做清理；未验证真实模型/上传/审批接口，因为尚未接入。"
+  }
+}

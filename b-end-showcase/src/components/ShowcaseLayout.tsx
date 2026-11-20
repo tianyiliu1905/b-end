@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Boxes, Layers3, LayoutTemplate, Search, PanelLeftClose, PanelLeftOpen, ArrowUpRight, Palette, X } from 'lucide-react';
 import { L2_CATEGORIES, L2_MODULES, getModulesByCategory } from '../data/l2Modules';
+import { getModuleTaxonomy } from '../data/moduleTaxonomy';
 import { themes, useTheme } from '../theme/useTheme';
 import './ShowcaseLayout.css';
-export const categoryLabels: Record<string, string> = {
-    'G-导航': '导航与共用', 'D-图表卡片': '数据可视化', 'W-工作台': '工作台',
-    '表单+详情': '表单 / 详情共用', '表单专属': '表单模块', '详情专属': '详情模块',
-};
 export default function ShowcaseLayout() {
     const [collapsed, setCollapsed] = useState(() => window.matchMedia('(max-width: 600px)').matches);
     const [query, setQuery] = useState('');
@@ -33,7 +30,13 @@ export default function ShowcaseLayout() {
         window.addEventListener('keydown', keydown);
         return () => window.removeEventListener('keydown', keydown);
     }, []);
-    const matches = (m: typeof L2_MODULES[number]) => [m.id, m.name, m.description, ...(m.triggers || [])].join(' ').toLowerCase().includes(query.trim().toLowerCase());
+    const matches = (m: typeof L2_MODULES[number]) => {
+        const taxonomy = getModuleTaxonomy(m.id);
+        const haystack = [m.id, m.name, m.description, ...(m.triggers || []), ...taxonomy.scenes, ...taxonomy.topics, taxonomy.category].join(' ').toLowerCase();
+        const needle = query.trim().toLowerCase();
+        // 英文按词首匹配，避免搜索 AI 时误命中 Detail。
+        return /^[a-z0-9+ -]+$/.test(needle) ? needle.split(/\s+/).every(part => haystack.split(/[^a-z0-9+-]+/).some(word => word.startsWith(part))) : haystack.includes(needle);
+    };
     return <div className={`showcase-shell ${collapsed ? 'is-collapsed' : ''}`}>
     <aside className="showcase-sidebar" aria-label="知识库目录">
       <div className="showcase-brand-row"><Link to="/" className="showcase-brand"><span className="showcase-mark"><Layers3 size={19}/></span>B-end<span className="showcase-beta">UI</span></Link>
@@ -50,7 +53,7 @@ export default function ShowcaseLayout() {
       <div className="showcase-directory" aria-live="polite">
         {L2_CATEGORIES.map(category => {
             const mods = getModulesByCategory(category).filter(matches);
-            return mods.length > 0 && <section key={category}><h2>{categoryLabels[category] || category}<span>{mods.length}</span></h2>
+            return mods.length > 0 && <section key={category}><h2>{category}<span>{mods.length}</span></h2>
             {mods.map(m => <NavLink key={m.id} to={`/modules/${m.id}`} title={m.name}><span>{m.name.replace(/ \(.*\)/, '')}</span><small>{m.id}</small></NavLink>)}
           </section>;
         })}

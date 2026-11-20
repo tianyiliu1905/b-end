@@ -1,0 +1,14 @@
+{
+  "scope": "Detail4",
+  "fingerprint": "f2839e2aa204870dd00366f80f9e97a727794970169b2e80b18645e691b8ac30",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 AI模块与审批状态补齐；按实际本地交互、复制代码与知识规则核验，不宣称后端服务或全仓库已核验。",
+  "checks": {
+    "identity": "Detail4 目录、三变体、详情专用索引和L1映射、ApprovalFlow受控只读核心与Demo对齐；Form4仍为填写向导。",
+    "variants": "审批中、已通过、已驳回均在浏览器切换/复制；终态无审批动作。",
+    "visual_tokens": "padding16、24px序号、节点gap20，标题16px、节点14px、意见12px/换行；黄色主题截图核对后恢复蓝。截图 docs/ai-modules/approval.png。",
+    "behavior": "浏览器实测空驳回意见提示必填；填写后驳回保留意见和前序节点；重置后连续两次通过，流转至下一节点再全部完成，终态通过按钮数量0。核心只读，Demo明确未接审批服务。真实权限、并发版本、pending/error提交由父页面/服务端契约约束，未宣称已实现后端。",
+    "copy_spec": "实际复制三变体分别只有当前变体，完整核心代码与CSS可提取；核心代码类型检查通过。",
+    "validation": "最终 npm run build --prefix b-end-showcase 通过（原有大包提示）；新增组件、taxonomy与从4个复制Spec提取的核心tsx严格独立tsc均通过。MTD远程查询进程退出失败，改核对已安装0.12.14的Input.TextArea/Select/Button/Tag类型与实现。浏览器库forwardRef警告仍存在。全工程既有类型错误未在本轮重做清理；未验证真实模型/上传/审批接口，因为尚未接入。"
+  }
+}

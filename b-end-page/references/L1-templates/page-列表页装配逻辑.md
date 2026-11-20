@@ -318,16 +318,16 @@ Prompt：「财务流水页，顶部显示总金额和订单数指标，下面�
 
 - 树节点点击 → 右侧表格数据联动刷新
 - 树支持展开/收起、搜索过滤
-- 树节点右键菜单（新增子节点/重命名/删除）
+- 按业务需要启用节点维护（新增子节点/重命名/删除），必须接入处理函数；只浏览分类时不显示维护按钮
 - 面包屑路径展示当前层级位置
 - 树节点可显示子项数量 badge
 
 **视觉**：
 
 - 左面板：白底，固定宽度 200-260px，overflow-y: auto
-- 选中节点：浅蓝底 + 蓝色文字
+- 选中节点：由 MTD 当前主题控制，不手写固定蓝色
 - 右面板：标准 CRUD 布局（筛选+操作栏+表格）
-- 左右之间：1px divider 竖线
+- 左右之间：使用 `--gap-module` 外部间距，不重复加竖向分割线
 
 **⚠️ 左右两栏等高 + 表格分页贴底（踩坑沉淀）**：
 
@@ -362,8 +362,28 @@ Prompt：「财务流水页，顶部显示总金额和订单数指标，下面�
 - [ ] 用 `mtd-tree`（非手写 ul/li）
 - [ ] 有面包屑路径提示
 - [ ] 树支持搜索/过滤
-- [ ] 支持新增/编辑/删除树节点
+- [ ] 按需接入新增/编辑/删除；只浏览分类时不显示无响应动作
 - [ ] 左右两栏等高，右侧表格 `flex:1 + minHeight:0` 逐层传递到 Table-wrapper，分页器贴底；容器同时保留 `minHeight` 兜底，不单独依赖 `flex:1`
+
+---
+
+### G-6 React API、状态与事件补充
+
+当前 `@ss/mtd-react3@0.12.14` 的 Tree：`nodeExpansion={{ defaultExpandAll: true }}`；`nodeSelection={{ selectedKeys: [selectedKey] }}`；`onSelectChange(keys)` 读取选中 key。不要把这些属性放在 Tree 顶层，也不要将 `onSelect` 的第一个 node 参数当成 keys。状态 Select 声明 `onlyKeyValue` 后 `onChange` 才返回值；否则返回选项对象。Vue 版本需单独查询 API。
+
+```tsx
+<Tree data={filteredNodes}
+  nodeExpansion={{ defaultExpandAll: true }}
+  nodeSelection={{ selectedKeys: [selectedKey] }}
+  onSelectChange={keys => { if (keys[0]) setSelectedKey(String(keys[0])); }}
+/>
+```
+
+- `nodes` 每项含稳定唯一 key、label 和可选 children；父页面持有 selectedKey、status 和结果数据。
+- 搜索递归保留匹配节点的祖先；匹配父分类时保留其子树。无匹配显示“没有匹配的分类”；清空恢复整棵树。搜索只过滤导航，不隐式重置当前业务选择。
+- 选中父分类匹配所有后代，“全部分类”恢复分类范围；与状态筛选取交集。分页型结果在切换分类/状态时回第一页；未选中时显示引导或使用明确的全部分类初值。
+- 分类节点维护为可选业务能力，不是 G-6 最小必备行为。
+- 展示站 G-6 和 `/list/tree` 共用 CategoryTreeExample，右侧少量静态记录演示真实过滤，不宣称是完整 G-4。完整管理页仍按 G-4 装配工具栏和分页。
 
 ---
 

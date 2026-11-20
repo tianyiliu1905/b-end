@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, ChevronRight, Code2, Eye, Monitor, RotateCcw, Ta
 import { modulePreviews, modulePreviewVariants, modulePreviewSubGroups } from '../components/modulePreviews';
 import { L2_MODULES, getModuleById, type L2Module } from '../data/l2Modules';
 import { getDesignSpec, hasDesignSpec } from '../data/designSpecs';
-import { categoryLabels } from '../components/ShowcaseLayout';
+import { getModuleTaxonomy } from '../data/moduleTaxonomy';
 import CopySpecButton from '../components/CopySpecButton';
 import styles from './ModuleDetail.module.css';
 function ModuleDocument({ mod }: {
@@ -25,9 +25,10 @@ function ModuleDocument({ mod }: {
     const position = L2_MODULES.findIndex(m => m.id === mod.id);
     const previous = L2_MODULES[position - 1], next = L2_MODULES[position + 1];
     return <article className={styles.content}>
-    <nav className={styles.breadcrumb} aria-label="面包屑"><Link to="/modules">模块库</Link><ChevronRight size={12}/><span>{categoryLabels[mod.category] || mod.category}</span><ChevronRight size={12}/><span>{mod.id}</span></nav>
+    <nav className={styles.breadcrumb} aria-label="面包屑"><Link to="/modules">模块库</Link><ChevronRight size={12}/><span>{getModuleTaxonomy(mod.id).category}</span><ChevronRight size={12}/><span>{mod.id}</span></nav>
     <div className={styles.heading}><h1>{mod.name.replace(/ \(.*\)/, '')}</h1><span className={styles.badge}>L2 MODULE</span></div>
     <p className={styles.description}>{mod.description}</p>
+    <div className={styles.tags}>{[...getModuleTaxonomy(mod.id).scenes, ...getModuleTaxonomy(mod.id).topics].map(tag => <span key={tag}>{tag}</span>)}</div>
     <div className={styles.specStrip}><Code2 size={15}/><code>{mod.id} <span>/</span> {mod.name.match(/\(([^)]+)\)/)?.[1] || 'MTD · Design Spec'}</code><CopySpecButton key={specId + (variant?.name || '')} moduleId={specId} variantName={variant?.name} className={styles.copyButton}/></div>
     <section className={styles.playground} aria-label="模块交互演示">
       <div className={styles.previewHeader}>

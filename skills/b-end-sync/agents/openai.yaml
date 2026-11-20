@@ -1,0 +1,6 @@
+interface:
+  display_name: "B 端展示与 Skill 同步"
+  short_description: "修改展示模块或页面时同步生成知识，并核验两端映射、内容漂移与语义一致性"
+  default_prompt: "使用 $b-end-sync 修改对应展示模块，并同步 B 端 Skill，验证本次范围的一致性。"
+policy:
+  allow_implicit_invocation: true

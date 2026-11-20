@@ -1,3 +1,4 @@
+import { TodoCardDemo, LatestUpdates, exampleUpdates, ToolGridDemo } from '../../components/WorkbenchModules';
 import { Button, Card, Carousel, Radio, Row, Col, Select, Tag, Table, Tabs } from '@ss/mtd-react3';
 import { BarChart3, CheckSquare, ClipboardList, FileSpreadsheet, ShoppingCart, Wallet, TrendingUp, Settings } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
@@ -171,44 +172,7 @@ export default function WorkbenchDashboard() {
 
           {/* W-7 常用工具 */}
           <ModuleWrapper moduleId="W-7 常用工具">
-            <div className="dash-card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ fontSize: 'var(--fs-16, 16px)', fontWeight: 'var(--fw-medium, 500)', color: 'var(--text-1, #111929)' }}>常用工具</span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                {[
-                  { title: '折扣活动', desc: '指定商品折扣价' },
-                  { title: '超值单品', desc: '任选1件享低价' },
-                  { title: 'X件优惠', desc: '多件折扣或立减' },
-                  { title: '商家券', desc: '满额立减优惠券' },
-                  { title: '新客立减', desc: '新客首单立减' },
-                  { title: '店铺满减', desc: '全店满额减' },
-                ].map((tool) => (
-                  <div
-                    key={tool.title}
-                    style={{
-                      border: '1px solid var(--border-color, #E5E7EB)',
-                      borderRadius: 'var(--radius-elem, 8px)',
-                      padding: '16px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 8,
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ width: 36, height: 36, borderRadius: 8, background: '#F3F4F6', flexShrink: 0 }} />
-                        <div>
-                          <div style={{ fontSize: 'var(--fs-14)', fontWeight: 'var(--fw-medium)', color: 'var(--text-1)' }}>{tool.title}</div>
-                          <div style={{ fontSize: 'var(--fs-12)', color: 'var(--text-3)', marginTop: 2 }}>{tool.desc}</div>
-                        </div>
-                      </div>
-                      <Button size="small">立即创建</Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ToolGridDemo />
           </ModuleWrapper>
 
           {/* Dashboard-1 指标卡片组 — 支持 3 种变体切换（工作台默认带迷你图） */}
@@ -305,23 +269,9 @@ export default function WorkbenchDashboard() {
 
         {/* ═══ 右侧边栏（固定宽度，sticky 跟随） ═══ */}
         <div style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 'var(--gap-module)', position: 'sticky', top: 16 }}>
-          {/* W-4 个人信息 */}
+          {/* W-4 今日待办 */}
           <ModuleWrapper moduleId="W-4 今日待办">
-            <Card style={{ marginBottom: 0 }} header={<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}><span>今日待办</span><span style={{ fontSize: 'var(--fs-12)', color: 'var(--text-3)', cursor: 'pointer' }}>更多</span></div>}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  { label: '待审批工单', count: '3 项', color: '#FF7700', btn: '去审批' },  /* Orange-5 */
-                  { label: '待处理工单', count: '5 项', color: 'var(--text-1)', btn: '去处理' },
-                  { label: '待回复咨询', count: '2 项', color: 'var(--text-1)', btn: '去回复' },
-                  { label: '本周目标', count: '85.6%', color: 'var(--color-green)', btn: '查看' },
-                ].map((item) => (
-                  <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 'var(--fs-13)', color: 'var(--text-3)' }}>{item.label}<span style={{ fontSize: 'var(--fs-13)', fontWeight: 600, color: item.color, marginLeft: 6 }}>{item.count}</span></span>
-                    <Button type="outline" size="small" style={{ minWidth: 64 }}>{item.btn}</Button>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            <TodoCardDemo />
           </ModuleWrapper>
 
           {/* W-5 公告通知 */}
@@ -371,17 +321,7 @@ export default function WorkbenchDashboard() {
 
           {/* W-6 最新动态 */}
           <ModuleWrapper moduleId="W-6 最新动态">
-            <Card style={{ marginBottom: 0 }} header="最新动态">
-              <div style={{ borderRadius: 8, overflow: 'hidden' }}>
-                <Carousel style={{ width: '100%' }} autoplay={true} arrow="never">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} style={{ height: 120, background: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: 'var(--fs-12)', color: '#9CA3AF' }}>动态 {i}</span>
-                    </div>
-                  ))}
-                </Carousel>
-              </div>
-            </Card>
+            <LatestUpdates slides={exampleUpdates} />
           </ModuleWrapper>
         </div>
       </div>

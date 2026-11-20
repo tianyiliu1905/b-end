@@ -1,0 +1,14 @@
+{
+  "scope": "G-6",
+  "fingerprint": "050b5b57b9b5677a7f5871113632ac895b2640060077b23173423aadefbb8933",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 模块身份与缺失预览修复；按项记录实际验证及限制，不代表全仓库已验证。",
+  "checks": {
+    "identity": "新增预览注册，与 /list/tree 共用 CategoryTreeExample / CategoryTreeNav；L1 §7.2、索引、复制 Spec 同步。 外壳现按功能分组，ID、预览注册和复制 key 保留；41条目录无重复无遗漏。",
+    "variants": "无独立变体；左树加状态，右侧少量静态记录演示过滤，明确非完整 G-4 管理页。",
+    "visual_tokens": "左栏240px，--gap-module 外部间距，dash-card，字段间距24；树选中由 MTD 当前主题控制。浏览器截图核对。",
+    "behavior": "实测全部7条、保洁2条、维修1条、生活服务3条；保洁+待审核1条；搜索不存在显示空态但保留结果选择，清空恢复完整树。/list/tree 实测保洁2条。修正 Tree nodeExpansion/nodeSelection/onSelectChange 与 Select onlyKeyValue API。",
+    "copy_spec": "实际复制标题 G-6 分类导航，含当前 React Tree API 和 Select onlyKeyValue 注意事项。",
+    "validation": "npm run build --prefix b-end-showcase 通过（原有大包提示）。全工程 tsc 受既有类型/未使用声明错误影响，新增三个组件未报错；MTD 在线查询进程失败，改以已安装 @ss/mtd-react3@0.12.14 类型与实现核对。浏览器五个模块及 /dashboard/workbench、/list/tree 已查看；库 forwardRef 警告仍存在。 最终归类后生产构建再次通过；三个新增共享组件与 moduleTaxonomy 独立类型检查通过。 最终独立 tsc（含 vite/client 类型）exit 0，最终生产构建 exit 0。"
+  }
+}

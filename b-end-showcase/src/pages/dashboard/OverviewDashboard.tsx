@@ -1,3 +1,4 @@
+import LiquidProgress from '../../components/LiquidProgress';
 import { useState } from 'react';
 import { Select, Button, Card, Table, Radio, Icon, Tag, Tabs } from '@ss/mtd-react3';
 import PageLayout from '../../components/PageLayout';
@@ -455,25 +456,7 @@ function RadarChart() {
 
 // D-13 水波球（Liquid）
 function LiquidGauge() {
-  const ratio = revenueTarget.actual / revenueTarget.target; // 0~1
-  const containerRef = useG2Chart(() => ({
-    type: 'liquid',
-    data: ratio,
-    style: { fill: chartPalette.c1, stroke: chartPalette.c1, outlineBorder: 4, outlineDistance: 6, waveLength: 128, textFill: '#fff', textFontSize: 20, textFontWeight: 700, contentText: `${(ratio * 100).toFixed(2)} %` },
-    axis: false,
-    legend: false,
-    tooltip: false,
-  }), []);
-  return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div ref={containerRef} style={{ width: 160, height: 160 }} />
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <div style={{ fontSize: 'var(--fs-12)', color: 'var(--text-2)' }}>
-          实际 <b>¥{revenueTarget.actual}万</b> / 目标 <b>¥{revenueTarget.target}万</b>
-        </div>
-      </div>
-    </div>
-  );
+  return <LiquidProgress actual={revenueTarget.actual} target={revenueTarget.target} />;
 }
 
 // D-14 热力图

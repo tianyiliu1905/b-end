@@ -1,0 +1,13 @@
+{
+  "scope": "shell",
+  "status": "partial-review",
+  "source_thread": "01a1aa67-140d-7442-9eac-1994d59d7a20",
+  "summary": "参考Widget手册的10px浅灰点阵、16px画布圆角与胶囊切换，应用于B-end模块预览和模板缩略图。",
+  "knowledge_sync": "展示外壳例外：未改变MTD组件、蓝黄业务Token或生成页设计规则，因此不修改b-end-page知识正文。",
+  "validation": "构建通过；浏览器检查D-1预览、Design Spec切换和模板缩略图；未认证全仓库一致性。",
+  "files": [
+    "b-end-showcase/src/pages/ModuleDetail.module.css",
+    "b-end-showcase/src/pages/Landing.module.css",
+    "b-end-showcase/src/components/ShowcaseLayout.css"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "AI-2",
+  "fingerprint": "7bcf9d18a5c27c15c543bf4e4e3350bf668b085b1138835dfc8113c111622884",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 AI模块与审批状态补齐；按实际本地交互、复制代码与知识规则核验，不宣称后端服务或全仓库已核验。",
+  "checks": {
+    "identity": "AI-2 目录、完整回答/失败重试注册、INDEX-ai、L2与 AiAnswer/AnswerDemo 对齐；D-11未替换。",
+    "variants": "完整回答和失败重试两种初态均通过浏览器切换；实际复制各只含对应变体。",
+    "visual_tokens": "卡片padding16，正文14px/1.8/pre-wrap，来源与动作margin16，用户消息灰底85%宽；截图通过浏览器查看，未修改全局token。",
+    "behavior": "实测模拟生成后停止，保留部分正文并可复制；失败变体重试进入正在生成；完整模拟流结束显示已完成，复制内容包含结束文案。离开页面清timer与安全链接分支静态核对。来源明确是组件参考而非门店业务依据；无模型请求。",
+    "copy_spec": "实际复制完整回答与失败重试，均只有当前变体并含核心tsx/CSS；提取核心代码类型检查通过。",
+    "validation": "最终 npm run build --prefix b-end-showcase 通过（原有大包提示）；新增组件、taxonomy与从4个复制Spec提取的核心tsx严格独立tsc均通过。MTD远程查询进程退出失败，改核对已安装0.12.14的Input.TextArea/Select/Button/Tag类型与实现。浏览器库forwardRef警告仍存在。全工程既有类型错误未在本轮重做清理；未验证真实模型/上传/审批接口，因为尚未接入。"
+  }
+}

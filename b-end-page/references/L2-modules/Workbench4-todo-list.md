@@ -52,7 +52,7 @@
     "count_color_urgent": "var(--color-red)",
     "count_color_normal": "var(--text-1)",
     "count_color_success": "var(--color-green)",
-    "btn_type": "outline",
+    "react_btn_type": "normal",
     "btn_size": "small",
     "btn_min_width": 64
   },
@@ -68,10 +68,11 @@
 {
   "items": [
     {
+      "id": "string (稳定业务标识)",
       "label": "string",
       "count": "string (如 '3 项' 或 '85.6%')",
-      "color": "string (计数颜色：紧急红/常规黑/达成绿)",
-      "btn": "string (按钮文案：去审批/去处理/去回复/查看)"
+      "tone": "urgent | normal | success",
+      "action": "string (按钮文案：去审批/去处理/去回复/查看)"
     }
   ]
 }
@@ -81,17 +82,17 @@
 
 ## 约束
 
-1. 固定出现在工作台页面右侧边栏（`position: sticky; top: 16px`），随主内容区滚动跟随。
+1. 放在工作台页面右侧 240px 边栏；由侧栏父容器设置 `position: sticky; top: 16px`，卡片不单独叠加 sticky。
 2. 标题栏右侧固定放「更多」文字入口，`cursor: pointer`，弱化配色（`--text-3`）。
 3. 每行左侧「标签+计数」在同一行内联展示，计数颜色按紧急程度区分：紧急用红、常规用主文本色、达成类指标用绿色。
-4. 每行右侧按钮统一用 `type="outline"` + `size="small"`，`minWidth: 64` 保证不同文案长度下按钮宽度一致对齐。
+4. 每行右侧按钮统一用 React `type="normal"`（默认描边外观）+ `size="small"`，`minWidth: 64` 保证不同文案长度下按钮宽度一致对齐。
 5. 无变体——保持单一形态，不做筛选/切换（工作台侧栏模块以轻量、信息密度低为原则）。
 6. 与 D 系图表模块不同，本模块无图表/无 ChartCard 依赖，是纯 Card + flex 布局的轻量列表。
 
 ---
 
 ## 自检
-- [ ] 卡片 sticky 定位，跟随主内容区滚动
+- [ ] 侧栏父容器 sticky 定位，卡片不重复叠加 sticky
 - [ ] 「更多」入口存在且样式弱化
 - [ ] 计数颜色按紧急/常规/达成三态区分
 - [ ] 按钮统一 outline + small + minWidth 对齐
@@ -128,18 +129,18 @@ import { Card, Button } from '@ss/mtd-react3'
   header={
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
       <span>今日待办</span>
-      <span style={{ fontSize: 'var(--fs-12)', color: 'var(--text-3)', cursor: 'pointer' }}>更多</span>
+      <Button size="small" shape="text" onClick={onMore} style={{ fontSize: 'var(--fs-12)', color: 'var(--text-3)' }}>更多</Button>
     </div>
   }
 >
   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
     {items.map((item) => (
-      <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontSize: 'var(--fs-12)', color: 'var(--text-3)' }}>
           {item.label}
-          <span style={{ fontSize: 'var(--fs-12)', fontWeight: 600, color: item.color, marginLeft: 6 }}>{item.count}</span>
+          <span style={{ fontSize: 'var(--fs-12)', fontWeight: 600, color: item.tone === 'urgent' ? 'var(--color-red)' : item.tone === 'success' ? 'var(--color-green)' : 'var(--text-1)', marginLeft: 6 }}>{item.count}</span>
         </span>
-        <Button type="outline" size="small" style={{ minWidth: 64 }}>{item.btn}</Button>
+        <Button type="normal" size="small" style={{ minWidth: 64 }} onClick={() => onAction(item.id)}>{item.action}</Button>
       </div>
     ))}
   </div>
@@ -154,16 +155,16 @@ import { Card, Button } from '@ss/mtd-react3'
     <template #header>
       <div class="todo-header">
         <span>今日待办</span>
-        <span class="more-link">更多</span>
+        <mtd-button size="small" shape="text" @click="onMore">更多</mtd-button>
       </div>
     </template>
     <div class="todo-rows">
-      <div v-for="item in items" :key="item.label" class="todo-row">
+      <div v-for="item in items" :key="item.id" class="todo-row">
         <span class="todo-label">
           {{ item.label }}
-          <span class="todo-count" :style="{ color: item.color }">{{ item.count }}</span>
+          <span class="todo-count" :style="{ color: item.tone === 'urgent' ? 'var(--color-red)' : item.tone === 'success' ? 'var(--color-green)' : 'var(--text-1)' }">{{ item.count }}</span>
         </span>
-        <mtd-button type="outline" size="small" style="min-width: 64px">{{ item.btn }}</mtd-button>
+        <mtd-button type="outline" size="small" style="min-width: 64px" @click="onAction(item.id)">{{ item.action }}</mtd-button>
       </div>
     </div>
   </mtd-card>
@@ -174,3 +175,7 @@ import { Card, Button } from '@ss/mtd-react3'
 
 - `Card` 的 `header` prop（React）传 JSX 时，内层需要自行加 `width: 100%` + `justifyContent: space-between`，Card 不会自动撑满头部。
 - 按钮 `minWidth: 64` 是为了防止「去审批/去处理/去回复/查看」等不同长度文案导致按钮宽度参差不齐。
+
+## 状态与事件
+
+`items` 由父页面持有，空集合显示“暂无待办”。`onAction(id)` 打开该类别的处理入口，`onMore()` 打开全部待办；不要在点击入口时自行减少计数或伪造审批成功。业务接入导航或异步动作后须处理加载和失败。预览与工作台示例共用 TodoCard；Demo 仅回显所选入口，未接真实工单。

@@ -44,7 +44,7 @@
   },
   "grid": {
     "display": "grid",
-    "grid_template_columns": "repeat(3, 1fr)",
+    "grid_template_columns": "repeat(3, minmax(0, 1fr))",
     "gap": 16
   },
   "tool_card": {
@@ -94,7 +94,7 @@
 
 ## 约束
 
-1. 固定 3 列网格（`grid-template-columns: repeat(3, 1fr)`），行数随工具数量自动换行，不做横向滚动。
+1. 固定 3 列网格（`grid-template-columns: repeat(3, minmax(0, 1fr))`），行数随工具数量自动换行，不做横向滚动。
 2. 每格结构固定：图标占位（36x36，浅灰底）→ 标题 → 描述文案 → 右下角小号「立即创建」按钮，四要素齐全，不可省略描述文案（这是与 W-3 的核心区别）。
 3. 卡片带描边（`1px solid`），区别于 D 系无边框卡片——W-7 的工具格需要视觉分隔以突出网格感。
 4. 头部标题纯静态展示，无筛选/操作控件。
@@ -104,7 +104,7 @@
 ---
 
 ## 自检
-- [ ] 3 列网格，`repeat(3, 1fr)`
+- [ ] 3 列网格，`repeat(3, minmax(0, 1fr))`
 - [ ] 每格含图标+标题+描述+按钮，四要素齐全
 - [ ] 卡片带 1px 描边，圆角引用 token
 - [ ] 头部无控件，纯标题
@@ -138,7 +138,7 @@ import { Button, Icon } from '@ss/mtd-react3'
 
 <div className="dash-card" style={{ padding: 16 }}>
   <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>常用工具</div>
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 }}>
     {tools.map(t => (
       <div
         key={t.id}
@@ -154,7 +154,7 @@ import { Button, Icon } from '@ss/mtd-react3'
         <div style={{ fontSize: 14, fontWeight: 600, marginTop: 8 }}>{t.title}</div>
         <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>{t.desc}</div>
         <div style={{ textAlign: 'right', marginTop: 8 }}>
-          <Button size="small">立即创建</Button>
+          <Button size="small" onClick={() => onCreate(t.id)}>立即创建</Button>
         </div>
       </div>
     ))}
@@ -176,7 +176,7 @@ import { Button, Icon } from '@ss/mtd-react3'
         <div class="tool-title">{{ t.title }}</div>
         <div class="tool-desc">{{ t.desc }}</div>
         <div class="tool-cta">
-          <mtd-button size="small" @click="onCreate(t)">立即创建</mtd-button>
+          <mtd-button size="small" @click="onCreate(t.id)">立即创建</mtd-button>
         </div>
       </div>
     </div>
@@ -191,7 +191,7 @@ import { Button, Icon } from '@ss/mtd-react3'
 }
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 .tool-card {
@@ -224,6 +224,10 @@ import { Button, Icon } from '@ss/mtd-react3'
 
 ## 踩坑笔记
 
-- 网格用原生 CSS Grid（`repeat(3, 1fr)`），不要用 24 栅格 `Row/Col` 拼三列——工具格宽度需完全均分，栅格 span 取整易出现像素级不对齐。
+- 网格用原生 CSS Grid（`repeat(3, minmax(0, 1fr))`），不要用 24 栅格 `Row/Col` 拼三列——工具格宽度需完全均分，栅格 span 取整易出现像素级不对齐。
 - 描述文案 `desc_text` 容易被漏写（对齐 W-3 时误删），务必保留，这是与 W-3 的关键区分点。
 - 按钮固定右下角对齐（`textAlign: 'right'` 包裹），不要跟标题同行。
+
+## 状态与事件
+
+`tools` 由父页面持有，空集合显示“暂无可用工具”。每项 id 必须稳定唯一。`onCreate(id)` 将工具标识交给父页面打开创建流程；点击入口不等于创建成功。图标、标题、说明、按钮纵向排列，说明区可伸展，按钮右下对齐；预览与工作台共用 ToolGrid。演示仅回显所选工具，不创建业务记录。

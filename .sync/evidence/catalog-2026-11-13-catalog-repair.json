@@ -1,0 +1,14 @@
+{
+  "scope": "catalog",
+  "reviewer": "Codex",
+  "summary": "展示目录外壳例外：功能主分类+场景筛选；不改变业务生成路由和模块规范。",
+  "checks": {
+    "identity": "moduleTaxonomy.ts 为唯一展示分组映射，侧栏、模块库、详情面包屑共用。41 个模块分组恰好一次，脚本核对无遗漏无重复。",
+    "variants": "没有新增业务变体；分类为7个功能组，页面筛选为全部/列表/看板/表单/详情/工作台。",
+    "visual_tokens": "保留展示站现有灰白文档外壳，只新增筛选按钮和场景标签；不将外壳颜色、卡片、目录形式写入 b-end-page 业务规范。截图 docs/catalog-repair/catalog.png。",
+    "behavior": "浏览器实测全部41、列表19、看板18、表单13、详情10、工作台10；空功能组隐藏。搜索 AI 只命中 D-11，不误命中 Detail；无匹配显示空态，清空恢复。",
+    "copy_spec": "列表卡片实际复制 G-1+G-2，URL 仍为 /modules，未触发卡片跳转；原 ID/Spec key 保留。",
+    "validation": "最终生产构建通过；归类映射完整性脚本通过；新增组件与 moduleTaxonomy 独立类型检查通过。全工程类型错误仍存在，不宣称整体通过。 最终独立 tsc（含 vite/client 类型）exit 0，最终生产构建 exit 0。"
+  },
+  "fingerprint": "1948f6dd429ef50f0f2980ae069d02a144cb00e40e33c0ba74a76be8f3ae1bb9"
+}

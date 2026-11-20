@@ -136,7 +136,7 @@
 }
 .showcase-directory {
   overflow:auto;
-  scrollbar-width:thin;
+  scrollbar-width:none;
   flex:1;
   padding-right:2px
 }
@@ -294,3 +294,12 @@
 .showcase-theme button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 5px; background: transparent; padding: 7px 5px; color: #85868e; font-size: 11px; cursor: pointer; }
 .showcase-theme button[aria-pressed="true"] { background: #fff; color: #303138; box-shadow: 0 1px 3px #0000000d; }
 .showcase-theme button > span { width: 7px; height: 7px; border-radius: 50%; }
+
+/* Preview surfaces follow the Widget manual's light, dense dot grid. */
+.showcase-shell { --showcase-preview-paper: #fdfdfd; --showcase-preview-dot: #e3e3e3; }
+.showcase-search:focus-within { outline-color: #949494; }
+.showcase-shell button:focus-visible,
+.showcase-shell a:focus-visible,
+.showcase-shell select:focus-visible { outline-color: #949494; }
+
+.showcase-directory::-webkit-scrollbar { display: none; }

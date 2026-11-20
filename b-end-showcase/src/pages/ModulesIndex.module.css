@@ -142,3 +142,10 @@
     grid-template-columns:1fr
   }
 }
+
+.filters { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+.filters button { padding:7px 12px; border:1px solid #e8e8ec; border-radius:6px; background:#fff; color:#676872; cursor:pointer; font-size:12px; }
+.filters button[aria-pressed="true"] { background:#26272d; color:#fff; border-color:#26272d; }
+.filters button:focus-visible { outline:2px solid #676872; outline-offset:3px; }
+.sceneTags { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.sceneTags span { font-size:10px; color:#676872; padding:3px 6px; border-radius:4px; background:#f4f4f6; }

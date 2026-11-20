@@ -231,6 +231,583 @@ function buildHeaderVariantSpecs(title: string, opts?: { filterOptions?: string[
    模块 Spec 数据
    ═══════════════════════════════════════════════════════════════ */
 const designSpecs: Record<string, DesignSpec> = {
+  'Detail4': {
+    summary: '只读审批节点与状态',
+    baseSpec: `## Detail4 审批状态流程 (Approval Flow)
+
+## 用途与边界
+
+详情页回显真实业务审批节点、处理人和意见；区别于 Form4 线性填写步骤条、FD2 当前状态标签和 MTD Timeline 操作日志。自身只读，不包含审批提交；动作交由 Form1 或父页面。
+
+## 输入
+
+\`state: pending | approved | rejected\`；\`nodes: {id,title,owner,state: pending | current | approved | rejected,comment?}[]\`。可选 title 指定流程名。稳定id；一个进行中流程至多一个current；通过时全部已通过；驳回时保留前序结果和后续未执行节点。由服务端当前状态驱动，不根据数组下标猜测审批权限。
+
+## 布局与组合
+
+白底1px --border、--radius-3圆角、padding16。标题16px配整体状态Tag，节点列表纵向gap20；24px序号圆点、14px标题、12px处理人与意见。当前节点用语义强调色并有文字，驳回文字红色；颜色不能替代状态文字。长意见换行，空节点显示暂无审批流程。
+
+落地页或抽屉均可承载，通常置于FD2/Detail2之后；详情字段多时可放入Detail1的审批面板。表单填写顺序仍用Form4，不能将审批节点做成可点击跳转。
+
+## 状态
+
+审批中、已通过、已驳回为三个真实状态和展示变体；停止/挂起/撤回不在此轮状态集中，有需求时显式扩展，不能硬映射成驳回。
+
+## 事件
+
+ApprovalFlow 无提交事件。父页面操作区按权限与当前节点开放通过/驳回，驳回原因必填；请求pending禁用重复提交；失败保留意见和旧流程；成功后按服务端新版本更新FD2、Detail4及审批记录。无权限只读。
+
+演示控制器只有本地状态：通过将current标为approved并使下一节点current，最后节点后整体approved；驳回无原因显示错误，有原因记录并结束；终态隐藏审批按钮。重置仅重置演示，不是生产“撤销审批”。
+
+## 约束与验证
+
+预览的“通过/驳回（演示）”明确标注未接审批服务。业务授权、并发版本、重复请求与审计结果须由服务端校验。不得把前端点击视为真正审批成功。
+
+## 实现映射与代码
+
+MTD Tag + 原生有序列表；动作示例用Button/Input.TextArea。完整代码 \`../implementations/ApprovalFlow.tsx\`，共用 \`../implementations/AiModules.css\`；生成时只读使用ApprovalFlow，Demo仅作本地交互验证。
+
+\`\`\`tsx
+<ApprovalFlow state={approval.state} nodes={approval.nodes} />
+// Form1 / 父页面承接 onApprove/onReject 并在请求成功后替换 approval。
+\`\`\`
+
+React Button合法业务type为normal/primary/danger等；TextArea需按真实textarea读取值。Vue需独立查询组件API。
+
+## 可复制核心实现
+以下保存为独立 .tsx 文件，样式另存为同目录 AiModules.css；父页面提供文档约定的状态和事件。
+
+\`\`\`tsx
+import { Tag } from '@ss/mtd-react3';
+import './AiModules.css';
+export type ApprovalState = 'pending' | 'approved' | 'rejected';
+export interface ApprovalNode { id: string; title: string; owner: string; state: 'pending' | 'current' | 'approved' | 'rejected'; comment?: string }
+/** Detail4 是业务状态回显，不负责校验审批权限或直接提交审批。 */
+export function ApprovalFlow({ state, nodes, title = '审批流程' }: { state: ApprovalState; nodes: ApprovalNode[]; title?: string }) {
+  const label = { pending: '审批中', approved: '已通过', rejected: '已驳回' };
+  const nodeLabel = { pending: '待处理', current: '待审批', approved: '已通过', rejected: '已驳回' };
+  return <section className="ai-module" aria-label="审批状态流程">
+    <header className="ai-section-header"><strong>{title}</strong><Tag theme={state === 'approved' ? 'green' : state === 'rejected' ? 'red' : 'orange'}>{label[state]}</Tag></header>
+    {nodes.length ? <ol className="approval-flow">{nodes.map((node, index) => <li key={node.id}>
+      <span className={\`approval-number approval-number--\${node.state}\`} aria-hidden="true">{index + 1}</span>
+      <div><strong>{node.title}</strong><p>{node.owner} · {nodeLabel[node.state]}</p>{node.comment && <p className="approval-comment">审批意见：{node.comment}</p>}</div>
+      {node.state === 'current' && <span className="approval-current">当前节点</span>}
+    </li>)}</ol> : <p className="ai-hint">暂无审批流程</p>}
+  </section>;
+}
+\`\`\`
+
+### AiModules.css
+\`\`\`css
+.ai-demo { width:100%; min-width:0; color:var(--text-1); font-size:var(--fs-14); }
+.ai-demo-note { margin:0 0 12px; color:var(--text-3); font-size:var(--fs-12); line-height:1.6; }
+.ai-module { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-3); padding:16px; min-width:0; }
+.ai-context, .ai-section-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+.ai-context { color:var(--text-3); font-size:var(--fs-12); padding-bottom:12px; border-bottom:1px solid var(--border); }
+.ai-section-header strong { font-size:var(--fs-16); font-weight:600; }
+.ai-section-header > span { color:var(--text-3); font-size:var(--fs-12); }
+.ai-composer-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
+.ai-control-spacer { flex:1; }
+.ai-attach { position:relative; display:inline-flex; align-items:center; min-height:32px; padding:0 8px; color:var(--text-2); cursor:pointer; border-radius:4px; }
+.ai-attach:hover { background:var(--bg-page); }
+.ai-attach:focus-within { outline:2px solid var(--color-brand-primary); outline-offset:2px; }
+.ai-attach input { position:absolute; width:1px; height:1px; opacity:0; }
+.ai-attach.is-disabled { opacity:.5; cursor:default; }
+.ai-attachments { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0 0 12px; }
+.ai-attachments li { display:flex; gap:4px; align-items:center; padding:4px 8px; background:var(--bg-page); border-radius:4px; max-width:100%; }
+.ai-attachments li > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+.ai-hint { font-size:var(--fs-12); line-height:1.7; color:var(--text-3); margin:10px 0 0; overflow-wrap:anywhere; }
+.ai-feedback { font-size:var(--fs-12); color:var(--color-red); margin:10px 0 0; }
+.ai-demo-toggle { display:flex; align-items:center; gap:6px; margin-top:12px; font-size:var(--fs-12); color:var(--text-3); }
+.ai-user-message { margin:0 0 16px auto; background:var(--bg-page); border-radius:var(--radius-3); padding:12px 16px; max-width:85%; line-height:1.7; }
+.ai-answer-text { line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere; }
+.ai-sources { font-size:var(--fs-12); margin-top:16px; color:var(--text-3); }
+.ai-sources ol { padding-left:20px; margin:8px 0 0; }
+.ai-sources a { color:var(--color-heading-accent); }
+.ai-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; }
+.ai-actions > span { font-size:var(--fs-12); color:var(--text-3); }
+.ai-step-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px; }
+.ai-step-list li { display:flex; align-items:center; gap:10px; }
+.ai-step-list li > span:last-child { margin-left:auto; color:var(--text-3); font-size:var(--fs-12); }
+.ai-state-dot { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:var(--border); }
+.ai-state-dot--running { background:var(--color-brand-primary); }
+.ai-state-dot--completed { background:var(--color-green); }
+.ai-state-dot--failed { background:var(--color-red); }
+.ai-confirmation { padding:12px; background:var(--bg-page); border-radius:4px; margin-top:16px; }
+.ai-confirmation p { font-size:var(--fs-12); line-height:1.7; color:var(--text-2); margin:8px 0 12px; }
+.approval-flow { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:20px; }
+.approval-flow li { display:flex; align-items:flex-start; gap:12px; }
+.approval-flow li > div { flex:1; min-width:0; }
+.approval-flow strong { font-size:var(--fs-14); font-weight:500; }
+.approval-flow p { font-size:var(--fs-12); color:var(--text-3); line-height:1.7; margin:4px 0 0; overflow-wrap:anywhere; }
+.approval-number { display:flex; align-items:center; justify-content:center; width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--bg-page); color:var(--text-3); font-size:12px; }
+.approval-number--current { background:var(--color-primary-4); color:var(--color-heading-accent); }
+.approval-number--approved { color:var(--color-green); }
+.approval-number--rejected { color:var(--color-red); }
+.approval-current { color:var(--color-heading-accent); font-size:var(--fs-12); }
+.approval-actions { margin:16px 0; }
+.approval-actions > label { display:block; font-size:var(--fs-12); margin-bottom:8px; }
+@media(max-width:600px) { .ai-composer-controls { align-items:stretch; } .ai-control-spacer { display:none; } }
+\`\`\`
+${TOKEN_APPENDIX}`,
+    variants: {
+      '审批中': `### 变体：审批中
+state=pending，至多一个current；动作交给父页面。`,
+      '已通过': `### 变体：已通过
+state=approved，全部节点approved；纯只读。`,
+      '已驳回': `### 变体：已驳回
+state=rejected，保留驳回节点comment、前序结果和未执行后续节点。`,
+    },
+  },
+
+  'AI-3': {
+    summary: '公开步骤与执行确认',
+    baseSpec: `## AI-3 智能体执行 (Agent Task)
+
+## 用途与边界
+
+展示公开任务步骤、工具执行状态和确认门槛。不是 Form4 填写向导，也不是模型内部思考面板；不是因选择“规划/辅助模式”就授予工具权限。
+
+## 输入
+
+\`state: idle | running | awaiting_confirmation | completed | failed | cancelled\`；\`steps: {id,title,state: pending | running | completed | failed}[]\`；onConfirm/onCancel/onRetry 可选。父页面持有 runId 和服务端结果。可选 title 指定真实任务名，confirmation: {title, description} 说明确认的工具、目标与影响；演示题材通过这些参数传入，不固化为业务规范。
+
+## 布局与组合
+
+白底1px边框、--radius-3、padding16。头部16px标题+状态Tag；步骤纵向gap16，左8px状态点、正文14px、右12px文字状态。颜色不是唯一状态提示。确认区灰底padding12、间距16，描述工具、对象和影响；错误文案12px红色。记录默认折叠。
+
+## 状态
+
+未开始无执行结果；running显示当前步骤；awaiting_confirmation必须停在确认前，不自动继续；completed只在全部已确认完成时展示；failed保留此前完成步骤；cancelled保留结果但不能继续推进旧任务。
+
+## 事件
+
+onConfirm 只允许当前待确认任务，真实确认需服务端验证工具/对象/权限并返回新状态。onCancel 取消真实请求，隔离迟到结果；onRetry 从失败步骤恢复，不能把已完成步骤重复执行当作默认。缺处理函数按钮禁用。展开记录只改变显示，不触发业务操作。
+
+## 约束与验证
+
+预览使用“推进一步”模拟事件，无网络请求。第一步读取→第二步分析→等待确认→完成；失败可重试当前步骤，取消后只能重新演示。核心 AgentTask 是受控显示组件，Demo 不是生产调度器。公开记录不能输出隐藏思考。
+
+有效显示变体：任务执行、等待确认、失败重试；三者共享同一受控组件。
+
+## 实现映射与代码
+
+MTD Tag、Button + 有序公开步骤。完整实现 \`../implementations/AiConversationModules.tsx\` 中 AgentTask / AgentTaskDemo，样式 AiModules.css。
+
+\`\`\`tsx
+<AgentTask state={run.state} steps={run.steps}
+  onConfirm={() => confirmRun(run.id)} onCancel={() => cancelRun(run.id)}
+  onRetry={() => retryFailedStep(run.id)} />
+\`\`\`
+
+真实状态转移、权限、幂等与取消结果需在跨模块契约声明，不能把语义事件直接当 MTD 原生属性。
+
+## 可复制核心实现
+以下保存为独立 .tsx 文件，样式另存为同目录 AiModules.css；父页面提供文档约定的状态和事件。
+
+\`\`\`tsx
+import { useState } from 'react';
+import { Button, Tag } from '@ss/mtd-react3';
+import './AiModules.css';
+export type AgentState = 'idle' | 'running' | 'awaiting_confirmation' | 'completed' | 'failed' | 'cancelled';
+export interface AgentStep { id: string; title: string; state: 'pending' | 'running' | 'completed' | 'failed' }
+export function AgentTask({ state, steps, title = '智能体执行', confirmation, onConfirm, onCancel, onRetry }: { state: AgentState; steps: AgentStep[]; title?: string; confirmation?: { title: string; description: string }; onConfirm?: () => void; onCancel?: () => void; onRetry?: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const labels: Record<AgentState, string> = { idle: '尚未开始', running: '正在执行', awaiting_confirmation: '等待确认', completed: '执行完成', failed: '执行失败', cancelled: '已取消' };
+  const stepLabels = { pending: '待执行', running: '进行中', completed: '已完成', failed: '失败' };
+  return <section className="ai-module" aria-label="智能体执行进度">
+    <header className="ai-section-header"><strong>{title}</strong><Tag theme={state === 'failed' ? 'red' : state === 'completed' ? 'green' : 'gray'}>{labels[state]}</Tag></header>
+    <ol className="ai-step-list">{steps.map(step => <li key={step.id}><span className={\`ai-state-dot ai-state-dot--\${step.state}\`} /><span>{step.title}</span><span>{stepLabels[step.state]}</span></li>)}</ol>
+    {state === 'awaiting_confirmation' && <div className="ai-confirmation"><strong>{confirmation?.title || '是否继续执行当前操作？'}</strong><p>{confirmation?.description || '继续前请核对操作对象和影响范围。'}</p><Button type="primary" size="small" onClick={onConfirm} disabled={!onConfirm} aria-disabled={!onConfirm}>确认继续</Button></div>}
+    {state === 'failed' && <p className="ai-feedback" role="alert">分析步骤失败，已保留此前完成的步骤。</p>}
+    <div className="ai-actions">
+      {['running', 'awaiting_confirmation'].includes(state) && <Button size="small" onClick={onCancel} disabled={!onCancel} aria-disabled={!onCancel}>取消任务</Button>}
+      {state === 'failed' && <Button size="small" onClick={onRetry} disabled={!onRetry} aria-disabled={!onRetry}>重试任务</Button>}
+      <Button size="small" shape="text" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}>{expanded ? '收起执行记录' : '查看执行记录'}</Button>
+    </div>
+    {expanded && <p className="ai-hint">仅展示公开步骤与执行状态，不展示模型内部思考。当前状态：{labels[state]}。</p>}
+  </section>;
+}
+\`\`\`
+
+### AiModules.css
+\`\`\`css
+.ai-demo { width:100%; min-width:0; color:var(--text-1); font-size:var(--fs-14); }
+.ai-demo-note { margin:0 0 12px; color:var(--text-3); font-size:var(--fs-12); line-height:1.6; }
+.ai-module { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-3); padding:16px; min-width:0; }
+.ai-context, .ai-section-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+.ai-context { color:var(--text-3); font-size:var(--fs-12); padding-bottom:12px; border-bottom:1px solid var(--border); }
+.ai-section-header strong { font-size:var(--fs-16); font-weight:600; }
+.ai-section-header > span { color:var(--text-3); font-size:var(--fs-12); }
+.ai-composer-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
+.ai-control-spacer { flex:1; }
+.ai-attach { position:relative; display:inline-flex; align-items:center; min-height:32px; padding:0 8px; color:var(--text-2); cursor:pointer; border-radius:4px; }
+.ai-attach:hover { background:var(--bg-page); }
+.ai-attach:focus-within { outline:2px solid var(--color-brand-primary); outline-offset:2px; }
+.ai-attach input { position:absolute; width:1px; height:1px; opacity:0; }
+.ai-attach.is-disabled { opacity:.5; cursor:default; }
+.ai-attachments { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0 0 12px; }
+.ai-attachments li { display:flex; gap:4px; align-items:center; padding:4px 8px; background:var(--bg-page); border-radius:4px; max-width:100%; }
+.ai-attachments li > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+.ai-hint { font-size:var(--fs-12); line-height:1.7; color:var(--text-3); margin:10px 0 0; overflow-wrap:anywhere; }
+.ai-feedback { font-size:var(--fs-12); color:var(--color-red); margin:10px 0 0; }
+.ai-demo-toggle { display:flex; align-items:center; gap:6px; margin-top:12px; font-size:var(--fs-12); color:var(--text-3); }
+.ai-user-message { margin:0 0 16px auto; background:var(--bg-page); border-radius:var(--radius-3); padding:12px 16px; max-width:85%; line-height:1.7; }
+.ai-answer-text { line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere; }
+.ai-sources { font-size:var(--fs-12); margin-top:16px; color:var(--text-3); }
+.ai-sources ol { padding-left:20px; margin:8px 0 0; }
+.ai-sources a { color:var(--color-heading-accent); }
+.ai-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; }
+.ai-actions > span { font-size:var(--fs-12); color:var(--text-3); }
+.ai-step-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px; }
+.ai-step-list li { display:flex; align-items:center; gap:10px; }
+.ai-step-list li > span:last-child { margin-left:auto; color:var(--text-3); font-size:var(--fs-12); }
+.ai-state-dot { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:var(--border); }
+.ai-state-dot--running { background:var(--color-brand-primary); }
+.ai-state-dot--completed { background:var(--color-green); }
+.ai-state-dot--failed { background:var(--color-red); }
+.ai-confirmation { padding:12px; background:var(--bg-page); border-radius:4px; margin-top:16px; }
+.ai-confirmation p { font-size:var(--fs-12); line-height:1.7; color:var(--text-2); margin:8px 0 12px; }
+.approval-flow { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:20px; }
+.approval-flow li { display:flex; align-items:flex-start; gap:12px; }
+.approval-flow li > div { flex:1; min-width:0; }
+.approval-flow strong { font-size:var(--fs-14); font-weight:500; }
+.approval-flow p { font-size:var(--fs-12); color:var(--text-3); line-height:1.7; margin:4px 0 0; overflow-wrap:anywhere; }
+.approval-number { display:flex; align-items:center; justify-content:center; width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--bg-page); color:var(--text-3); font-size:12px; }
+.approval-number--current { background:var(--color-primary-4); color:var(--color-heading-accent); }
+.approval-number--approved { color:var(--color-green); }
+.approval-number--rejected { color:var(--color-red); }
+.approval-current { color:var(--color-heading-accent); font-size:var(--fs-12); }
+.approval-actions { margin:16px 0; }
+.approval-actions > label { display:block; font-size:var(--fs-12); margin-bottom:8px; }
+@media(max-width:600px) { .ai-composer-controls { align-items:stretch; } .ai-control-spacer { display:none; } }
+\`\`\`
+${TOKEN_APPENDIX}`,
+    variants: {
+      '任务执行': `### 变体：任务执行
+初态idle；开始→running；服务端事件推进步骤。`,
+      '等待确认': `### 变体：等待确认
+初态awaiting_confirmation，前两步已完成、末步pending；确认前不得自动执行。`,
+      '失败重试': `### 变体：失败重试
+初态failed，保留已完成步骤；仅失败步骤恢复running。`,
+    },
+  },
+
+  'AI-2': {
+    summary: '文本回答、来源与重试',
+    baseSpec: `## AI-2 消息与回答 (AI Answer)
+
+## 用途与边界
+
+展示用户消息和助手文本回答，覆盖逐段生成、完成、停止与失败，带引用来源、复制和重新生成。不同于 D-11 静态诊断摘要。本轮纯文本默认转义，不支持把任意模型 HTML 直接插入 DOM。
+
+## 输入
+
+AiAnswer 接收 \`text: string\`、\`state: streaming | completed | stopped | failed\`、可选 \`sources: {id,title,href}[]\`、onRetry/onStop。父页面持有消息和 runId。来源必须有真实依据；没有来源就隐藏，不编造业务知识库。演示来源明确标为“组件参考：BoardUI（非业务依据）”。
+
+## 布局与组合
+
+白底、1px --border、--radius-3、padding16。头部助手名称和状态，名称16px；正文14px、1.8行高、pre-wrap换行、长文本折行。来源与操作各在下方间距16px，12px辅助字号。用户消息灰底、最大85%宽、右对齐。颜色用语义 token。
+
+## 状态
+
+streaming 时 aria-busy=true，空文本显示准备提示；completed 正常完成；stopped 保留已有文本；failed 无文本时显示可重试提示，有文本时保留。状态仅代表父页面传入结果，不推导真实后端成功。
+
+## 事件
+
+复制仅复制正文，空文本禁用；clipboard 失败显示手动复制提示。流式状态显示停止，终态显示重试/重新生成；未传处理函数时按钮禁用。父页面负责真正取消流、隔离旧 runId 和替换新回答，而非无条件追加重复消息。
+
+## 约束与验证
+
+sources 链接仅允许 http/https，其余显示为不可用文本；默认 React 转义，不解析原始 HTML。完整回答与失败重试是演示初态，不是两个不同消息结构。演示重新生成每100ms追加6个字符，停止清除 interval，卸载清除定时器；真实业务用实际数据流替换，不继承此节奏为视觉规范。
+
+## 实现映射与代码
+
+MTD Button + 原生安全文本/链接，回答不是 MTD TextArea。完整实现 \`../implementations/AiConversationModules.tsx\` 的 AiAnswer / AnswerDemo，样式 AiModules.css。
+
+\`\`\`tsx
+<AiAnswer text={message.text} state={message.state} sources={message.sources}
+  onRetry={() => retryMessage(message.id)} onStop={() => cancelRun(message.runId)} />
+\`\`\`
+
+查询 Button 的已安装 API；复制浏览器依赖 navigator.clipboard，失败处理必须保留。
+
+## 可复制核心实现
+以下保存为独立 .tsx 文件，样式另存为同目录 AiModules.css；父页面提供文档约定的状态和事件。
+
+\`\`\`tsx
+import { useEffect, useState } from 'react';
+import { Button } from '@ss/mtd-react3';
+import './AiModules.css';
+export type AnswerState = 'streaming' | 'completed' | 'stopped' | 'failed';
+export interface AnswerSource { id: string; title: string; href: string }
+export function AiAnswer({ text, state, sources = [], onRetry, onStop }: { text: string; state: AnswerState; sources?: AnswerSource[]; onRetry?: () => void; onStop?: () => void }) {
+  const [feedback, setFeedback] = useState('');
+  useEffect(() => setFeedback(''), [text, state]);
+  const labels: Record<AnswerState, string> = { streaming: '正在生成', completed: '已完成', stopped: '已停止', failed: '生成失败' };
+  return <article className="ai-module ai-answer" aria-label="助手回答" aria-busy={state === 'streaming'}>
+    <header className="ai-section-header"><strong>助手</strong><span role="status">{labels[state]}</span></header>
+    <div className="ai-answer-text">{text || (state === 'streaming' ? '正在准备回答…' : state === 'failed' ? '没有收到回答，请重试。' : '暂无回答')}</div>
+    {sources.length > 0 && <div className="ai-sources"><span>参考来源</span><ol>{sources.map(source => <li key={source.id}>{/^https?:\\/\\//.test(source.href) ? <a href={source.href} target="_blank" rel="noreferrer">{source.title}</a> : <span>{source.title}（链接不可用）</span>}</li>)}</ol></div>}
+    <footer className="ai-actions">
+      <Button size="small" disabled={!text} aria-disabled={!text} onClick={async () => {
+        try { await navigator.clipboard.writeText(text); setFeedback('回答已复制'); } catch { setFeedback('复制失败，请选择文本复制'); }
+      }}>复制回答</Button>
+      {state === 'streaming' ? <Button size="small" disabled={!onStop} aria-disabled={!onStop} onClick={onStop}>停止生成</Button> : <Button size="small" disabled={!onRetry} aria-disabled={!onRetry} onClick={onRetry}>{state === 'failed' ? '重试生成' : '重新生成'}</Button>}
+      {feedback && <span role="status">{feedback}</span>}
+    </footer>
+  </article>;
+}
+\`\`\`
+
+### AiModules.css
+\`\`\`css
+.ai-demo { width:100%; min-width:0; color:var(--text-1); font-size:var(--fs-14); }
+.ai-demo-note { margin:0 0 12px; color:var(--text-3); font-size:var(--fs-12); line-height:1.6; }
+.ai-module { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-3); padding:16px; min-width:0; }
+.ai-context, .ai-section-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+.ai-context { color:var(--text-3); font-size:var(--fs-12); padding-bottom:12px; border-bottom:1px solid var(--border); }
+.ai-section-header strong { font-size:var(--fs-16); font-weight:600; }
+.ai-section-header > span { color:var(--text-3); font-size:var(--fs-12); }
+.ai-composer-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
+.ai-control-spacer { flex:1; }
+.ai-attach { position:relative; display:inline-flex; align-items:center; min-height:32px; padding:0 8px; color:var(--text-2); cursor:pointer; border-radius:4px; }
+.ai-attach:hover { background:var(--bg-page); }
+.ai-attach:focus-within { outline:2px solid var(--color-brand-primary); outline-offset:2px; }
+.ai-attach input { position:absolute; width:1px; height:1px; opacity:0; }
+.ai-attach.is-disabled { opacity:.5; cursor:default; }
+.ai-attachments { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0 0 12px; }
+.ai-attachments li { display:flex; gap:4px; align-items:center; padding:4px 8px; background:var(--bg-page); border-radius:4px; max-width:100%; }
+.ai-attachments li > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+.ai-hint { font-size:var(--fs-12); line-height:1.7; color:var(--text-3); margin:10px 0 0; overflow-wrap:anywhere; }
+.ai-feedback { font-size:var(--fs-12); color:var(--color-red); margin:10px 0 0; }
+.ai-demo-toggle { display:flex; align-items:center; gap:6px; margin-top:12px; font-size:var(--fs-12); color:var(--text-3); }
+.ai-user-message { margin:0 0 16px auto; background:var(--bg-page); border-radius:var(--radius-3); padding:12px 16px; max-width:85%; line-height:1.7; }
+.ai-answer-text { line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere; }
+.ai-sources { font-size:var(--fs-12); margin-top:16px; color:var(--text-3); }
+.ai-sources ol { padding-left:20px; margin:8px 0 0; }
+.ai-sources a { color:var(--color-heading-accent); }
+.ai-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; }
+.ai-actions > span { font-size:var(--fs-12); color:var(--text-3); }
+.ai-step-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px; }
+.ai-step-list li { display:flex; align-items:center; gap:10px; }
+.ai-step-list li > span:last-child { margin-left:auto; color:var(--text-3); font-size:var(--fs-12); }
+.ai-state-dot { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:var(--border); }
+.ai-state-dot--running { background:var(--color-brand-primary); }
+.ai-state-dot--completed { background:var(--color-green); }
+.ai-state-dot--failed { background:var(--color-red); }
+.ai-confirmation { padding:12px; background:var(--bg-page); border-radius:4px; margin-top:16px; }
+.ai-confirmation p { font-size:var(--fs-12); line-height:1.7; color:var(--text-2); margin:8px 0 12px; }
+.approval-flow { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:20px; }
+.approval-flow li { display:flex; align-items:flex-start; gap:12px; }
+.approval-flow li > div { flex:1; min-width:0; }
+.approval-flow strong { font-size:var(--fs-14); font-weight:500; }
+.approval-flow p { font-size:var(--fs-12); color:var(--text-3); line-height:1.7; margin:4px 0 0; overflow-wrap:anywhere; }
+.approval-number { display:flex; align-items:center; justify-content:center; width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--bg-page); color:var(--text-3); font-size:12px; }
+.approval-number--current { background:var(--color-primary-4); color:var(--color-heading-accent); }
+.approval-number--approved { color:var(--color-green); }
+.approval-number--rejected { color:var(--color-red); }
+.approval-current { color:var(--color-heading-accent); font-size:var(--fs-12); }
+.approval-actions { margin:16px 0; }
+.approval-actions > label { display:block; font-size:var(--fs-12); margin-bottom:8px; }
+@media(max-width:600px) { .ai-composer-controls { align-items:stretch; } .ai-control-spacer { display:none; } }
+\`\`\`
+${TOKEN_APPENDIX}`,
+    variants: {
+      '完整回答': `### 变体：完整回答
+初态completed；显示正文、来源与复制/重新生成。`,
+      '失败重试': `### 变体：失败重试
+初态failed；无正文时显示失败提示，点击重试进入streaming。`,
+    },
+  },
+
+  'AI-1': {
+    summary: '对话输入与本地附件暂存',
+    baseSpec: `## AI-1 对话输入 (Conversation Composer)
+
+## 用途与边界
+
+连续会话的输入区，负责草稿、附件暂存、模式与模型选择、发送和停止入口。不是 Form3 字段布局，也不是 Form7 上传区；工作模式不等于执行权限。此轮实现 React，Vue 需查真实 API 后另行映射，不混用 React 示例。
+
+## 输入
+
+\`variant: 'panel' | 'compact'\`；可选 \`context: string\`；\`running: boolean\`；\`onSubmit({text, attachments: File[], model, mode}): Promise<void>\`；\`onStop?: () => void\`。模型目录在参考实现中为显式演示选项，生产使用业务提供的目录；实际权限和目录可用性由服务端验证。
+
+## 布局与组合
+
+白底卡片，1px --border、--radius-3 圆角、padding 16。面板式在 context 有值时显示上下文条，输入 3–10 行；紧凑式无上下文条，输入 1–3 行。附件位于输入上方；底部依次为添加附件、工作模式、模型选择和右侧发送/停止。控件 gap 8px，可换行。辅助文案 12px。
+
+上下文条是演示“运营知识库”，生产替换真实上下文，不把示例项目固定成通用规则。模型、模式和附件不是新增一级 L2，可作为输入模块子区块维护。
+
+## 状态
+
+草稿初值空、附件空、mode=assist、model=standard。最大 4000 字；全空白禁用发送。提交期间同步 ref 锁防止重复提交，控件禁用。onSubmit resolve 代表请求已受理才清空；reject 保留草稿和附件并报错。切换页面卸载后不更新旧组件状态。
+
+附件本地最多 3 个、每个 10MB（演示限制，可由业务调整），按 name/size/lastModified 去重，超限拒绝本次追加且保留已有附件。选择和移除均不发网络请求。生成中可编辑下一份草稿，但不发送新一轮；停止事件由父页面取消真实任务。
+
+## 事件
+
+- Enter 发送，Shift+Enter 换行；IME composition 与 keyCode=229 不发送。
+- onSubmit 取得去空白文本、File 快照、模型和模式；模式与模型在一轮生成期间锁定。
+- onStop 只发取消意图，业务需取消实际请求并隔离迟到 runId。
+- 失败可直接再次发送；成功后清空输入/附件。示例通过勾选“模拟发送失败”验证失败保留。
+
+## 约束与验证
+
+不把本地 File 选择宣称成上传完成，不通过模式菜单绕过服务端授权。变体显示名必须是“面板式”“紧凑式”；复制 Spec 每次仅包含所选变体章节。
+
+## 实现映射与代码
+
+MTD Input.TextArea、Select、Button 与原生 file input。当前 React Select 必须 onlyKeyValue；TextArea onChange 的 target 类型含 div，读取值时按实际 textarea 做类型收窄。TextArea autosize 用对象；Button htmlType="submit" 与业务 type="primary" 分开。
+
+完整可移植 React 实现与演示：\`../implementations/AiConversationModules.tsx\` 中 ConversationComposer / ComposerDemo；样式 \`../implementations/AiModules.css\`。生成时复制这两个文件到同一目录，只使用核心组件；父页面自行接入实际 API。演示控制器不可充当后端服务。
+
+\`\`\`tsx
+<ConversationComposer variant="panel" context={selectedContext.name} running={run.status === 'running'}
+  onSubmit={payload => acceptRun(payload)}
+  onStop={() => cancelRun(run.id)} />
+\`\`\`
+
+查询：\`node mtd3/scripts/mtd-rag.js query_components_direct --components=Input,Select,Button --target=mtd-react --quiet\`。远程知识不可用时核对已安装版本的类型与实现，并记录限制。
+
+## 可复制核心实现
+以下保存为独立 .tsx 文件，样式另存为同目录 AiModules.css；父页面提供文档约定的状态和事件。
+
+\`\`\`tsx
+import { useEffect, useId, useRef, useState } from 'react';
+import { Button, Input, Select } from '@ss/mtd-react3';
+import './AiModules.css';
+export type ComposerMode = 'assist' | 'plan';
+export interface ComposerSubmission { text: string; attachments: File[]; model: string; mode: ComposerMode }
+export interface ComposerProps {
+  variant?: 'compact' | 'panel';
+  context?: string;
+  running?: boolean;
+  onStop?: () => void;
+  onSubmit: (payload: ComposerSubmission) => Promise<void>;
+}
+const models = [{ label: '标准模型（演示）', value: 'standard' }, { label: '推理模型（演示）', value: 'reasoning' }];
+
+/** AI-1：本地附件暂存。文件上传、模型访问及实际执行权限均由业务服务实现。 */
+export function ConversationComposer({ variant = 'panel', context, running = false, onStop, onSubmit }: ComposerProps) {
+  const [text, setText] = useState('');
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [model, setModel] = useState('standard');
+  const [mode, setMode] = useState<ComposerMode>('assist');
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState('');
+  const form = useRef<HTMLFormElement>(null);
+  const lock = useRef(false);
+  const fileId = useId();
+  const live = useRef(true);
+  useEffect(() => { live.current = true; return () => { live.current = false; }; }, []);
+  const send = async () => {
+    if (lock.current || running || !text.trim()) return;
+    lock.current = true; setPending(true); setError('');
+    try {
+      await onSubmit({ text: text.trim(), attachments: [...attachments], model, mode });
+      if (live.current) { setText(''); setAttachments([]); }
+    } catch {
+      if (live.current) setError('发送失败，草稿与附件已保留，请重试。');
+    } finally {
+      lock.current = false;
+      if (live.current) setPending(false);
+    }
+  };
+  return <form ref={form} className={\`ai-module ai-composer ai-composer--\${variant}\`} onSubmit={event => { event.preventDefault(); void send(); }}>
+    {variant === 'panel' && context && <div className="ai-context"><span>上下文 · {context}</span></div>}
+    {attachments.length > 0 && <ul className="ai-attachments" aria-label="暂存附件">{attachments.map((file, index) => <li key={\`\${file.name}-\${index}\`}><span>{file.name}</span><Button size="small" shape="text" disabled={pending} aria-label={\`移除附件 \${file.name}\`} onClick={() => setAttachments(items => items.filter((_, i) => i !== index))}>移除</Button></li>)}</ul>}
+    <Input.TextArea aria-label="对话内容" placeholder="描述你需要完成的任务…" value={text} maxLength={4000} disabled={pending}
+      autosize={{ minRows: variant === 'compact' ? 1 : 3, maxRows: variant === 'compact' ? 3 : 10 }}
+      onChange={event => setText((event.target as HTMLTextAreaElement).value)}
+      onKeyDown={event => {
+        if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing && event.keyCode !== 229) {
+          event.preventDefault(); form.current?.requestSubmit();
+        }
+      }} />
+    <div className="ai-composer-controls">
+      <label className={\`ai-attach \${pending ? 'is-disabled' : ''}\`} htmlFor={fileId}>添加附件<input id={fileId} type="file" multiple disabled={pending} onChange={event => {
+        const incoming = Array.from(event.target.files || []);
+        const merged = [...attachments];
+        for (const file of incoming) {
+          if (!merged.some(old => old.name === file.name && old.size === file.size && old.lastModified === file.lastModified)) merged.push(file);
+        }
+        if (merged.length > 3 || merged.some(file => file.size > 10 * 1024 * 1024)) setError('最多暂存 3 个附件，每个不超过 10MB。');
+        else { setAttachments(merged); setError(''); }
+        event.target.value = '';
+      }} /></label>
+      <Select aria-label="工作模式" onlyKeyValue value={mode} disabled={pending || running} options={[{ label: '辅助模式', value: 'assist' }, { label: '规划模式', value: 'plan' }]} onChange={value => setMode(value as ComposerMode)} style={{ width: 116 }} />
+      <Select aria-label="模型选择" onlyKeyValue value={model} disabled={pending || running} options={models} onChange={value => setModel(String(value))} style={{ width: 176 }} />
+      <span className="ai-control-spacer" />
+      {running ? <Button onClick={onStop} disabled={!onStop} aria-disabled={!onStop}>停止生成</Button> : <Button type="primary" htmlType="submit" loading={pending} disabled={pending || !text.trim()} aria-disabled={pending || !text.trim()}>发送</Button>}
+    </div>
+    {error && <p className="ai-feedback" role="alert">{error}</p>}
+    <p className="ai-hint">Enter 发送 · Shift+Enter 换行 · 附件仅本地暂存</p>
+  </form>;
+}
+\`\`\`
+
+### AiModules.css
+\`\`\`css
+.ai-demo { width:100%; min-width:0; color:var(--text-1); font-size:var(--fs-14); }
+.ai-demo-note { margin:0 0 12px; color:var(--text-3); font-size:var(--fs-12); line-height:1.6; }
+.ai-module { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-3); padding:16px; min-width:0; }
+.ai-context, .ai-section-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
+.ai-context { color:var(--text-3); font-size:var(--fs-12); padding-bottom:12px; border-bottom:1px solid var(--border); }
+.ai-section-header strong { font-size:var(--fs-16); font-weight:600; }
+.ai-section-header > span { color:var(--text-3); font-size:var(--fs-12); }
+.ai-composer-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:12px; }
+.ai-control-spacer { flex:1; }
+.ai-attach { position:relative; display:inline-flex; align-items:center; min-height:32px; padding:0 8px; color:var(--text-2); cursor:pointer; border-radius:4px; }
+.ai-attach:hover { background:var(--bg-page); }
+.ai-attach:focus-within { outline:2px solid var(--color-brand-primary); outline-offset:2px; }
+.ai-attach input { position:absolute; width:1px; height:1px; opacity:0; }
+.ai-attach.is-disabled { opacity:.5; cursor:default; }
+.ai-attachments { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0 0 12px; }
+.ai-attachments li { display:flex; gap:4px; align-items:center; padding:4px 8px; background:var(--bg-page); border-radius:4px; max-width:100%; }
+.ai-attachments li > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px; }
+.ai-hint { font-size:var(--fs-12); line-height:1.7; color:var(--text-3); margin:10px 0 0; overflow-wrap:anywhere; }
+.ai-feedback { font-size:var(--fs-12); color:var(--color-red); margin:10px 0 0; }
+.ai-demo-toggle { display:flex; align-items:center; gap:6px; margin-top:12px; font-size:var(--fs-12); color:var(--text-3); }
+.ai-user-message { margin:0 0 16px auto; background:var(--bg-page); border-radius:var(--radius-3); padding:12px 16px; max-width:85%; line-height:1.7; }
+.ai-answer-text { line-height:1.8; white-space:pre-wrap; overflow-wrap:anywhere; }
+.ai-sources { font-size:var(--fs-12); margin-top:16px; color:var(--text-3); }
+.ai-sources ol { padding-left:20px; margin:8px 0 0; }
+.ai-sources a { color:var(--color-heading-accent); }
+.ai-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:16px; }
+.ai-actions > span { font-size:var(--fs-12); color:var(--text-3); }
+.ai-step-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px; }
+.ai-step-list li { display:flex; align-items:center; gap:10px; }
+.ai-step-list li > span:last-child { margin-left:auto; color:var(--text-3); font-size:var(--fs-12); }
+.ai-state-dot { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:var(--border); }
+.ai-state-dot--running { background:var(--color-brand-primary); }
+.ai-state-dot--completed { background:var(--color-green); }
+.ai-state-dot--failed { background:var(--color-red); }
+.ai-confirmation { padding:12px; background:var(--bg-page); border-radius:4px; margin-top:16px; }
+.ai-confirmation p { font-size:var(--fs-12); line-height:1.7; color:var(--text-2); margin:8px 0 12px; }
+.approval-flow { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:20px; }
+.approval-flow li { display:flex; align-items:flex-start; gap:12px; }
+.approval-flow li > div { flex:1; min-width:0; }
+.approval-flow strong { font-size:var(--fs-14); font-weight:500; }
+.approval-flow p { font-size:var(--fs-12); color:var(--text-3); line-height:1.7; margin:4px 0 0; overflow-wrap:anywhere; }
+.approval-number { display:flex; align-items:center; justify-content:center; width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--bg-page); color:var(--text-3); font-size:12px; }
+.approval-number--current { background:var(--color-primary-4); color:var(--color-heading-accent); }
+.approval-number--approved { color:var(--color-green); }
+.approval-number--rejected { color:var(--color-red); }
+.approval-current { color:var(--color-heading-accent); font-size:var(--fs-12); }
+.approval-actions { margin:16px 0; }
+.approval-actions > label { display:block; font-size:var(--fs-12); margin-bottom:8px; }
+@media(max-width:600px) { .ai-composer-controls { align-items:stretch; } .ai-control-spacer { display:none; } }
+\`\`\`
+${TOKEN_APPENDIX}`,
+    variants: {
+      '面板式': `### 变体：面板式
+variant="panel"；显示上下文条，输入区3–10行。`,
+      '紧凑式': `### 变体：紧凑式
+variant="compact"；隐藏上下文条，输入区1–3行。`,
+    },
+  },
+
 
   /* ═══════════════════════════ G-1+G-2 顶导+侧导 ═══════════════════════════ */
   'G-1+G-2': {
@@ -412,7 +989,7 @@ MTD Table 组件，支持排序/分页/固定列/操作列，分页器与表格�
 | 属性 | CSS 变量写法 | 实际值 |
 |------|------|------|
 | 容器 | \`.dash-card\`，\`flex: 1; minHeight: 0; display: flex; flex-direction: column\` | 背景#fff，圆角6px，内边距16px |
-| 头部区（标题+操作） | \`display: flex; justify-content: space-between; marginBottom: var(--gap-module)\` | 间距 8px |
+| 头部区（标题+操作） | \`display: flex; justify-content: space-between; marginBottom: var(--gap-page)\` | 操作栏到表头 16px（纯文字 / 带图片列） |
 | 头部操作区内部间距 | \`gap: var(--gap-elem)\` | 8px |
 | 标题字号 | \`fontSize: var(--fs-14); fontWeight: 500; color: var(--text-1)\` | 14px |
 | 表格区域 | \`flex: 1; minHeight: 0; overflow: auto\`（保证分页器贴底） | — |
@@ -439,7 +1016,7 @@ ${TOKEN_APPENDIX}`,
 #### 代码骨架
 \`\`\`tsx
 <div className="dash-card" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-module)' }}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-page)' }}>
     <span style={{ fontSize: 'var(--fs-14)', fontWeight: 500, color: 'var(--text-1)' }}>门店明细</span>
     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-elem)' }}>
       <Radio.Group defaultValue="revenue" size="small">
@@ -527,41 +1104,37 @@ ${TOKEN_APPENDIX}`,
 
   /* ═══════════════════════════ G-6 分类导航 ═══════════════════════════ */
   'G-6': {
-    summary: '左侧固定宽度面板：搜索框+树形分类结构+附加筛选项，联动右侧内容区，常见于"左树右表"类列表页。',
+    summary: '分类导航：树搜索、受控选中与附加状态筛选，联动右侧内容。',
     baseSpec: `## G-6 分类导航 (Category Tree Nav)
 
-左侧固定宽度树形导航面板，用于"左树右表"类列表页。
+### 用途与边界
+左侧 240px 分类面板，包含搜索、MTD Tree 与附加筛选。右侧内容由父页面持有，与面板使用 --gap-module 分隔。不是站点侧导，也不是完整 G-4 表格。
 
-### 视觉规格
-| 属性 | CSS 变量写法 | 实际值 |
-|------|------|------|
-| 面板宽度 | 固定 240px 左右 | 240px |
-| 面板背景 | \`.dash-card\` 白底 | #FFFFFF |
-| 与右侧内容间距 | \`gap: var(--gap-module)\` | 8px |
-| 树节点选中态背景 | \`background: var(--color-primary-4)\` | #F0F6FF（黄主题下 #FFFADB） |
-| 树节点选中态文字 | \`color: var(--color-heading-accent)\` | #166FF7（黄主题下 #FF7700） |
-| 搜索框 | 面板顶部，\`<Input prefix={<Icon type="search-o" />} />\` | — |
+### 输入与布局
+- nodes: CategoryNode[]，每项 key / label / children，key 唯一且稳定。
+- selectedKey / onSelect(key)：父页面持有选中节点。
+- status / onStatusChange(status)：父页面持有状态条件。
+- 白底 dash-card，标题 16px；字段标签 14px，区块间距 24px。
 
-### 约束
-- 树节点选中态联动右侧表格/内容区数据刷新
-- 附加筛选项（如状态/类型）放在树形结构下方，与树节点视觉上明确分隔（分割线或间距）
+### 状态与事件
+搜索只过滤树并保留祖先路径；匹配父节点时保留子树，不暗中修改当前选择。无匹配显示空态，清空恢复完整树。
+点击父分类匹配其所有后代，点击“全部分类”恢复全部分类范围；分类与状态取交集。父页面在条件变化时重置结果页码。
+新增/重命名/删除只在业务需要且接入处理函数时启用，不显示无响应按钮。
 
-### 代码骨架
+### React 实现骨架（MTD 0.12.14）
 \`\`\`tsx
-<div style={{ display: 'flex', gap: 'var(--gap-module)' }}>
-  <div className="dash-card" style={{ width: 240, flexShrink: 0 }}>
-    <Input placeholder="搜索分类" prefix={<Icon type="search-o" />} style={{ marginBottom: 12 }} />
-    <Tree
-      data={treeData}
-      selectedKeys={[selectedKey]}
-      onSelect={(keys) => setSelectedKey(keys[0])}
-    />
-  </div>
-  <div style={{ flex: 1, minWidth: 0 }}>
-    {/* 右侧表格/内容区，随左侧选中节点联动刷新 */}
-  </div>
-</div>
+<Tree
+  data={filteredNodes}
+  nodeExpansion={{ defaultExpandAll: true }}
+  nodeSelection={{ selectedKeys: [selectedKey] }}
+  onSelectChange={keys => { if (keys[0]) onSelect(String(keys[0])); }}
+/>
+// Input 的 onChange 接收 event：setQuery(event.target.value)
+// Select 使用 onlyKeyValue 后 onChange 才返回状态值；默认返回选项对象。
+// filteredNodes 递归过滤并保留祖先；结果区由 selectedKey + status 过滤。
 \`\`\`
+注意：selectedKeys 属于 nodeSelection；defaultExpandAll 属于 nodeExpansion。不要使用旧示例中的顶层属性或将 onSelect 的第一个参数当成 keys。
+演示用少量静态数据展示真实过滤，右侧不是完整 G-4；管理页需要工具栏和分页时组合 G-4。
 ${TOKEN_APPENDIX}`,
     variants: {},
   },
@@ -1319,32 +1892,47 @@ const ref = useG2Chart(() => ({
     variants: buildHeaderVariantSpecs('门店综合能力', { order: ['纯净型', '操作型', '筛选型', '筛选（复杂）'] }),
   },
 
-  /* ═══════════════════════════ D-13 仪表盘 ═══════════════════════════ */
+  /* ═══════════════════════════ D-13 水波球 ═══════════════════════════ */
   'D-13': {
-    summary: '单一指标的区间型进度展示（如健康度、达成度），5型头部变体（纯净型优先）。',
-    baseSpec: `## D-13 仪表盘 (Gauge)
+    summary: '单一目标完成率水波球，5 型头部变体；非区间评分仪表盘。',
+    baseSpec: `## D-13 水波球 (Liquid Gauge)
 
-AntV G2 gauge 图，红-黄-绿三色区间指示健康度。
+### 用途与输入
+用波浪水位表达目标完成率。输入 actual >= 0，target > 0，均须有限数值；ratio = actual / target。
 
-### 视觉规格
-| 属性 | 值 |
-|------|-----|
-| 图表类型 | \`type: 'gauge'\` |
-| 区间配色 | \`range: [chartTrend.down, '#FFD700', chartTrend.up]\`（绿→黄→红三段，注意此处颜色语义与业务"涨绿跌红"相反，是"健康度低=红，高=绿"的区间色，字面变量名与语义方向需要按场景判断） |
-| 弧线端点 | \`arcLineCap: 'round'\`（圆头） |
+### 视觉与组合
+AntV G2 type: 'liquid'，data 是比例数字，不是数组。160×160 正方形居中，下方展示实际值和目标值。fill / stroke 取 chartPalette.c1，随主题变化；轮廓宽 4、间隔 6、波长 128。中心 20px / 700，蓝主题白字，黄主题深字。
 
-### 代码骨架
+### 状态与约束
+非法数据显示“—”和“暂无有效目标数据”；超过目标时水位截到 1，百分比保留真实完成率。只读展示，无业务操作事件。主题和数据变化须重绘图表。
+
+### React 代码骨架
 \`\`\`tsx
+const { theme } = useTheme();
+const [color, setColor] = useState(() => chartPalette.c1);
+useEffect(() => {
+  const frame = requestAnimationFrame(() => setColor(chartPalette.c1));
+  return () => cancelAnimationFrame(frame);
+}, [theme]);
+const valid = Number.isFinite(actual) && actual >= 0 && Number.isFinite(target) && target > 0;
+const ratio = valid ? actual / target : 0;
 const ref = useG2Chart(() => ({
-  type: 'gauge',
-  data: [{ target: 82, total: 100 }],
-  scale: { color: { range: [chartTrend.down, '#FFD700', chartTrend.up] } },
-  style: { arcLineCap: 'round' },
-}), []);
+  type: 'liquid', data: Math.min(ratio, 1),
+  style: {
+    fill: color, stroke: color,
+    outlineBorder: 4, outlineDistance: 6, waveLength: 128,
+    textFill: theme === 'brand-yellow' ? '#111925' : '#fff',
+    textFontSize: 20, textFontWeight: 700,
+    contentText: valid ? \`\${(ratio * 100).toFixed(2)} %\` : '—',
+  },
+  axis: false, legend: false, tooltip: false,
+}), [actual, target, theme, color]);
+// <div ref={ref} style={{ width: 160, height: 160 }} />
+// 下方显示 actual / target 原始数值。
 \`\`\`
-
-以下为外层 Card 的头部变体规格（纯净型排最前）：`,
-    variants: buildHeaderVariantSpecs('健康度评分', { order: ['纯净型', '筛选型', '筛选（复杂）', '操作型', '描述型'], descText: '评分周期：本月' }),
+以下仅切换外层 ChartCard 的头部形态，水波球本体不变：
+${TOKEN_APPENDIX}`,
+    variants: buildHeaderVariantSpecs('营收目标完成率', { order: ['纯净型', '筛选型', '筛选（复杂）', '操作型', '描述型'], descText: '统计周期：本月' }),
   },
 
   /* ═══════════════════════════ D-14 热力图 ═══════════════════════════ */
@@ -1580,47 +2168,36 @@ ${TOKEN_APPENDIX}`,
     variants: {},
   },
 
-  /* ═══════════════════════════ W-4 个人信息/统计卡 ═══════════════════════════ */
+  /* ═══════════════════════════ W-4 今日待办 ═══════════════════════════ */
   'W-4': {
-    summary: '工作台个人信息卡，头像+姓名+职位+三栏统计数据网格。',
-    baseSpec: `## W-4 个人信息/统计卡 (Profile Card)
+    summary: '今日待办分类计数与处理入口，单一侧栏形态。',
+    baseSpec: `## W-4 今日待办 (Today Todo)
 
-个人信息 + 统计数据网格卡片。
+### 用途与边界
+工作台 240px 侧栏卡片，每行是待办类别、计数和处理按钮；不是个人资料卡，也不是逐条勾选的任务清单。sticky 由侧栏父容器负责。
 
-### 视觉规格
-| 属性 | 值 |
-|------|-----|
-| 头像尺寸 | 56×56px，圆形 |
-| 头像文字颜色 | \`var(--color-heading-accent)\`（不用 brand-primary，保证黄主题下可读） |
-| 头像背景 | \`var(--color-primary-4)\` |
-| 姓名字号 | 16px, fontWeight: 600, color: var(--text-1) |
-| 职位字号 | 13px, color: var(--text-3) |
-| 统计网格 | \`display: grid; gridTemplateColumns: repeat(3, 1fr); gap: 8px\`，marginTop: 16px |
-| 统计单元格背景 | \`rgba(17,25,37,0.03)\` |
-| 统计单元格圆角/内边距 | \`borderRadius: 8px; padding: 12px\` |
-| 统计数字 | 18px, fontWeight: 600, color: var(--text-1) |
-| 统计标签 | 12px, color: var(--text-3), marginTop: 2px |
+### 输入
+items: { id, label, count, tone?: 'urgent' | 'normal' | 'success', action }[]。
+onAction(id) 打开对应处理入口；onMore() 打开全部待办。事件为模块语义，不是 Card 原生属性。
 
-### 代码骨架
+### 布局与状态
+Card 标题 16px，右侧“更多”为弱化文字按钮；行距 10px，标签与计数 12px。紧急计数 --color-red，常规 --text-1，达成 --color-green。行按钮 normal（默认描边）/ small / minWidth:64。空集合显示“暂无待办”。无变体、无筛选、无图表。
+
+### React 骨架
 \`\`\`tsx
-<Card>
-  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-    <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--color-primary-4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 600, color: 'var(--color-heading-accent)' }}>张</div>
-    <div>
-      <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)' }}>张三</div>
-      <div style={{ fontSize: 13, color: 'var(--text-3)' }}>区域运营经理</div>
-    </div>
-  </div>
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginTop: 16 }}>
-    {stats.map((s) => (
-      <div key={s.label} style={{ background: 'rgba(17,25,37,0.03)', borderRadius: 8, padding: 12, textAlign: 'center' }}>
-        <div style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-1)' }}>{s.value}</div>
-        <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{s.label}</div>
-      </div>
-    ))}
+<Card header={<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+  <span>今日待办</span><Button size="small" shape="text" onClick={onMore}>更多</Button>
+</div>}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    {items.map(item => <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>{item.label} <b>{item.count}</b></span>
+      <Button type="normal" size="small" style={{ minWidth: 64 }} onClick={() => onAction(item.id)}>{item.action}</Button>
+    </div>)}
+    {!items.length && <span>暂无待办</span>}
   </div>
 </Card>
 \`\`\`
+演示点击只显示所选入口，不代表已完成审批或已接入业务路由。
 ${TOKEN_APPENDIX}`,
     variants: {},
   },
@@ -1690,71 +2267,61 @@ ${TOKEN_APPENDIX}`,
     },
   },
 
-  /* ═══════════════════════════ W-6 数据动态统计 ═══════════════════════════ */
+  /* ═══════════════════════════ W-6 最新动态 ═══════════════════════════ */
   'W-6': {
-    summary: '三列统计卡，彩色图标+数字+标签。',
-    baseSpec: `## W-6 数据动态统计 (Stat Cards)
+    summary: '工作台侧栏最新动态，120px 轻量轮播。',
+    baseSpec: `## W-6 最新动态 (Latest Updates)
 
-三列统计卡片组，图标底色用 15% 透明度叠加技巧。
+### 用途与输入
+工作台侧栏 240px 卡片，通常位于今日待办和公告下方。输入 slides: { id, label }[]；不是指标统计卡。
 
-### 视觉规格
-| 属性 | 值 |
-|------|-----|
-| 栅格 | 3 列，\`display: grid; gridTemplateColumns: repeat(3, 1fr); gap: 8px\` |
-| 图标容器 | 40×40px, \`borderRadius: 10px\` |
-| 图标底色技巧 | \`background: \${it.color}15\`（十六进制颜色值 + "15" 后缀 = 约 8% 不透明度叠加写法，需保证 it.color 是 6 位 hex） |
-| 图标颜色 | \`it.color\`（不透明实色） |
-| 数字字号 | 20px, fontWeight: 600, color: var(--text-1) |
-| 标签字号 | 12px, color: var(--text-3) |
+### 布局与状态
+Card 标题“最新动态”；轮播内容高 120px、--bg-page 背景、12px 弱化文字，外层圆角 8px 并 overflow:hidden。多项自动轮播、单项不自动播放，arrow="never"。空集合显示“暂无动态”。无变体、无图表。
+轮播索引由 Carousel 内部持有；无后端业务事件。演示灰块是占位内容，不应泛化为真实资讯不得使用图片。
 
-### 代码骨架
+### React 骨架
 \`\`\`tsx
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-  {stats.map((it) => (
-    <Card key={it.label}>
-      <div style={{ width: 40, height: 40, borderRadius: 10, background: \`\${it.color}15\`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-        <Icon type={it.icon} style={{ fontSize: 20, color: it.color }} />
-      </div>
-      <div style={{ fontSize: 20, fontWeight: 600, color: 'var(--text-1)' }}>{it.value}</div>
-      <div style={{ fontSize: 12, color: 'var(--text-3)' }}>{it.label}</div>
-    </Card>
-  ))}
-</div>
+<Card header="最新动态">
+  {slides.length ? <div style={{ borderRadius: 8, overflow: 'hidden' }}>
+    <Carousel autoplay={slides.length > 1} arrow="never" height={120}>
+      {slides.map(slide => <div key={slide.id} style={{ height: 120, background: 'var(--bg-page)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-4)', fontSize: 12 }}>{slide.label}</div>)}
+    </Carousel>
+  </div> : <span>暂无动态</span>}
+</Card>
 \`\`\`
 ${TOKEN_APPENDIX}`,
     variants: {},
   },
 
-  /* ═══════════════════════════ W-7 待办任务列表 ═══════════════════════════ */
+  /* ═══════════════════════════ W-7 常用工具 ═══════════════════════════ */
   'W-7': {
-    summary: '待办列表，含勾选框+优先级 Tag，优先级颜色映射固定。',
-    baseSpec: `## W-7 待办任务列表 (Todo List)
+    summary: '常用工具三列网格，含说明和独立创建入口。',
+    baseSpec: `## W-7 常用工具 (Tool Grid)
 
-带勾选框和优先级标签的任务列表。
+### 用途与输入
+工作台主区需要说明用途的工具集合；区别于 W-3 纯图标快捷入口。输入 tools: { id, title, desc }[]，onCreate(id) 由父页面接入创建流程。
 
-### 视觉规格
-| 属性 | 值 |
-|------|-----|
-| 行布局 | \`display: flex; alignItems: center; gap: 10px; padding: 10px 0; borderBottom: 1px solid var(--divider)\` |
-| 勾选框 | MTD \`<Checkbox>\` |
-| 任务文字 | 13px, color: var(--text-2)，勾选后 \`textDecoration: line-through; color: var(--text-4)\` |
-| 优先级 Tag 背景 | \`\${color}10\`（约 6% 透明度叠加） |
-| 优先级颜色映射 | \`紧急: #FF1F1F\`（红，例外允许，因为"紧急"语义确实需要强警示色）, \`高: #FF7700\`（橙）, \`中: #166FF7\`（蓝，主题联动） |
+### 布局与状态
+外层 dash-card / padding:16；标题 16px，底部间距 16px。网格 repeat(3, minmax(0, 1fr)) / gap:16。
+每格 1px var(--border) 描边、--radius-3 圆角、padding:16。内部纵向排列：36px 图标占位 → 14px/600 标题 → 12px 弱化说明 → 右下角 small“立即创建”。
+空集合显示“暂无可用工具”。无变体，不使用待办勾选、优先级或 ChartCard。
 
-\`\`\`ts
-const priColor: Record<string, string> = { 紧急: '#FF1F1F', 高: '#FF7700', 中: '#166FF7' };
-\`\`\`
-
-### 代码骨架
+### React 骨架
 \`\`\`tsx
-{todos.map((t) => (
-  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', borderBottom: '1px solid var(--divider)' }}>
-    <Checkbox checked={t.done} onChange={() => toggle(t.id)} />
-    <span style={{ flex: 1, fontSize: 13, color: t.done ? 'var(--text-4)' : 'var(--text-2)', textDecoration: t.done ? 'line-through' : 'none' }}>{t.title}</span>
-    <Tag size="small" style={{ background: \`\${priColor[t.priority]}10\`, color: priColor[t.priority], border: 'none' }}>{t.priority}</Tag>
+<div className="dash-card">
+  <h3>常用工具</h3>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 }}>
+    {tools.map(tool => <div key={tool.id} style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-3)', padding: 16, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+      <div style={{ width: 36, height: 36, background: 'var(--bg-page)', borderRadius: 8 }} />
+      <div style={{ fontSize: 14, fontWeight: 600, marginTop: 8 }}>{tool.title}</div>
+      <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4, flex: 1 }}>{tool.desc}</div>
+      <Button size="small" style={{ alignSelf: 'flex-end', marginTop: 8 }} onClick={() => onCreate(tool.id)}>立即创建</Button>
+    </div>)}
   </div>
-))}
+  {!tools.length && <span>暂无可用工具</span>}
+</div>
 \`\`\`
+示例工具名属于模拟数据，点击只反馈所选工具，不代表已创建记录。
 ${TOKEN_APPENDIX}`,
     variants: {},
   },

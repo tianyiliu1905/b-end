@@ -180,8 +180,10 @@
 }
 .canvas {
   border:1px solid #e6e7eb;
-  background:#fafafb;
-  border-radius:12px;
+  background-color:var(--showcase-preview-paper, #fdfdfd);
+  background-image:radial-gradient(circle, var(--showcase-preview-dot, #e3e3e3) 0.8px, transparent 1px);
+  background-size:10px 10px;
+  border-radius:16px;
   min-height:350px;
   display:flex;
   flex-direction:column;
@@ -213,9 +215,9 @@
 }
 .codePanel {
   border:1px solid #e7e7ec;
-  border-radius:12px;
+  border-radius:16px;
   overflow:hidden;
-  background:#fafafb
+  background:#f8f8f8
 }
 .codeHeader {
   display:flex;
@@ -411,3 +413,11 @@
     white-space:nowrap
   }
 }
+
+/* Widget manual reference: presentation controls, not business-component styles. */
+.tabs { border-radius: 999px; padding: 3px; background: #f3f3f3; }
+.tabs button { border-radius: 999px; padding: 7px 15px; }
+.tabs .selected { box-shadow: 0 1px 3px #00000014; }
+.toolbar select { border-radius: 8px; background-color: #fdfdfd; }
+.previewLabel { color: #85858b; }
+.canvasCaption { color: #7e8088; }

@@ -1,0 +1,17 @@
+{
+  "scope": "G-4",
+  "fingerprint": "b55f4f7513c1204f46ae37f044524b3edec11cafebc658750c7f4d27f7a8dd19",
+  "status": "partial-review",
+  "summary": "本次仅核验操作栏到表头间距：纯文字与带图片列由8px调整为16px；展示实现、复制Spec和L2文档同步。未认证G-4全部既有规则。",
+  "validation": {
+    "build": "npm --prefix b-end-showcase run build passed",
+    "browser": "两变体DOM实测 marginBottom=16px，实际边界间距=16px；Spec面板包含16px规则",
+    "consumers": "列表/看板共7个页面复用g4Variants，自动继承间距；未逐页浏览",
+    "remaining": "既有tab变体知识要求TabPane内放置内容，当前实现为兄弟节点；本次不改无关变体，不将整个模块标为verified。"
+  },
+  "files": [
+    "b-end-showcase/src/components/G4DataTable.tsx",
+    "b-end-showcase/src/data/designSpecs.ts",
+    "b-end-page/references/L2-modules/General4-data-table.md"
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "scope": "D-13",
+    "status": "resolved",
+    "finding": "展示站与复制 Spec 是 gauge 仪表盘；Skill Dashboard13-liquid.md 明确是 liquid 水波球。",
+    "evidence": [
+      "b-end-showcase/src/components/modulePreviews.tsx",
+      "b-end-showcase/src/data/l2Modules.ts",
+      "b-end-showcase/src/data/designSpecs.ts",
+      "b-end-showcase/src/components/CopySpecButton.tsx",
+      "b-end-showcase/src/components/ModuleWrapper.tsx",
+      "b-end-page/references/L2-modules/Dashboard13-liquid.md"
+    ],
+    "resolution": "2026-11-13：以活跃业务案例及 Skill 的既有定义统一目录、真实预览、复制 Spec；共享 LiquidProgress / WorkbenchModules，已核对实际模块身份。",
+    "evidence_record": ".sync/evidence/D-13-2026-11-13-catalog-repair.json"
+  },
+  {
+    "scope": "W-4",
+    "status": "resolved",
+    "finding": "展示站/Spec 为个人信息卡；Skill 为今日待办。",
+    "evidence": [
+      "b-end-showcase/src/components/modulePreviews.tsx",
+      "b-end-showcase/src/data/l2Modules.ts",
+      "b-end-showcase/src/data/designSpecs.ts",
+      "b-end-showcase/src/components/CopySpecButton.tsx",
+      "b-end-showcase/src/components/ModuleWrapper.tsx",
+      "b-end-page/references/L2-modules/Workbench4-todo-list.md"
+    ],
+    "resolution": "2026-11-13：以活跃业务案例及 Skill 的既有定义统一目录、真实预览、复制 Spec；共享 LiquidProgress / WorkbenchModules，已核对实际模块身份。",
+    "evidence_record": ".sync/evidence/W-4-2026-11-13-catalog-repair.json"
+  },
+  {
+    "scope": "W-6",
+    "status": "resolved",
+    "finding": "展示站/Spec 为指标统计区；Skill 为最新动态。",
+    "evidence": [
+      "b-end-showcase/src/components/modulePreviews.tsx",
+      "b-end-showcase/src/data/l2Modules.ts",
+      "b-end-showcase/src/data/designSpecs.ts",
+      "b-end-showcase/src/components/CopySpecButton.tsx",
+      "b-end-showcase/src/components/ModuleWrapper.tsx",
+      "b-end-page/references/L2-modules/Workbench6-latest-updates.md"
+    ],
+    "resolution": "2026-11-13：以活跃业务案例及 Skill 的既有定义统一目录、真实预览、复制 Spec；共享 LiquidProgress / WorkbenchModules，已核对实际模块身份。",
+    "evidence_record": ".sync/evidence/W-6-2026-11-13-catalog-repair.json"
+  },
+  {
+    "scope": "W-7",
+    "status": "resolved",
+    "finding": "展示站/Spec 为待办列表；Skill 为常用工具网格。",
+    "evidence": [
+      "b-end-showcase/src/components/modulePreviews.tsx",
+      "b-end-showcase/src/data/l2Modules.ts",
+      "b-end-showcase/src/data/designSpecs.ts",
+      "b-end-showcase/src/components/CopySpecButton.tsx",
+      "b-end-showcase/src/components/ModuleWrapper.tsx",
+      "b-end-page/references/L2-modules/Workbench7-tool-grid.md"
+    ],
+    "resolution": "2026-11-13：以活跃业务案例及 Skill 的既有定义统一目录、真实预览、复制 Spec；共享 LiquidProgress / WorkbenchModules，已核对实际模块身份。",
+    "evidence_record": ".sync/evidence/W-7-2026-11-13-catalog-repair.json"
+  }
+]

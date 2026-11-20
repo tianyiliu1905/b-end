@@ -1,0 +1,14 @@
+{
+  "scope": "W-6",
+  "fingerprint": "3f5e6e249063e045bc6b47d6c298bffa1cfd7512f9fe24912c98a3b4ca7cdefb",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 模块身份与缺失预览修复；按项记录实际验证及限制，不代表全仓库已验证。",
+  "checks": {
+    "identity": "目录/预览/Spec/Workbench6-latest-updates.md/工作台均为最新动态轮播，共用 LatestUpdates。 外壳现按功能分组，ID、预览注册和复制 key 保留；41条目录无重复无遗漏。",
+    "variants": "无变体；多项自动播放、单项不自动播放、空集合显示暂无动态的分支已核对。",
+    "visual_tokens": "240px 侧栏 Card，120px 轮播内容，8px 裁切圆角，背景 --bg-page，文字 --text-4；浏览器显示动态占位，无箭头。",
+    "behavior": "浏览器加载组件和工作台均显示 Carousel；autoplay 配置与库本地 API 核对；未对自动轮播索引变化和单项/空分支做浏览器断言，无业务提交事件。",
+    "copy_spec": "实际复制得到 W-6 最新动态，无指标统计卡定义。",
+    "validation": "npm run build --prefix b-end-showcase 通过（原有大包提示）。全工程 tsc 受既有类型/未使用声明错误影响，新增三个组件未报错；MTD 在线查询进程失败，改以已安装 @ss/mtd-react3@0.12.14 类型与实现核对。浏览器五个模块及 /dashboard/workbench、/list/tree 已查看；库 forwardRef 警告仍存在。 最终归类后生产构建再次通过；三个新增共享组件与 moduleTaxonomy 独立类型检查通过。 最终独立 tsc（含 vite/client 类型）exit 0，最终生产构建 exit 0。"
+  }
+}

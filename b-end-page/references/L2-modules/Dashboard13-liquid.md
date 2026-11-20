@@ -39,12 +39,12 @@
     "type": "liquid"
   },
   "style": {
-    "fill": "chartPrimary()",
-    "stroke": "chartPrimary()",
+    "fill": "chartPalette.c1",
+    "stroke": "chartPalette.c1",
     "outline_border": 4,
     "outline_distance": 6,
     "wave_length": 128,
-    "text_fill": "#fff",
+    "text_fill": "蓝主题 #fff；黄主题 #111925",
     "text_font_size": 20,
     "text_font_weight": 700
   },
@@ -67,27 +67,28 @@
 }
 ```
 
-> `data` 传给 G2 的是比例值 `ratio = actual / target`（0~1 之间的小数），不是原始 actual/target 两个数。
+> `data` 是比例数字，绘制水位取 `Math.min(ratio, 1)`；中心文案保留未截断的实际完成率。无效目标不参与除法。
 
 ---
 
 ## G2 v5 Spec
 
 ```js
-const ratio = revenueTarget.actual / revenueTarget.target; // 0~1
+const valid = Number.isFinite(actual) && actual >= 0 && Number.isFinite(target) && target > 0;
+const ratio = valid ? actual / target : 0;
 chart.options({
   type: 'liquid',
-  data: ratio,
+  data: Math.min(ratio, 1),
   style: {
-    fill: chartPrimary(),
-    stroke: chartPrimary(),
+    fill: chartPalette.c1,
+    stroke: chartPalette.c1,
     outlineBorder: 4,
     outlineDistance: 6,
     waveLength: 128,
-    textFill: '#fff',
+    textFill: theme === 'brand-yellow' ? '#111925' : '#fff',
     textFontSize: 20,
     textFontWeight: 700,
-    contentText: `${(ratio * 100).toFixed(2)} %`,
+    contentText: valid ? `${(ratio * 100).toFixed(2)} %` : '—',
   },
   axis: false,
   legend: false,
@@ -142,27 +143,32 @@ node "<skill>/mtd3/scripts/mtd-rag.js" query_components_direct --components=Card
 ## 骨架代码 · React
 
 ```tsx
-function LiquidGauge() {
-  const ratio = revenueTarget.actual / revenueTarget.target; // 0~1
-  const containerRef = useG2Chart(() => ({
+function LiquidProgress({ actual, target }: { actual: number; target: number }) {
+  const { theme } = useTheme();
+  const [color, setColor] = useState(() => chartPalette.c1);
+  // ThemeProvider 在 effect 中更新 html 属性，下一帧读取才是新主题 token。
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setColor(chartPalette.c1));
+    return () => cancelAnimationFrame(frame);
+  }, [theme]);
+  const valid = Number.isFinite(actual) && actual >= 0 && Number.isFinite(target) && target > 0;
+  const ratio = valid ? actual / target : 0;
+  const ref = useG2Chart(() => ({
     type: 'liquid',
-    data: ratio,
+    data: Math.min(ratio, 1),
     style: {
-      fill: chartPrimary(), stroke: chartPrimary(), outlineBorder: 4, outlineDistance: 6,
-      waveLength: 128, textFill: '#fff', textFontSize: 20, textFontWeight: 700,
-      contentText: `${(ratio * 100).toFixed(2)} %`,
+      fill: color, stroke: color, outlineBorder: 4, outlineDistance: 6,
+      waveLength: 128, textFill: theme === 'brand-yellow' ? '#111925' : '#fff',
+      textFontSize: 20, textFontWeight: 700,
+      contentText: valid ? `${(ratio * 100).toFixed(2)} %` : '—',
     },
-    axis: false,
-    legend: false,
-    tooltip: false,
-  }), []);
+    axis: false, legend: false, tooltip: false,
+  }), [actual, target, theme, color]);
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div ref={containerRef} style={{ width: 160, height: 160 }} />
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <div style={{ fontSize: 'var(--fs-12)', color: 'var(--text-2)' }}>
-          实际 <b>¥{revenueTarget.actual}万</b> / 目标 <b>¥{revenueTarget.target}万</b>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 8 }}>
+      <div ref={ref} role="img" aria-label={valid ? `目标完成率 ${(ratio * 100).toFixed(2)}%` : '目标数据不可用'} style={{ width: 160, height: 160 }} />
+      <div style={{ fontSize: 'var(--fs-12)', color: 'var(--text-2)' }}>
+        {valid ? <>实际 <b>¥{actual}万</b> / 目标 <b>¥{target}万</b></> : '暂无有效目标数据'}
       </div>
     </div>
   );
@@ -174,3 +180,14 @@ function LiquidGauge() {
 - `data` 字段直接是数字（比例值），这是 G2 v5 `liquid` 类型的特殊之处，和其他图表类型 `data` 传数组不同。
 - `contentText` 用于自定义中心文案，不设置的话会显示默认的原始比例数字（不带 `%`、不带小数位格式化）。
 - 外层容器需要用 flex 布局把水波球和底部说明文字垂直居中排列，水波球本身固定宽高为正方形。
+
+## 状态、事件与实现对齐
+
+- D-13 的唯一身份是水波球；区间评分仪表盘不使用此编号。预览与经营概览共同复用 `LiquidProgress`。
+- 输入 actual / target 都必须有限，actual >= 0 且 target > 0；无效时水位为 0、中心显示“—”，下方显示“暂无有效目标数据”。目标为 0 不参与除法。
+- 超额完成时水位截到 1，中心百分比仍显示真实比例，不能截断业务结果。
+- 颜色读取 `chartPalette.c1`；中心蓝主题白字、黄主题深字。`useG2Chart` 的依赖包含 actual、target、theme 和已解析的颜色，保证数据更新与蓝→黄→蓝都能重绘。
+- 160×160 球体下方保留原始实际值 / 目标值；演示金额和单位可由业务替换，不作为所有比例指标的固定单位。
+- 外层支持纯净型、筛选型、筛选（复杂）、操作型、描述型五种头部；本体只读，无业务操作事件。筛选控件的联动由父页面声明，静态预览不代表已接入数据接口。
+
+主题切换时 ThemeProvider 在 effect 更新 html 属性，下一帧再读取 chartPalette.c1 并更新颜色状态，避免读取到旧主题 token；代码需导入 useEffect / useState / useTheme / useG2Chart / chartPalette。

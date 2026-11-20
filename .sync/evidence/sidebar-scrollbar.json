@@ -1,0 +1,6 @@
+{
+  "scope": "shell",
+  "status": "partial-review",
+  "summary": "隐藏目录滚动条，保留 overflow:auto 和滚动能力。",
+  "knowledge_sync": "仅展示站外壳调整，不改变业务组件或生成规范，无需修改 b-end-page。"
+}

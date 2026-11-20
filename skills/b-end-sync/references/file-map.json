@@ -1,0 +1,1852 @@
+{
+  "schema_version": 1,
+  "scopes": {
+    "G-1+G-2": {
+      "kind": "module",
+      "name": "顶导+侧导 Layout",
+      "routes": [
+        "/modules/G-1+G-2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/General-Layout.tsx",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "G-3": {
+      "kind": "module",
+      "name": "看板筛选器栏 (Dashboard Filter Bar)",
+      "routes": [
+        "/modules/G-3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/General3-filter-bar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "G-4": {
+      "kind": "module",
+      "name": "数据表格 (Data Table)",
+      "routes": [
+        "/modules/G-4"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/G4DataTable.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/General4-data-table.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "G-6": {
+      "kind": "module",
+      "name": "分类导航 (Category Tree Nav)",
+      "routes": [
+        "/modules/G-6"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/pages/list/TreeList.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx",
+        "b-end-showcase/src/components/CategoryTreeNav.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-列表页装配逻辑.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-1": {
+      "kind": "module",
+      "name": "指标卡片组 (Metric Cards)",
+      "routes": [
+        "/modules/D-1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard1-metric-cards.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-2": {
+      "kind": "module",
+      "name": "进度展示 (Progress)",
+      "routes": [
+        "/modules/D-2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard2-progress.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-3": {
+      "kind": "module",
+      "name": "折线图/面积图（趋势）",
+      "routes": [
+        "/modules/D-3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard3-trend.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-4": {
+      "kind": "module",
+      "name": "柱状图 (Bar Chart)",
+      "routes": [
+        "/modules/D-4"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard4-bar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-5": {
+      "kind": "module",
+      "name": "双轴组合图 (Combo Chart)",
+      "routes": [
+        "/modules/D-5"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard5-combo.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-6": {
+      "kind": "module",
+      "name": "漏斗图 (Funnel)",
+      "routes": [
+        "/modules/D-6"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard6-funnel.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-7": {
+      "kind": "module",
+      "name": "饼/环图 (Pie/Donut)",
+      "routes": [
+        "/modules/D-7"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard7-pie-donut.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-8": {
+      "kind": "module",
+      "name": "堆叠进度条 (Stacked Progress)",
+      "routes": [
+        "/modules/D-8"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard8-stacked-progress.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-9": {
+      "kind": "module",
+      "name": "排名条形图 (Ranking Bar)",
+      "routes": [
+        "/modules/D-9"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard9-rank-bar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-10": {
+      "kind": "module",
+      "name": "散点图 (Scatter)",
+      "routes": [
+        "/modules/D-10"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard10-scatter.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-11": {
+      "kind": "module",
+      "name": "AI摘要卡 (AI Summary)",
+      "routes": [
+        "/modules/D-11"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/DigestCard.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard11-digest-card.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-12": {
+      "kind": "module",
+      "name": "雷达图 (Radar)",
+      "routes": [
+        "/modules/D-12"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard12-radar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-13": {
+      "kind": "module",
+      "name": "水波球 (Liquid Gauge)",
+      "routes": [
+        "/modules/D-13"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx",
+        "b-end-showcase/src/components/LiquidProgress.tsx",
+        "b-end-showcase/src/pages/dashboard/OverviewDashboard.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard13-liquid.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-14": {
+      "kind": "module",
+      "name": "热力图 (Heatmap)",
+      "routes": [
+        "/modules/D-14"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard14-heatmap.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-15": {
+      "kind": "module",
+      "name": "玫瑰图 (Rose Chart)",
+      "routes": [
+        "/modules/D-15"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Dashboard15-rose.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-1": {
+      "kind": "module",
+      "name": "欢迎栏 (Welcome Banner)",
+      "routes": [
+        "/modules/W-1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench1-welcome-banner.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-2": {
+      "kind": "module",
+      "name": "操作引导卡 (Guide Card)",
+      "routes": [
+        "/modules/W-2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench2-action-card.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-3": {
+      "kind": "module",
+      "name": "快捷入口 (Shortcut Grid)",
+      "routes": [
+        "/modules/W-3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/ShortcutGrid.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench3-shortcut-grid.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-4": {
+      "kind": "module",
+      "name": "今日待办 (Today Todo)",
+      "routes": [
+        "/modules/W-4"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx",
+        "b-end-showcase/src/components/WorkbenchModules.tsx",
+        "b-end-showcase/src/pages/dashboard/WorkbenchDashboard.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench4-todo-list.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-5": {
+      "kind": "module",
+      "name": "公告通知 (Announcement)",
+      "routes": [
+        "/modules/W-5"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench5-announcement.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-6": {
+      "kind": "module",
+      "name": "最新动态 (Latest Updates)",
+      "routes": [
+        "/modules/W-6"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx",
+        "b-end-showcase/src/components/WorkbenchModules.tsx",
+        "b-end-showcase/src/pages/dashboard/WorkbenchDashboard.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench6-latest-updates.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "W-7": {
+      "kind": "module",
+      "name": "常用工具 (Tool Grid)",
+      "routes": [
+        "/modules/W-7"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx",
+        "b-end-showcase/src/components/WorkbenchModules.tsx",
+        "b-end-showcase/src/pages/dashboard/WorkbenchDashboard.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Workbench7-tool-grid.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/L2-modules/index.json",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "FD1": {
+      "kind": "module",
+      "name": "承载容器 (Presentation Container)",
+      "routes": [
+        "/modules/FD1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/PresentationContainerPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/FD1-presentation-container.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "FD2": {
+      "kind": "module",
+      "name": "表头信息区 (Page Header)",
+      "routes": [
+        "/modules/FD2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/PageHeaderPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/FD2-page-header.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "FD3": {
+      "kind": "module",
+      "name": "只读数据表格 (Readonly Table)",
+      "routes": [
+        "/modules/FD3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/ReadonlyTablePreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/FD3-readonly-table.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form1": {
+      "kind": "module",
+      "name": "操作栏 (Action Bar)",
+      "routes": [
+        "/modules/Form1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/ActionBarPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form1-action-bar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form2": {
+      "kind": "module",
+      "name": "分组分段 (Group Section)",
+      "routes": [
+        "/modules/Form2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/GroupSectionPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form2-group-section.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form3": {
+      "kind": "module",
+      "name": "基础布局 (Base Layout)",
+      "routes": [
+        "/modules/Form3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/SingleLayoutPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form3-base-layout.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form4": {
+      "kind": "module",
+      "name": "步骤条 (Step Bar)",
+      "routes": [
+        "/modules/Form4"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/StepPageFlowPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form4-step-bar.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form5": {
+      "kind": "module",
+      "name": "行内编辑明细表格 (Editable Table)",
+      "routes": [
+        "/modules/Form5"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/ReadonlyTablePreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form5-editable-table.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form6": {
+      "kind": "module",
+      "name": "复选组 (Checkbox Group)",
+      "routes": [
+        "/modules/Form6"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/CheckboxGroupField.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form6-checkbox-group.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form7": {
+      "kind": "module",
+      "name": "文件/图片上传 (File Upload)",
+      "routes": [
+        "/modules/Form7"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/FileUploadPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form7-file-upload.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form8": {
+      "kind": "module",
+      "name": "公式编辑器 (Formula Editor)",
+      "routes": [
+        "/modules/Form8"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/FormulaEditor.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form8-formula-editor.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Form9": {
+      "kind": "module",
+      "name": "增删标签组 (Tag Group Editor)",
+      "routes": [
+        "/modules/Form9"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/TagGroupEditorPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Form9-tag-group-editor.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Detail1": {
+      "kind": "module",
+      "name": "Tab 切换 (Tab Panel)",
+      "routes": [
+        "/modules/Detail1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Detail1-tab-panel.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Detail2": {
+      "kind": "module",
+      "name": "描述列表 (Description List)",
+      "routes": [
+        "/modules/Detail2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/DescriptionListPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Detail2-description-list.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Detail3": {
+      "kind": "module",
+      "name": "附件预览 (Attachment Preview)",
+      "routes": [
+        "/modules/Detail3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/components/AttachmentPreview.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/src/components/CopySpecButton.tsx",
+        "b-end-showcase/src/components/ModuleWrapper.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Detail3-attachment-preview.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/INDEX-form-detail.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "D-ChartCard": {
+      "kind": "foundation",
+      "name": "图表统一外壳（非独立目录模块）",
+      "showcase": [
+        "b-end-showcase/src/components/modulePreviews.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/DashboardChartCard.md",
+        "b-end-page/references/g2-chart-foundation.md"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "page:/examples/store-operations": {
+      "kind": "page",
+      "name": "/examples/store-operations",
+      "routes": [
+        "/examples/store-operations"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/examples/StoreOperations.tsx",
+        "b-end-showcase/src/pages/examples/store-operations.design-spec.json",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-列表页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "D-1",
+        "G-3",
+        "G-4",
+        "FD1",
+        "Detail2",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/dashboard/overview": {
+      "kind": "page",
+      "name": "/dashboard/overview",
+      "routes": [
+        "/dashboard/overview"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/dashboard/OverviewDashboard.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-看板页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/dashboard/ai-summary": {
+      "kind": "page",
+      "name": "/dashboard/ai-summary",
+      "routes": [
+        "/dashboard/ai-summary"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/dashboard/AiSummaryDashboard.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-看板页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/dashboard/filter-table": {
+      "kind": "page",
+      "name": "/dashboard/filter-table",
+      "routes": [
+        "/dashboard/filter-table"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/dashboard/FilterTableDashboard.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-看板页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/dashboard/workbench": {
+      "kind": "page",
+      "name": "/dashboard/workbench",
+      "routes": [
+        "/dashboard/workbench"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/dashboard/WorkbenchDashboard.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-看板页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/list/crud": {
+      "kind": "page",
+      "name": "/list/crud",
+      "routes": [
+        "/list/crud"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/list/CrudList.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-列表页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/list/tree": {
+      "kind": "page",
+      "name": "/list/tree",
+      "routes": [
+        "/list/tree"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/list/TreeList.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-列表页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/list/metric-detail": {
+      "kind": "page",
+      "name": "/list/metric-detail",
+      "routes": [
+        "/list/metric-detail"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/VersionSwitcher.tsx",
+        "b-end-showcase/src/pages/list/MetricDetail.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-列表页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "G-1+G-2",
+        "G-3",
+        "G-4",
+        "G-6",
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "D-8",
+        "D-9",
+        "D-10",
+        "D-11",
+        "D-12",
+        "D-13",
+        "D-14",
+        "D-15",
+        "W-1",
+        "W-2",
+        "W-3",
+        "W-4",
+        "W-5",
+        "W-6",
+        "W-7",
+        "D-ChartCard",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/form/basic": {
+      "kind": "page",
+      "name": "/form/basic",
+      "routes": [
+        "/form/basic"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/form/DealFormPage.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-表单页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/form/step": {
+      "kind": "page",
+      "name": "/form/step",
+      "routes": [
+        "/form/step"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/form/StoreSettingsPage.jsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-表单页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/form/stepper": {
+      "kind": "page",
+      "name": "/form/stepper",
+      "routes": [
+        "/form/stepper"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/form/MerchantOnboardingPage.jsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-表单页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/form/group": {
+      "kind": "page",
+      "name": "/form/group",
+      "routes": [
+        "/form/group"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/form/SpecQualificationPage.jsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-表单页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/form/modal": {
+      "kind": "page",
+      "name": "/form/modal",
+      "routes": [
+        "/form/modal"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/form/ModalFormPage.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-表单页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/detail/basic": {
+      "kind": "page",
+      "name": "/detail/basic",
+      "routes": [
+        "/detail/basic"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/detail/AppShell.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-详情页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/detail/card": {
+      "kind": "page",
+      "name": "/detail/card",
+      "routes": [
+        "/detail/card"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/detail/MasterDetailPage.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-详情页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/detail/timeline": {
+      "kind": "page",
+      "name": "/detail/timeline",
+      "routes": [
+        "/detail/timeline"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/detail/DrawerDetailPage.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-详情页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "page:/detail/modal": {
+      "kind": "page",
+      "name": "/detail/modal",
+      "routes": [
+        "/detail/modal"
+      ],
+      "showcase": [
+        "b-end-showcase/src/pages/detail/ModalDetailPage.tsx",
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/pages/Landing.tsx"
+      ],
+      "knowledge": [
+        "b-end-page/references/L1-templates/page-详情页装配逻辑.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md"
+      ],
+      "depends_on": [
+        "FD1",
+        "FD2",
+        "FD3",
+        "Form1",
+        "Form2",
+        "Form3",
+        "Form4",
+        "Form5",
+        "Form6",
+        "Form7",
+        "Form8",
+        "Form9",
+        "Detail1",
+        "Detail2",
+        "Detail3",
+        "theme"
+      ],
+      "dependency_note": "Conservative candidate modules; confirm actual composition via imports and ModuleWrapper before editing."
+    },
+    "theme": {
+      "kind": "theme",
+      "name": "主题与 Token",
+      "showcase": [
+        "b-end-showcase/src/styles/tokens.css",
+        "b-end-showcase/src/theme/useTheme.tsx",
+        "b-end-showcase/src/lib/chartTokens.ts",
+        "b-end-showcase/src/hooks/useG2Chart.ts",
+        "b-end-showcase/src/pages/TokenSheet.tsx",
+        "b-end-showcase/src/data/designSpecs.ts",
+        "b-end-showcase/package.json",
+        "b-end-showcase/package-lock.json"
+      ],
+      "knowledge": [
+        "b-end-page/references/style-profile.md",
+        "b-end-page/references/theme-system.md",
+        "b-end-page/references/theme-examples/tokens.css",
+        "b-end-page/references/theme-examples/tokens.brand-yellow.overrides.css",
+        "b-end-page/references/theme-examples/theme.react.tsx",
+        "b-end-page/references/theme-examples/chartTokens.react.ts",
+        "b-end-page/references/g2-chart-foundation.md"
+      ]
+    },
+    "shell": {
+      "kind": "shell",
+      "name": "知识库展示站外壳（不作为生成页规范）",
+      "routes": [
+        "/",
+        "/templates",
+        "/modules",
+        "/modules/:id",
+        "/tokens",
+        "/showcase/store-operations"
+      ],
+      "showcase": [
+        "b-end-showcase/src/App.tsx",
+        "b-end-showcase/src/components/ShowcaseLayout.tsx",
+        "b-end-showcase/src/components/ShowcaseLayout.css",
+        "b-end-showcase/src/components/TemplateThumbnail.tsx",
+        "b-end-showcase/src/pages/Landing.tsx",
+        "b-end-showcase/src/pages/Landing.module.css",
+        "b-end-showcase/src/pages/ModulesIndex.tsx",
+        "b-end-showcase/src/pages/ModulesIndex.module.css",
+        "b-end-showcase/src/pages/ModuleDetail.tsx",
+        "b-end-showcase/src/pages/ModuleDetail.module.css",
+        "b-end-showcase/src/pages/GeneratedExample.tsx",
+        "b-end-showcase/src/pages/GeneratedExample.module.css"
+      ],
+      "knowledge": []
+    },
+    "catalog": {
+      "kind": "shell",
+      "name": "模块目录功能分类与场景检索（外壳例外）",
+      "routes": [
+        "/modules",
+        "/modules/:id"
+      ],
+      "showcase": [
+        "b-end-showcase/src/data/moduleTaxonomy.ts",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/components/ShowcaseLayout.tsx",
+        "b-end-showcase/src/pages/ModulesIndex.tsx",
+        "b-end-showcase/src/pages/ModulesIndex.module.css",
+        "b-end-showcase/src/pages/ModuleDetail.tsx",
+        "docs/module-taxonomy.md"
+      ],
+      "knowledge": []
+    },
+    "AI-1": {
+      "kind": "module",
+      "name": "对话输入",
+      "routes": [
+        "/modules/AI-1"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/AiConversationModules.tsx",
+        "b-end-showcase/src/components/AiModules.css",
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/moduleTaxonomy.ts",
+        "b-end-showcase/src/data/designSpecs.ts"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/AI1-composer.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md",
+        "b-end-page/references/INDEX-ai.md",
+        "b-end-page/references/implementations/AiConversationModules.tsx",
+        "b-end-page/references/implementations/AiModules.css"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "AI-2": {
+      "kind": "module",
+      "name": "消息与回答",
+      "routes": [
+        "/modules/AI-2"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/AiConversationModules.tsx",
+        "b-end-showcase/src/components/AiModules.css",
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/moduleTaxonomy.ts",
+        "b-end-showcase/src/data/designSpecs.ts"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/AI2-message.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md",
+        "b-end-page/references/INDEX-ai.md",
+        "b-end-page/references/implementations/AiConversationModules.tsx",
+        "b-end-page/references/implementations/AiModules.css"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "AI-3": {
+      "kind": "module",
+      "name": "智能体执行",
+      "routes": [
+        "/modules/AI-3"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/AiConversationModules.tsx",
+        "b-end-showcase/src/components/AiModules.css",
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/moduleTaxonomy.ts",
+        "b-end-showcase/src/data/designSpecs.ts"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/AI3-agent-task.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md",
+        "b-end-page/references/INDEX-ai.md",
+        "b-end-page/references/implementations/AiConversationModules.tsx",
+        "b-end-page/references/implementations/AiModules.css"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    },
+    "Detail4": {
+      "kind": "module",
+      "name": "审批状态流程",
+      "routes": [
+        "/modules/Detail4"
+      ],
+      "showcase": [
+        "b-end-showcase/src/components/ApprovalFlow.tsx",
+        "b-end-showcase/src/components/AiModules.css",
+        "b-end-showcase/src/components/modulePreviews.tsx",
+        "b-end-showcase/src/data/l2Modules.ts",
+        "b-end-showcase/src/data/moduleTaxonomy.ts",
+        "b-end-showcase/src/data/designSpecs.ts"
+      ],
+      "knowledge": [
+        "b-end-page/references/L2-modules/Detail4-approval-flow.md",
+        "b-end-page/references/module-contract.md",
+        "b-end-page/references/page-contract.md",
+        "b-end-page/SKILL.md",
+        "b-end-page/references/INDEX-form-detail.md",
+        "b-end-page/references/L1-templates/page-详情页装配逻辑.md",
+        "b-end-page/references/implementations/ApprovalFlow.tsx",
+        "b-end-page/references/implementations/AiModules.css"
+      ],
+      "depends_on": [
+        "theme"
+      ]
+    }
+  }
+}

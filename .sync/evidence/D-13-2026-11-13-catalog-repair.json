@@ -1,0 +1,14 @@
+{
+  "scope": "D-13",
+  "fingerprint": "860f8ccf2603ab71a465b05270ec698a2a2bf6c16d4ecbeafa75e13c864f21c4",
+  "reviewer": "Codex",
+  "summary": "2026-11-13 模块身份与缺失预览修复；按项记录实际验证及限制，不代表全仓库已验证。",
+  "checks": {
+    "identity": "目录、预览、复制 Spec、Dashboard13-liquid.md 和经营概览统一为 liquid 水波球；LiquidProgress 同源复用。 外壳现按功能分组，ID、预览注册和复制 key 保留；41条目录无重复无遗漏。",
+    "variants": "浏览器依次选择纯净型、筛选型、筛选（复杂）、操作型、描述型，球体均可见；执行 getDesignSpec 验证每次仅一个变体章节。",
+    "visual_tokens": "160×160 球体，外描边 4 / 距离 6 / 波长 128；蓝→黄→蓝通过，黄底深字。使用 requestAnimationFrame 在 ThemeProvider 更新 html 属性后重读 chartPalette.c1。",
+    "behavior": "正常值 4280/5500 = 77.82% 实测；只读球体无提交事件。无效输入与超额完成已按实现和文档静态核对，未在浏览器注入边界数据。",
+    "copy_spec": "实际点击复制描述型 Spec；标题为 D-13 水波球；另执行五变体解析断言，各仅一个变体章节。",
+    "validation": "npm run build --prefix b-end-showcase 通过（原有大包提示）。全工程 tsc 受既有类型/未使用声明错误影响，新增三个组件未报错；MTD 在线查询进程失败，改以已安装 @ss/mtd-react3@0.12.14 类型与实现核对。浏览器五个模块及 /dashboard/workbench、/list/tree 已查看；库 forwardRef 警告仍存在。 最终归类后生产构建再次通过；三个新增共享组件与 moduleTaxonomy 独立类型检查通过。 最终独立 tsc（含 vite/client 类型）exit 0，最终生产构建 exit 0。"
+  }
+}

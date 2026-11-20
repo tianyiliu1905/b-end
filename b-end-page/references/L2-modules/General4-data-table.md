@@ -38,6 +38,10 @@
 
 ---
 
+## 操作栏与表格的间距
+
+纯文字和带图片列变体的顶部操作栏（标题、排序、导出、新增）与表头之间保留 **16px**，使用 `marginBottom: var(--gap-page)`。按钮之间仍为 `var(--gap-elem)`（8px），分页器上方仍为 `var(--gap-module)`（8px）。此规则同时用于模块预览和复用 G-4 的业务页面，不修改全局间距 token。带切换 tab 变体的标签筛选行沿用其专用间距。
+
 ## 视觉规格 (JSON)
 
 ```json
@@ -47,6 +51,11 @@
     "border_radius": "var(--radius-3)",
     "border": "none",
     "shadow": "none"
+  },
+  "toolbar": {
+    "margin_bottom": "var(--gap-page)",
+    "margin_bottom_px": 16,
+    "actions_gap": "var(--gap-elem)"
   },
   "header_row": {
     "background": "var(--bg-card-inner)",
@@ -401,7 +410,7 @@ function TextTableVariant() {
   const [current, setCurrent] = useState(1)
   return (
     <div className="dash-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-module)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--gap-page)' }}>
         <span style={{ fontSize: 'var(--fs-14)', fontWeight: 500, color: 'var(--text-1)' }}>门店明细</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-elem)' }}>
           <Radio.Group defaultValue="revenue" size="small">

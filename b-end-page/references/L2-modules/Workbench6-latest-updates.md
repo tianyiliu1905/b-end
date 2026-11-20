@@ -2,7 +2,7 @@
 
 > **统一描述字段**：用途与边界 → 输入 → 布局与组合 → 状态 → 事件 → 约束与验证 → 实现映射。按 [模块描述规范](../module-contract.md) 解读本文；原章节保留具体规格与代码，静态模块无交互时标注不适用。
 
-工作台右侧边栏卡片：图片/资讯轮播，用于展示运营动态或图文资讯流。比 W-1「轮播图」变体更轻量——纯色块占位，无文案排版，仅作动态感知用途。
+工作台右侧边栏卡片：图片/资讯轮播，用于展示运营动态或图文资讯流。比 W-1「轮播图」变体更轻量——演示采用纯色块和简短占位文案，侧栏保持轻量。
 
 ## 何时用
 - 最新动态 / 资讯轮播 / 动态展示 / 运营动态（侧边栏轻量位）。
@@ -63,15 +63,15 @@
 
 1. 固定出现在工作台右侧边栏，通常位于 W-4/W-5 下方（今日待办、公告通知之后）。
 2. `Carousel` 关闭箭头（`arrow="never"`），保持视觉轻量，不与主内容区的轮播抢注意力。
-3. 每屏内容用纯色块占位（`#F3F4F6` 灰底）+ 居中弱化文字（`#9CA3AF`），不强行塞入真实图片/复杂排版——这是与 W-1「轮播图」变体的核心区别。
+3. 演示用 `--bg-page` 背景 + `--text-4` 居中文字。占位素材不泛化为业务限制；真实资讯可按需求替换图片或文案，但仍需保持 120px 轻量侧栏结构。
 4. 无变体，保持单一形态。
-5. `borderRadius: 8` 与卡片圆角protocol统一，轮播容器需 `overflow: hidden` 裁切圆角。
+5. `borderRadius: 8` 用于内部轮播容器，轮播容器需 `overflow: hidden` 裁切圆角。
 
 ---
 
 ## 自检
 - [ ] Carousel 箭头关闭（arrow="never"）
-- [ ] 内容为纯色块占位，非真实复杂排版
+- [ ] 示例占位与真实业务素材边界清楚，内容保持轻量
 - [ ] 容器 overflow:hidden 裁切圆角
 - [ ] 位于右侧边栏 W-4/W-5 之后
 
@@ -102,8 +102,8 @@ node "<skill>/mtd3/scripts/mtd-rag.js" query_components_direct --components=Card
 import { Card, Carousel } from '@ss/mtd-react3'
 
 <Card header="最新动态" style={{ width: 240 }}>
-  <Carousel autoplay arrow="never">
-    {updates.map((u, i) => (
+  <Carousel autoplay={slides.length > 1} arrow="never" height={120}>
+    {slides.map((u) => (
       <div
         key={u.id}
         style={{
@@ -129,9 +129,9 @@ import { Card, Carousel } from '@ss/mtd-react3'
 ```vue
 <template>
   <mtd-card header="最新动态" style="width: 240px">
-    <mtd-carousel autoplay arrow="never">
+    <mtd-carousel :autoplay="slides.length > 1" arrow="never" :height="120">
       <div
-        v-for="u in updates"
+        v-for="u in slides"
         :key="u.id"
         class="update-slide"
       >
@@ -159,3 +159,7 @@ import { Card, Carousel } from '@ss/mtd-react3'
 
 - `Carousel` 容器需 `overflow: hidden`（组件默认自带，若自定义外层包裹要保留）以裁切圆角。
 - 不要给 `arrow="never"` 的轮播额外加指示点强调样式，保持视觉轻量、不抢主内容区注意力。
+
+## 状态与事件
+
+空 slides 显示“暂无动态”并不挂载 Carousel；单条关闭自动播放，多条自动轮播。索引由 Carousel 内部持有，无额外业务提交事件。预览与工作台共用 LatestUpdates，演示不代表资讯接口已经接入。组件是轻量资讯轮播，不是指标统计卡。

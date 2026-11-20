@@ -1,3 +1,5 @@
+import { FUNCTIONAL_GROUPS, getModuleTaxonomy } from './moduleTaxonomy';
+
 /**
  * L2 模块索引数据（用于「模块」入口页 / 模块详情页展示）
  *
@@ -21,6 +23,11 @@ export interface L2Module {
 }
 
 export const L2_MODULES: L2Module[] = [
+  { id: 'AI-1', name: '对话输入 (Conversation Composer)', category: 'AI-对话', description: '面板式与紧凑式对话输入，组合草稿、暂存附件、模型和工作模式；失败保留草稿，生成中可停止。', triggers: ['对话输入', 'AI输入', 'composer', '提示词', '聊天输入', '附件暂存'], l3Roles: ['Input.TextArea', 'Select', 'Button', '原生文件选择'], variants: { '面板式': '含上下文条，输入区 3–10 行', '紧凑式': '不含上下文条，输入区 1–3 行' }, notes: '模式选择不授予权限；附件仅本地暂存。接口、上传和实际模型由父页面接入。' },
+  { id: 'AI-2', name: '消息与回答 (AI Answer)', category: 'AI-对话', description: '用户消息与助手回答，覆盖生成中、完成、停止和失败，含来源、复制和重新生成。', triggers: ['AI回答', '聊天消息', '引用来源', '流式回答', '重新生成'], l3Roles: ['Button', '原生文本与来源链接'], variants: { '完整回答': '含来源与操作，支持本地模拟生成和停止', '失败重试': '失败状态，重试后逐段生成' }, notes: '来源由业务传入，缺失时不编造；回答文本默认转义，不直接渲染 HTML。' },
+  { id: 'AI-3', name: '智能体执行 (Agent Task)', category: 'AI-对话', description: '公开步骤与执行状态，区分执行中、等待确认、完成、失败和取消；支持取消及失败重试。', triggers: ['智能体执行', 'agent', '工具调用', '任务进度', '等待确认'], l3Roles: ['Tag', 'Button', '公开步骤列表'], variants: { '任务执行': '从未开始到执行的完整本地状态演示', '等待确认': '停在确认门槛，继续或取消', '失败重试': '保留已完成步骤，从失败步骤恢复' }, notes: '展示公开执行步骤，不展示模型内部思考；实际操作和权限校验由服务端负责。' },
+  { id: 'Detail4', name: '审批状态流程 (Approval Flow)', category: '详情专属', description: '只读回显审批节点、处理人、当前状态和意见，支持审批中、通过、驳回；与表单填写步骤条分开。', triggers: ['审批状态', '审核流程', '审批节点', '驳回原因', '审批进度'], l3Roles: ['Tag', '有序流程节点', '父页面操作栏'], variants: { '审批中': '突出当前审批节点，可演示流转或驳回', '已通过': '全部节点已通过，只读展示', '已驳回': '保留前序节点与驳回意见' }, notes: 'Detail4 自身只读，审批操作由 Form1 / 父页面承接并校验权限；预览动作只更新本地状态。' },
+
   // ===== G-导航 =====
   {
     id: 'G-1+G-2',
@@ -55,7 +62,7 @@ export const L2_MODULES: L2Module[] = [
     category: 'G-导航',
     description: '左侧固定宽度面板：搜索框 + 树形分类结构 + 附加筛选项，点击树节点联动右侧表格/内容区数据，常见于「左树右表」类列表页。',
     triggers: ['分类导航', '树形导航', '分类树', '左树', '左树右表', '组织架构树', '树形层级', '目录树'],
-    l3Roles: ['Input（树搜索）', 'Tree / mtd-tree', 'Select（附加筛选）', 'Button（新增节点）'],
+    l3Roles: ['Input（树搜索）', 'Tree / mtd-tree', 'Select（附加筛选）', 'Button（按需节点维护）'],
     notes: '固定宽度 240px 左右，白底 dash-card；与右侧内容区之间用 --gap-module 做外部间距；树节点选中态联动右侧数据刷新，详见 L1-templates/page-列表页装配逻辑.md §7.2',
   },
 
@@ -72,7 +79,7 @@ export const L2_MODULES: L2Module[] = [
   { id: 'D-10', name: '散点图 (Scatter)', category: 'D-图表卡片', description: '双维度数值分布，用于相关性/象限分析。', triggers: ['散点', '相关性', '象限分析'], variants: ['操作型', '筛选型', '筛选（复杂）', '描述型', '纯净型'] },
   { id: 'D-11', name: 'AI摘要卡 (AI Summary)', category: 'D-图表卡片', description: '顶部 AI 诊断摘要卡，先给结论再看数据细节。', triggers: ['AI总结', 'AI诊断', '摘要卡', '智能总结'], variants: { 列表型: 'DigestCard variant="list"，多条摘要纵向列表展示', 卡片型: 'DigestCard variant="cards"，多条摘要拆成独立小卡片横排' }, notes: '与 D-2~D-15 的 5 型头部变体是不同的独立变体体系，专属 DigestCard 组件' },
   { id: 'D-12', name: '雷达图 (Radar)', category: 'D-图表卡片', description: '多维度能力/指标对比。', triggers: ['雷达图', '多维对比', '能力模型'], variants: ['纯净型', '操作型', '筛选型', '筛选（复杂）'] },
-  { id: 'D-13', name: '仪表盘 (Gauge)', category: 'D-图表卡片', description: '单一指标的区间型进度展示（如健康度、达成度）。', triggers: ['仪表盘', 'gauge', '健康度'], variants: ['纯净型', '筛选型', '筛选（复杂）', '操作型', '描述型'] },
+  { id: 'D-13', name: '水波球 (Liquid Gauge)', category: 'D-图表卡片', description: '用波浪水位表达实际值与目标值的比例，中心显示完成率，下方保留原始数值。', triggers: ['水波球', 'liquid', '目标完成率', '年度进度'], l3Roles: ['Card', 'AntV G2 liquid'], variants: ['纯净型', '筛选型', '筛选（复杂）', '操作型', '描述型'] },
   { id: 'D-14', name: '热力图 (Heatmap)', category: 'D-图表卡片', description: '双维度矩阵密度展示，如时段×星期活跃度。', triggers: ['热力图', '活跃度矩阵'], variants: ['操作型', '筛选型', '筛选（复杂）', '描述型', '纯净型'] },
   { id: 'D-15', name: '玫瑰图 (Rose Chart)', category: 'D-图表卡片', description: '环形分类占比展示，饼图变体。', triggers: ['玫瑰图', '南丁格尔图'], variants: ['纯净型', '筛选型', '筛选（复杂）', '操作型'] },
 
@@ -80,10 +87,10 @@ export const L2_MODULES: L2Module[] = [
   { id: 'W-1', name: '欢迎栏 (Welcome Banner)', category: 'W-工作台', description: '工作台顶部欢迎信息+关键提示条。', triggers: ['欢迎栏', '问候语', '工作台头部'], variants: { 文字欢迎: '渐变背景卡片，问候语+今日概述+一个主操作按钮', 轮播图: 'Carousel 轮播多张运营/公告卡片，自动播放+hover箭头' } },
   { id: 'W-2', name: '操作引导卡 (Guide Card)', category: 'W-工作台', description: '待办/引导类卡片，提示用户下一步操作。', triggers: ['引导卡', '待办提醒', '操作指引'] },
   { id: 'W-3', name: '快捷入口 (Shortcut Grid)', category: 'W-工作台', description: '宫格式功能快捷入口，偏门户/导航型工作台常用。', triggers: ['快捷入口', '功能宫格', '常用功能'] },
-  { id: 'W-4', name: '个人信息 (Profile Card)', category: 'W-工作台', description: '工作台内个人信息小卡片。', triggers: ['个人信息', '我的', '账号卡片'] },
+  { id: 'W-4', name: '今日待办 (Today Todo)', category: 'W-工作台', description: '工作台侧栏的待办分类与计数，每行提供处理入口，标题区含更多入口。', triggers: ['今日待办', '待审批', '待处理', '工单提醒'], l3Roles: ['Card', 'Button'] },
   { id: 'W-5', name: '公告通知 (Announcement)', category: 'W-工作台', description: '公告/通知列表卡片。', triggers: ['公告', '通知', '消息列表'], variants: { 日期前缀: '每行以「MM-DD」日期作为前缀标签，纯文字弱化时间感', 标签前缀: '每行以彩色 Tag（活动/系统/会议等分类）作为前缀，强调类型区分' } },
-  { id: 'W-6', name: '工作台指标区', category: 'W-工作台', description: '工作台内轻量指标展示，通常与快捷入口组合。', triggers: ['工作台指标', '轻量指标'] },
-  { id: 'W-7', name: '工作台待办列表', category: 'W-工作台', description: '任务/待办类明细列表，工作台专属。', triggers: ['待办列表', '任务列表'] },
+  { id: 'W-6', name: '最新动态 (Latest Updates)', category: 'W-工作台', description: '工作台侧栏的轻量资讯轮播，灰底占位内容，自动播放且不显示箭头。', triggers: ['最新动态', '资讯轮播', '运营动态'], l3Roles: ['Card', 'Carousel'] },
+  { id: 'W-7', name: '常用工具 (Tool Grid)', category: 'W-工作台', description: '工作台主区三列工具网格，每格含图标、标题、说明和独立创建按钮。', triggers: ['常用工具', '工具箱', '快捷创建', '工具入口'], l3Roles: ['Button', 'CSS Grid'] },
 
   // ===== 表单+详情 共用/专属（来自 INDEX-form-detail.md） =====
   { id: 'FD1', name: '承载容器 (Presentation Container)', category: '表单+详情', description: '页面对外用多大外壳：表单页（顺序/步骤/主从/抽屉/弹窗）、详情页（落地页/抽屉），含容器尺寸、标题区、蒙层层级和操作栏。', triggers: ['落地页', '步骤落地页', '分步', '向导', '主从', '抽屉', '弹窗', 'Drawer', 'Dialog', 'Modal'], notes: '表单+详情共用；弹窗仅开放给表单页，详情页不用主从和弹窗分支' },
@@ -103,10 +110,10 @@ export const L2_MODULES: L2Module[] = [
   { id: 'Detail3', name: '附件预览 (Attachment Preview)', category: '详情专属', description: '以缩略图或文件链接列表形式展示详情页关联的图片、文档等附件，纯只读展示。图片类附件→缩略图网格+点击放大（MTD Image.PreviewGroup）；文件类附件→纯文字蓝色链接横向并排（原生 <a>，无图标，无文件大小）。两类可按需二选一或混用，通常嵌套在 GroupSection 分组内作为最后一类内容。', triggers: ['图片', '附件', '文件预览', '证照附件', '合同附件', '现场照片', '凭证图片', '计划书', '测算表', '文档列表', '上传附件展示'], variants: { '文件链接列表': '纯文字蓝色链接，无图标，无文件大小，横向 flex-wrap 并排。适用于 pdf/xlsx/docx 等文档类附件。', '图片缩略图': '96×96px 缩略图网格，边框 1px，圆角 4px，点击放大（Image.PreviewGroup）。适用于现场照片、凭证图片等。', '图片+文件混合': '图片区在上（缩略图网格）+ 文件链接区在下（纯文字链接），两类附件都有时使用。', '嵌入分组（实际场景）': '附件作为 GroupSection 分组内最后一类字段出现，label="证照附件"，value 区域为横向文件链接列表；演示真实详情页嵌套场景。' } },
 ];
 
-export const L2_CATEGORIES: string[] = Array.from(new Set(L2_MODULES.map((m) => m.category)));
+export const L2_CATEGORIES: string[] = FUNCTIONAL_GROUPS.map(group => group.name);
 
 export function getModulesByCategory(category: string): L2Module[] {
-  return L2_MODULES.filter((m) => m.category === category);
+  return L2_MODULES.filter((m) => getModuleTaxonomy(m.id).category === category);
 }
 
 export function getModuleById(id: string): L2Module | undefined {
